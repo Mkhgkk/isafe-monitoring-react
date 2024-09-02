@@ -6,7 +6,7 @@ interface PanelVideoProps {
 }
 
 export default function PanelVideo({ streamId }: PanelVideoProps) {
-    const VIDEO_EVENT = `frame-${streamId}`
+  const VIDEO_EVENT = `frame-${streamId}`;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function PanelVideo({ streamId }: PanelVideoProps) {
     // Join the room using socket and listen for 'frame' events
     socket.emit("join", { room: streamId });
 
-    socket.on(VIDEO_EVENT, (data) => {
+    const handleFrameEvent = (data: any) => {
       console.log("Frame received!");
 
       if (canvas) {
@@ -58,12 +58,14 @@ export default function PanelVideo({ streamId }: PanelVideoProps) {
           image.src = url; // Trigger image load and onload event
         }
       }
-    });
+    };
+
+    socket.on(VIDEO_EVENT, handleFrameEvent);
 
     // Cleanup function to remove listeners and leave the room
     return () => {
       console.log("Leaving room");
-      socket.off("frame");
+      socket.off(VIDEO_EVENT, handleFrameEvent); // Remove specific event listener
       socket.emit("leave", { room: streamId });
       window.removeEventListener("resize", resizeCanvas);
     };
