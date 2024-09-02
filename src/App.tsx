@@ -1,4 +1,5 @@
 import "./App.css";
+import React, {useEffect} from 'react';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -10,8 +11,22 @@ import { ThemeProvider } from "./components/theme-provider";
 import Root from "./pages/Root";
 import { MainLayout } from "./pages/MainLayout";
 import CameraDetail from "./pages/CameraDetail";
+import socket from "./services/socketService";
 
 function App() {
+  useEffect(() => {
+    socket.connect()
+
+    socket.on('connect', () => {
+      console.log('Connected to socket server')
+    })
+
+    return () => {
+      socket.off('connect')
+      socket.disconnect()
+    }
+  },[])
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path={"/"} element={<Root />}>

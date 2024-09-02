@@ -1,6 +1,7 @@
 import video1 from "@/assets/1.mp4";
 import video2 from "@/assets/2.mp4";
 import video3 from "@/assets/3.mp4";
+import PanelVideo from "@/components/panel-video";
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -35,20 +36,21 @@ export default function MainPage() {
       <div className="pb-4">
         <p className="mb-4 font-semibold text-xl">Online</p>
         <div className="grid grid-cols-3 gap-4">
-          {[video1, video2, video3].map((item, index) => (
+          {["stream1", "stream2"].map((item, index) => (
             <Link
               to="/camera/1"
               key={index}
               className="relative rounded-md overflow-hidden"
             >
-              <video
+              {/* <video
                 src={item}
                 controls={false}
                 className="cursor-pointer"
                 autoPlay
                 muted
                 loop
-              />
+              /> */}
+              <PanelVideo streamId={item} />
               <Info bg />
             </Link>
           ))}
