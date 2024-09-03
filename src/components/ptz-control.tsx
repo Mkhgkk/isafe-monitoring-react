@@ -16,10 +16,14 @@ function PTZControl({streamId}: PTZControlProps) {
   const [sliderValue, setSliderValue] = useState(0)
 
   const onMouseDown = (btn) => {
+    console.log("Mouse Down: ", btn)
+    socket.emit("ptz_move", {stream_id: streamId, direction: btn, stop: false})
     setActiveButton(btn);
   };
 
   const onMouseUp = (btn) => {
+    console.log("Mouse Up: ", btn)
+    socket.emit("ptz_move", {stream_id: streamId, direction: btn, stop: true})
     setActiveButton("");
   };
 
@@ -42,7 +46,6 @@ function PTZControl({streamId}: PTZControlProps) {
   }, [streamId])
 
   const handleChangeZoom = (value) => {
-    console.log("Zoooooooooooooom change: ", sliderValue)
     socket.emit("ptz_move", {stream_id: streamId, direction: 'zoom_in', zoom_amount: sliderValue})
   }
 
