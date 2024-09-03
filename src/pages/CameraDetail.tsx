@@ -17,11 +17,16 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import PTZControl from "@/components/ptz-control";
+import PanelVideo from "@/components/panel-video";
+import {useParams} from "react-router-dom";
 
 function CameraDetail() {
   const [filter, setFilter] = useState("all");
   const [ptz, setPtz] = useState(false);
 
+  const {streamId} = useParams()
+
+  
   return (
     <div className=" grid grid-cols-12 gap-4">
       <div className="col-span-9 border-r pr-4">
@@ -32,21 +37,22 @@ function CameraDetail() {
         </div>
 
         <div className="relative rounded-md w-full overflow-hidden">
-          <video
+          {/* <video
             src={video1}
             controls={false}
             autoPlay
             muted
             loop
             className="w-full"
-          />
+          /> */}
+          <PanelVideo streamId={streamId} />
 
           <div className="absolute left-0 top-0 right-0 bottom-0 flex flex-col justify-between">
             <div className="py-1 px-3 bg-zinc-200 dark:bg-slate-700 bg-opacity-60 rounded-2xl flex items-center m-5 self-end">
               <span className="flex h-2 w-2 rounded-full bg-red-600 mr-1.5" />
               <p className="text-xs font-semibold">Live</p>
             </div>
-            {ptz && <PTZControl />}
+            {ptz && <PTZControl streamId={streamId} />}
 
             <div className="flex justify-between items-end">
               <Info bg className="static p-5" />

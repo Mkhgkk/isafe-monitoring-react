@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Icons } from "./icons";
 import { cn } from "@/lib/utils";
 import { Slider } from "./ui/slider";
+import socket from "../services/socketService";
 
-function PTZControl() {
+interface PTZControlProps {
+  streamId: string;
+}
+
+function PTZControl({streamId}: PTZControlProps) {
   const gridClass = "h-10 w-10 flex justify-center items-center";
   const buttonClass = cn(gridClass, "cursor-pointer");
 
   const [activeButton, setActiveButton] = useState("");
+  const [sliderValue, setSliderValue] = useState(0)
 
   const onMouseDown = (btn) => {
     setActiveButton(btn);
@@ -16,6 +22,34 @@ function PTZControl() {
   const onMouseUp = (btn) => {
     setActiveButton("");
   };
+
+  useEffect(() => {
+    console.log("PTZ component mounted atleast")
+    socket.emit("join_ptz", { stream_id: streamId });
+
+    socket.on("zoom-level", (data) => {
+        console.log("Zoooooooooooooooooom data: ", data)
+        const current_zoom = data["zoom"]
+        const value = parseFloat(current_zoom.toFixed(2));
+        setSliderValue(value)
+    })
+
+    return () => {
+      console.log("Leaving ptz room");
+      socket.off("zoom-level")
+      socket.emit("leave_ptz", { stream_id: streamId });
+    }
+  }, [streamId])
+
+  const handleChangeZoom = (value) => {
+    console.log("Zoooooooooooooom change: ", sliderValue)
+    socket.emit("ptz_move", {stream_id: streamId, direction: 'zoom_in', zoom_amount: sliderValue})
+  }
+
+  const handleSetSliderValue = (value) => {
+    setSliderValue(value[0])
+  }
+
 
   return (
     <div className="flex justify-between p-5 items-center">
@@ -71,9 +105,12 @@ function PTZControl() {
 
       <div className="bg-zinc-300 rounded-sm overflow-hidden bg-opacity-60 p-5 h-[10rem]">
         <Slider
-          defaultValue={[33]}
-          max={100}
-          step={1}
+          // defaultValue={[0.33]}
+          value={[sliderValue]}
+          onValueChange={handleSetSliderValue}
+          onValueCommit={handleChangeZoom}
+          max={1.0}
+          step={0.01}
           orientation="vertical"
           className="h-full w-4"
         />

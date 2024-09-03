@@ -32,7 +32,7 @@ function App() {
       <Route path={"/"} element={<Root />}>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<MainPage />} />
-          <Route path="/camera/:id" element={<CameraDetail />} />
+          <Route path="/camera/:streamId" element={<CameraDetail />} />
         </Route>
       </Route>
     )

@@ -38,7 +38,7 @@ export default function MainPage() {
         <div className="grid grid-cols-3 gap-4">
           {["stream1", "stream2"].map((item, index) => (
             <Link
-              to="/camera/1"
+              to={`/camera/${item}`}
               key={index}
               className="relative rounded-md overflow-hidden"
             >
