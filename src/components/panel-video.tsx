@@ -18,8 +18,8 @@ const PowerButton = ({ onClick }: any) => {
   };
 
   return (
-    <div onClick={handleClick} className="absolute top-0 left-0 p-2 pt-3">
-      <Icons.power className="opacity-70" size={20} />
+    <div onClick={handleClick} className="absolute top-0 right-0 p-2 pt-3">
+      <Icons.power className="opacity-90 text-blue-500" size={20} />
     </div>
   );
 };
@@ -52,6 +52,10 @@ export default function PanelVideo({
     console.log("Error: ", error);
   };
 
+  const handleSetIsStreaming = () => {
+    if (!isStreaming) setIsStreaming(true);
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
 
@@ -78,7 +82,7 @@ export default function PanelVideo({
 
     const handleFrameEvent = (data: any) => {
       console.log("Frame received!");
-      setIsStreaming(true);
+      handleSetIsStreaming();
 
       if (canvas) {
         const ctx = canvas.getContext("2d");
@@ -119,23 +123,20 @@ export default function PanelVideo({
     // <div onClick={onClick}>
     <>
       {!isStreaming && (
-        <div className="relative">
-          <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-60 flex justify-center items-center cursor-pointer">
+        <div className="absolute w-full h-full">
+          <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-full flex justify-center items-center cursor-pointer">
             {loading && (
               <Icons.loader className="animate-spin opacity-30" size={50} />
             )}
             {!loading && <Icons.videoOff className="opacity-30" size={50} />}
           </div>
-          {/* <Info /> */}
         </div>
       )}
-      {isStreaming && (
-        <canvas
-          ref={canvasRef}
-          style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
-        />
-      )}
-
+      <canvas
+        ref={canvasRef}
+        className="className=w-full h-full block"
+        // style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
+      />
       <PowerButton onClick={handleStartStream} />
     </>
     // </div>

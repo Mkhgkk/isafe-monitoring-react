@@ -18,15 +18,14 @@ import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import PTZControl from "@/components/ptz-control";
 import PanelVideo from "@/components/panel-video";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function CameraDetail() {
   const [filter, setFilter] = useState("all");
   const [ptz, setPtz] = useState(false);
 
-  const {streamId} = useParams()
+  const { streamId } = useParams();
 
-  
   return (
     <div className=" grid grid-cols-12 gap-4">
       <div className="col-span-9 border-r pr-4">

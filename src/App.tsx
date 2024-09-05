@@ -1,5 +1,5 @@
 import "./App.css";
-import React, {useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -14,23 +14,43 @@ import CameraDetail from "./pages/CameraDetail";
 import socket from "./services/socketService";
 
 function App() {
-  useEffect(() => {
-    socket.connect()
+  const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });
+  const [isConnected, setIsConnected] = useState(false);
 
-    socket.on('connect', () => {
-      console.log('Connected to socket server')
-    })
+  useEffect(() => {
+    socket.connect();
+
+    socket.on("connect", () => {
+      setIsConnected(true);
+      console.log("Connected to socket server");
+    });
+
+    socket.on("disconnect", () => {
+      setIsConnected(false);
+      console.log("Socket server disconnected");
+    });
+
+    socket.on("system_status", (data) => {
+      setSystemStatus(data);
+      // console.log("System Status: ", data);
+    });
 
     return () => {
-      socket.off('connect')
-      socket.disconnect()
-    }
-  },[])
+      socket.off("connect");
+      socket.off("system_status");
+      socket.disconnect();
+    };
+  }, []);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path={"/"} element={<Root />}>
-        <Route path="/" element={<MainLayout />}>
+        <Route
+          path="/"
+          element={
+            <MainLayout isConnected={isConnected} systemStatus={systemStatus} />
+          }
+        >
           <Route path="/" element={<MainPage />} />
           <Route path="/camera/:streamId" element={<CameraDetail />} />
         </Route>

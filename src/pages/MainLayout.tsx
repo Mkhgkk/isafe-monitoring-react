@@ -29,7 +29,17 @@ import { Outlet } from "react-router-dom";
 //   navCollapsedSize: number;
 // }
 
-export function MainLayout() {
+interface SystemStatus {
+  cpu: number;
+  gpu: number;
+}
+
+interface MainLayoutProps {
+  isConnected: boolean;
+  systemStatus: SystemStatus;
+}
+
+export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
   const defaultLayout = [265, 440, 655];
   const defaultCollapsed = false;
   const isCollapsed = false;
@@ -140,10 +150,24 @@ export function MainLayout() {
           </div>
 
           <div className="p-5 mb-4">
-            <p className="text-muted-foreground text-xs">Server Connected</p>
+            {isConnected && (
+              <p className="text-muted-foreground text-xs flex items-center">
+                <span className="inline-block h-2 w-2 rounded-full bg-green-600 mr-2"></span>
+                Server Connected
+              </p>
+            )}
+            {!isConnected && (
+              <p className="text-muted-foreground text-xs flex items-center">
+                <span className="inline-block h-2 w-2 rounded-full bg-orange-600 mr-2"></span>
+                Server Disconnected
+              </p>
+            )}
             <p className="text-sm">Less than a minute ago</p>
-            <p className="text-muted-foreground text-xs mt-3">Version</p>
-            <p className="text-sm">10.1.1.3.9</p>
+            <p className="text-muted-foreground text-xs mt-3">
+              System Utilization
+            </p>
+            <p className="text-sm">CPU: {systemStatus.cpu}%</p>
+            <p className="text-sm">GPU: {systemStatus.gpu}%</p>
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
