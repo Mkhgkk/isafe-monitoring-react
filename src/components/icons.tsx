@@ -7,6 +7,7 @@ import {
   Joystick,
   LucideProps,
   Moon,
+  Power,
   SunMedium,
   WifiOff,
   type Icon as LucideIcon,
@@ -17,6 +18,7 @@ export type Icon = LucideIcon;
 export const Icons = {
   sun: SunMedium,
   moon: Moon,
+  power: Power,
   offline: WifiOff,
   filter: Filter,
   control: Joystick,

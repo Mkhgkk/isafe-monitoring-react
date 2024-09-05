@@ -1,13 +1,39 @@
 import { useEffect, useRef } from "react";
 import socket from "../services/socketService";
+import { startStream } from "../api/stream";
+import useRequest from "@/hooks/useRequest";
+
+import { Icons } from "@/components/icons";
 
 interface PanelVideoProps {
   streamId: string;
+  camera: any;
 }
 
-export default function PanelVideo({ streamId }: PanelVideoProps) {
+const PowerButton = ({ onClick }: any) => {
+  return (
+    <div onClick={onClick} className="absolute top-0 left-0 p-2 pt-5">
+      <Icons.power className="opacity-70" size={20} />
+    </div>
+  );
+};
+
+export default function PanelVideo({ camera, streamId }: PanelVideoProps) {
   const VIDEO_EVENT = `frame-${streamId}`;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const {
+    data,
+    loading,
+    error,
+    request: startStreamRequest,
+  } = useRequest(startStream);
+
+  const handleStartStream = async () => {
+    // const data = await startStreamRequest(camera);
+    // console.log(data);
+
+    alert("handleStartStreamingPressed");
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -16,7 +42,7 @@ export default function PanelVideo({ streamId }: PanelVideoProps) {
     const resizeCanvas = () => {
       if (canvas) {
         const parentWidth = canvas.parentElement?.clientWidth || 0;
-        const aspectRatio = 1080 / 720; // Adjust this if you have a different video frame aspect ratio
+        const aspectRatio = 1280 / 720; // Adjust this if you have a different video frame aspect ratio
 
         // Set canvas width to parent width and height to maintain the aspect ratio
         canvas.width = parentWidth;
@@ -72,9 +98,12 @@ export default function PanelVideo({ streamId }: PanelVideoProps) {
   }, [streamId]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
+      />
+      <PowerButton onClick={() => handleStartStream()} />
+    </>
   );
 }

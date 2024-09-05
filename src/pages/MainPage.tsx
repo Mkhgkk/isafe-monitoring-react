@@ -1,11 +1,89 @@
-import video1 from "@/assets/1.mp4";
-import video2 from "@/assets/2.mp4";
-import video3 from "@/assets/3.mp4";
+// import video1 from "@/assets/1.mp4";
+// import video2 from "@/assets/2.mp4";
+// import video3 from "@/assets/3.mp4";
 import PanelVideo from "@/components/panel-video";
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+
+const cameras = [
+  {
+    id: "camera1",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:1q2w3e4r.@218.54.201.82:554/idis?trackid=2",
+    stream_id: "stream1",
+    supports_ptz: false,
+    ptz_autotrack: false,
+  },
+  {
+    id: "camera2",
+    cam_ip: "192.168.0.128",
+    model_name: "PPE",
+    ptz_password: "fsnetworks1!",
+    ptz_port: 80,
+    ptz_username: "root",
+    rtsp_link: "rtsp://root:fsnetworks!@192.168.0.128:554/cam0_0",
+    stream_id: "stream2",
+    supports_ptz: true,
+    ptz_autotrack: false,
+  },
+  {
+    id: "camera3",
+    cam_ip: "192.168.0.133",
+    model_name: "PPE",
+    ptz_password: "fsnetworks1!",
+    ptz_port: 80,
+    ptz_username: "root",
+    rtsp_link: "rtsp://root:fsnetworks!@192.168.0.133:554/cam0_0",
+    stream_id: "stream3",
+    supports_ptz: true,
+    ptz_autotrack: false,
+  },
+  {
+    id: "camera4",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link:
+      "rtsp://dhh:a12345678@dhh3-4.iptime.org:3554/cam/realmonitor?channel=1&subtype=0",
+    stream_id: "stream4",
+    supports_ptz: false,
+    ptz_autotrack: false,
+  },
+  {
+    id: "camera5",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link:
+      "rtsp://khh:a12345678@khh5-1.iptime.org:554/cam/realmonitor?channel=1&subtype=0",
+    stream_id: "stream5",
+    supports_ptz: false,
+    ptz_autotrack: false,
+  },
+  {
+    id: "camera6",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link:
+      "rtsp://dhh:a12345678@dhh00.iptime.org:2554/cam/realmonitor?channel=1&subtype=0",
+    stream_id: "stream6",
+    supports_ptz: false,
+    ptz_autotrack: false,
+  },
+];
 
 export const Info = ({
   bg = false,
@@ -36,21 +114,13 @@ export default function MainPage() {
       <div className="pb-4">
         <p className="mb-4 font-semibold text-xl">Online</p>
         <div className="grid grid-cols-3 gap-4">
-          {["stream1", "stream2"].map((item, index) => (
+          {cameras.map((item, index) => (
             <Link
-              to={`/camera/${item}`}
+              to={`/camera/${item.stream_id}`}
               key={index}
               className="relative rounded-md overflow-hidden"
             >
-              {/* <video
-                src={item}
-                controls={false}
-                className="cursor-pointer"
-                autoPlay
-                muted
-                loop
-              /> */}
-              <PanelVideo streamId={item} />
+              <PanelVideo camera={item} streamId={item.stream_id} />
               <Info bg />
             </Link>
           ))}
