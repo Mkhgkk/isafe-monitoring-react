@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import socket from "../services/socketService";
 import { startStream } from "../api/stream";
 import useRequest from "@/hooks/useRequest";
@@ -8,19 +8,32 @@ import { Icons } from "@/components/icons";
 interface PanelVideoProps {
   streamId: string;
   camera: any;
+  onClick?: () => void;
 }
 
 const PowerButton = ({ onClick }: any) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the event from bubbling up to the parent div
+    onClick?.(e);
+  };
+
   return (
-    <div onClick={onClick} className="absolute top-0 left-0 p-2 pt-5">
+    <div onClick={handleClick} className="absolute top-0 left-0 p-2 pt-3">
       <Icons.power className="opacity-70" size={20} />
     </div>
   );
 };
 
-export default function PanelVideo({ camera, streamId }: PanelVideoProps) {
+export default function PanelVideo({
+  camera,
+  streamId,
+  onClick,
+}: PanelVideoProps) {
   const VIDEO_EVENT = `frame-${streamId}`;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [isStreaming, setIsStreaming] = useState<boolean>(false);
+  const [hasStartedStreaming, setHasStartedStreaming] =
+    useState<boolean>(false);
   const {
     data,
     loading,
@@ -29,10 +42,14 @@ export default function PanelVideo({ camera, streamId }: PanelVideoProps) {
   } = useRequest(startStream);
 
   const handleStartStream = async () => {
-    // const data = await startStreamRequest(camera);
-    // console.log(data);
+    await startStreamRequest(camera);
 
-    alert("handleStartStreamingPressed");
+    if (data) {
+      setHasStartedStreaming(true);
+      setIsStreaming(true);
+    }
+    console.log("Response: ", data);
+    console.log("Error: ", error);
   };
 
   useEffect(() => {
@@ -61,6 +78,7 @@ export default function PanelVideo({ camera, streamId }: PanelVideoProps) {
 
     const handleFrameEvent = (data: any) => {
       console.log("Frame received!");
+      setIsStreaming(true);
 
       if (canvas) {
         const ctx = canvas.getContext("2d");
@@ -98,12 +116,28 @@ export default function PanelVideo({ camera, streamId }: PanelVideoProps) {
   }, [streamId]);
 
   return (
+    // <div onClick={onClick}>
     <>
-      <canvas
-        ref={canvasRef}
-        style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
-      />
-      <PowerButton onClick={() => handleStartStream()} />
+      {!isStreaming && (
+        <div className="relative">
+          <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-60 flex justify-center items-center cursor-pointer">
+            {loading && (
+              <Icons.loader className="animate-spin opacity-30" size={50} />
+            )}
+            {!loading && <Icons.videoOff className="opacity-30" size={50} />}
+          </div>
+          {/* <Info /> */}
+        </div>
+      )}
+      {isStreaming && (
+        <canvas
+          ref={canvasRef}
+          style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
+        />
+      )}
+
+      <PowerButton onClick={handleStartStream} />
     </>
+    // </div>
   );
 }

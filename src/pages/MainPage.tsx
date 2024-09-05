@@ -5,7 +5,7 @@ import PanelVideo from "@/components/panel-video";
 import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const cameras = [
   {
@@ -109,20 +109,21 @@ export const Info = ({
 };
 
 export default function MainPage() {
+  const navigate = useNavigate();
   return (
     <div className="">
       <div className="pb-4">
         <p className="mb-4 font-semibold text-xl">Online</p>
         <div className="grid grid-cols-3 gap-4">
           {cameras.map((item, index) => (
-            <Link
-              to={`/camera/${item.stream_id}`}
+            <div
               key={index}
               className="relative rounded-md overflow-hidden"
+              onClick={() => navigate(`/camera/${item.stream_id}`)}
             >
               <PanelVideo camera={item} streamId={item.stream_id} />
               <Info bg />
-            </Link>
+            </div>
           ))}
         </div>
       </div>
