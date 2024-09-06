@@ -114,7 +114,7 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
               )}
             >
               <img
-                src="src/assets/logo.png"
+                src="src/assets/logoBlack.png"
                 width={25}
                 height={25}
                 className="mx-3"
