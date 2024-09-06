@@ -21,13 +21,23 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (!isConnected) return;
-    messageApi.open({
-      key: "updatable",
-      type: "success",
-      content: "Connected!",
-      duration: 2,
-    });
+    if (!isConnected) {
+      messageApi.open({
+        key: "updatable",
+        type: "loading",
+        content: "Connecting...",
+        duration: 0,
+      });
+    }
+
+    if (isConnected) {
+      messageApi.open({
+        key: "updatable",
+        type: "success",
+        content: "Connected!",
+        duration: 2,
+      });
+    }
   }, [isConnected]);
 
   useEffect(() => {
@@ -35,6 +45,7 @@ function App() {
       key: "updatable",
       type: "loading",
       content: "Connecting...",
+      duration: 0,
     });
 
     socket.connect();
