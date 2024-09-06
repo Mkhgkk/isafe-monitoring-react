@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
-const cameras = [
+export const cameras = [
   {
     id: "camera1",
     cam_ip: null,
@@ -19,6 +19,7 @@ const cameras = [
     stream_id: "stream1",
     supports_ptz: false,
     ptz_autotrack: false,
+    location: "Laboratory",
   },
   {
     id: "camera2",
@@ -31,6 +32,7 @@ const cameras = [
     stream_id: "stream2",
     supports_ptz: true,
     ptz_autotrack: false,
+    location: "Laboratory",
   },
   {
     id: "camera3",
@@ -43,6 +45,7 @@ const cameras = [
     stream_id: "stream3",
     supports_ptz: true,
     ptz_autotrack: false,
+    location: "Laboratory",
   },
   {
     id: "camera4",
@@ -56,6 +59,7 @@ const cameras = [
     stream_id: "stream4",
     supports_ptz: false,
     ptz_autotrack: false,
+    location: "Bridge Construction",
   },
   {
     id: "camera5",
@@ -69,6 +73,7 @@ const cameras = [
     stream_id: "stream5",
     supports_ptz: false,
     ptz_autotrack: false,
+    location: "Bridge Construction",
   },
   {
     id: "camera6",
@@ -82,16 +87,25 @@ const cameras = [
     stream_id: "stream6",
     supports_ptz: false,
     ptz_autotrack: false,
+    location: "Bridge Construction",
   },
 ];
+
+interface InfoProps {
+  bg?: boolean;
+  className: string;
+  cameraName: string;
+  modelName: string;
+  location: string;
+}
 
 export const Info = ({
   bg = false,
   className,
-}: {
-  bg?: boolean;
-  className?: string;
-}) => {
+  cameraName,
+  modelName,
+  location,
+}: InfoProps) => {
   const textClass = `text-sm  ${bg ? "text-white" : "text-zinc-500"}`;
   return (
     <div
@@ -102,8 +116,10 @@ export const Info = ({
         className
       )}
     >
-      <p className={textClass}>Camera 1</p>
-      <p className={textClass}>15-05 2024 12:19:49 PM</p>
+      <p className={textClass}>
+        {cameraName}-{modelName}
+      </p>
+      <p className={textClass}>{location}</p>
     </div>
   );
 };
@@ -122,7 +138,12 @@ export default function MainPage() {
               onClick={() => navigate(`/camera/${item.stream_id}`)}
             >
               <PanelVideo camera={item} streamId={item.stream_id} />
-              <Info bg />
+              <Info
+                cameraName={item.id}
+                modelName={item.model_name}
+                location={item.location}
+                bg
+              />
             </div>
           ))}
         </div>

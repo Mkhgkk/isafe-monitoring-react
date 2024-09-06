@@ -19,12 +19,14 @@ import { cn } from "@/lib/utils";
 import PTZControl from "@/components/ptz-control";
 import PanelVideo from "@/components/panel-video";
 import { useParams } from "react-router-dom";
+import { cameras } from "./MainPage";
 
 function CameraDetail() {
-  const [filter, setFilter] = useState("all");
-  const [ptz, setPtz] = useState(false);
-
   const { streamId } = useParams();
+  const camera = cameras.find((item) => item.stream_id == streamId);
+
+  const [filter, setFilter] = useState("all");
+  const [ptz, setPtz] = useState(camera?.supports_ptz);
 
   return (
     <div className=" grid grid-cols-12 gap-4">
@@ -32,7 +34,8 @@ function CameraDetail() {
         <h1 className="text-xl font-semibold">Monitoring</h1>
         <div className="flex items-center mb-3">
           <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2" />
-          <p className="text-sm text-muted-foreground">Construction site 4</p>
+          {/* <p className="text-sm text-muted-foreground">Construction site 4</p> */}
+          <p className="text-sm text-muted-foreground">{camera?.location}</p>
         </div>
 
         <div className="relative rounded-md w-full overflow-hidden">
