@@ -13,11 +13,30 @@ import { MainLayout } from "./pages/MainLayout";
 import CameraDetail from "./pages/CameraDetail";
 import socket from "./services/socketService";
 
+import { message } from "antd";
+
 function App() {
+  const [messageApi, contextHolder] = message.useMessage();
   const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
+    if (!isConnected) return;
+    messageApi.open({
+      key: "updatable",
+      type: "success",
+      content: "Connected!",
+      duration: 2,
+    });
+  }, [isConnected]);
+
+  useEffect(() => {
+    messageApi.open({
+      key: "updatable",
+      type: "loading",
+      content: "Connecting...",
+    });
+
     socket.connect();
 
     socket.on("connect", () => {
@@ -59,9 +78,12 @@ function App() {
   );
 
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <>
+      {contextHolder}
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </>
   );
 }
 
