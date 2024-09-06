@@ -47,10 +47,14 @@ function CameraDetail() {
           <PanelVideo streamId={streamId} />
 
           <div className="absolute left-0 top-0 right-0 bottom-0 flex flex-col justify-between">
-            <div className="py-1 px-3 bg-zinc-200 dark:bg-slate-700 bg-opacity-60 rounded-2xl flex items-center m-5 self-end">
-              <span className="flex h-2 w-2 rounded-full bg-red-600 mr-1.5" />
+            <div className="py-1 px-3 bg-zinc-200 dark:bg-slate-700 bg-opacity-60 rounded-2xl flex items-center m-5 self-end space-x-1.5">
+              <div className="relative flex items-center justify-center h-3 w-3">
+                <span className="absolute inline-flex h-2 w-2 rounded-full bg-red-600" />
+                <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-600 opacity-75" />
+              </div>
               <p className="text-xs font-semibold">Live</p>
             </div>
+
             {ptz && <PTZControl streamId={streamId} />}
 
             <div className="flex justify-between items-end">

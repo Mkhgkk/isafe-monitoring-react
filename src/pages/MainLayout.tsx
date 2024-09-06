@@ -166,8 +166,8 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
             <p className="text-muted-foreground text-xs mt-3">
               System Utilization
             </p>
-            <p className="text-sm">CPU: {systemStatus.cpu}%</p>
-            <p className="text-sm">GPU: {systemStatus.gpu}%</p>
+            <p className="text-sm">CPU: {systemStatus.cpu.toFixed(1)}%</p>
+            <p className="text-sm">GPU: {systemStatus.gpu.toFixed(1)}%</p>
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
