@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Slider } from "./ui/slider";
 import socket from "../services/socketService";
 import { message } from "antd";
+import config from "../config/default.config";
 
 interface PTZControlProps {
   streamId: string;
@@ -72,7 +73,8 @@ function PTZControl({ streamId }: PTZControlProps) {
     if (streamId !== "stream2") return;
 
     // make request
-    const url = "http://192.168.0.10:5000/api/change_autotrack"; // Replace with your API URL
+    // const url = "http://192.168.0.10:5000/api/change_autotrack";
+    const url = `http://${config.BACKEND_URL}/api/change_autotrack`;
     const data = {
       stream_id: streamId,
     };
@@ -92,7 +94,9 @@ function PTZControl({ streamId }: PTZControlProps) {
         messageApi.open({
           key: "auto-ptz",
           type: "success",
-          content: autotrack ? "activated!" : "deactivated!",
+          content: autotrack
+            ? "Autotrack activated!"
+            : "Autotrack deactivated!",
           duration: 5,
         });
       })

@@ -1,9 +1,11 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import config from "../config/default.config";
 
 const apiClient = axios.create({
-  baseURL: 'http://192.168.0.10:5000',
+  // baseURL: "http://192.168.0.10:5000",
+  baseURL: `http://${config.BACKEND_URL}`,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -25,7 +27,7 @@ apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
     // Handle errors globally
-    console.error('API Error:', error);
+    console.error("API Error:", error);
     return Promise.reject(error);
   }
 );
