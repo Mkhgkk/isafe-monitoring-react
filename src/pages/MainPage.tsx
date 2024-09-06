@@ -118,7 +118,7 @@ export default function MainPage() {
           {cameras.map((item, index) => (
             <div
               key={index}
-              className="relative rounded-md overflow-hidden"
+              className="relative rounded-md overflow-hidden h-60"
               onClick={() => navigate(`/camera/${item.stream_id}`)}
             >
               <PanelVideo camera={item} streamId={item.stream_id} />
