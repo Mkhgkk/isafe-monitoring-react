@@ -8,55 +8,92 @@ interface PTZControlProps {
   streamId: string;
 }
 
-function PTZControl({streamId}: PTZControlProps) {
+function PTZControl({ streamId }: PTZControlProps) {
   const gridClass = "h-10 w-10 flex justify-center items-center";
   const buttonClass = cn(gridClass, "cursor-pointer");
 
   const [activeButton, setActiveButton] = useState("");
-  const [sliderValue, setSliderValue] = useState(0)
+  const [sliderValue, setSliderValue] = useState(0);
 
   const onMouseDown = (btn) => {
-    console.log("Mouse Down: ", btn)
-    socket.emit("ptz_move", {stream_id: streamId, direction: btn, stop: false})
+    console.log("Mouse Down: ", btn);
+    socket.emit("ptz_move", {
+      stream_id: streamId,
+      direction: btn,
+      stop: false,
+    });
     setActiveButton(btn);
   };
 
   const onMouseUp = (btn) => {
-    console.log("Mouse Up: ", btn)
-    socket.emit("ptz_move", {stream_id: streamId, direction: btn, stop: true})
+    console.log("Mouse Up: ", btn);
+    socket.emit("ptz_move", {
+      stream_id: streamId,
+      direction: btn,
+      stop: true,
+    });
     setActiveButton("");
   };
 
   useEffect(() => {
-    console.log("PTZ component mounted atleast")
+    console.log("PTZ component mounted atleast");
     socket.emit("join_ptz", { stream_id: streamId });
 
     socket.on("zoom-level", (data) => {
-        console.log("Zoooooooooooooooooom data: ", data)
-        const current_zoom = data["zoom"]
-        const value = parseFloat(current_zoom.toFixed(2));
-        setSliderValue(value)
-    })
+      console.log("Zoooooooooooooooooom data: ", data);
+      const current_zoom = data["zoom"];
+      const value = parseFloat(current_zoom.toFixed(2));
+      setSliderValue(value);
+    });
 
     return () => {
       console.log("Leaving ptz room");
-      socket.off("zoom-level")
+      socket.off("zoom-level");
       socket.emit("leave_ptz", { stream_id: streamId });
-    }
-  }, [streamId])
+    };
+  }, [streamId]);
 
   const handleChangeZoom = (value) => {
-    socket.emit("ptz_move", {stream_id: streamId, direction: 'zoom_in', zoom_amount: sliderValue})
-  }
+    socket.emit("ptz_move", {
+      stream_id: streamId,
+      direction: "zoom_in",
+      zoom_amount: sliderValue,
+    });
+  };
 
   const handleSetSliderValue = (value) => {
-    setSliderValue(value[0])
-  }
+    setSliderValue(value[0]);
+  };
 
+  const handleAutoPTZ = () => {
+    //take streamId
+    if (streamId !== "stream2") return;
+
+    // make request
+    const url = "http://192.168.0.10:5000/api/change_autotrack"; // Replace with your API URL
+    const data = {
+      stream_id: streamId,
+    };
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Success:", result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   return (
     <div className="flex justify-between p-5 items-center">
-      <div className="grid grid-cols-3 bg-zinc-300 h-[7.5rem] w-[7.5rem] rounded-full overflow-hidden bg-opacity-60 ">
+      <div className="grid grid-cols-3 bg-zinc-300 h-[7.5rem] w-[7.5rem] rounded-full overflow-hidden bg-opacity-60">
         <div className={gridClass}></div>
         <div
           className={buttonClass}
@@ -79,7 +116,20 @@ function PTZControl({streamId}: PTZControlProps) {
             }`}
           />
         </div>
-        <div className={gridClass}></div>
+        {/* <!-- Middle button here --> */}
+        <div
+          className="flex items-center justify-center"
+          // onMouseDown={() => onMouseDown("center")}
+          // onMouseUp={() => onMouseUp("center")}
+          // onClick={}
+        >
+          <button
+            onClick={handleAutoPTZ}
+            className="bg-gray-500 text-white rounded-full h-12 w-12 px-2  hover:bg-green-600"
+          >
+            auto
+          </button>
+        </div>
         <div
           className={buttonClass}
           onMouseDown={() => onMouseDown("right")}
