@@ -134,7 +134,7 @@ export default function PanelVideo({
       )}
       <canvas
         ref={canvasRef}
-        className="className=w-full h-full block"
+        className="w-full h-full max-h-screen max-w-screen block"
         // style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
       />
       <PowerButton onClick={handleStartStream} />
