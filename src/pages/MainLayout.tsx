@@ -2,10 +2,11 @@ import * as React from "react";
 import Cookies from "js-cookie";
 
 import {
-  Award,
+  Settings,
   DownloadCloud,
   LayoutDashboard,
   ShieldCheck,
+  TvMinimalPlay,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -119,7 +120,7 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
                 height={25}
                 className="mx-3"
               />
-              <Label className="font-semibold text-lg">iSafe guard</Label>
+              <Label className="font-semibold text-lg">iSafe Guard</Label>
             </div>
             <Separator />
             <Nav
@@ -131,18 +132,18 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
                   variant: "default",
                 },
                 {
-                  title: "Security Camera",
+                  title: "Security Cameras",
                   icon: ShieldCheck,
                   variant: "ghost",
                 },
                 {
-                  title: "Update",
-                  icon: DownloadCloud,
+                  title: "Saved Events",
+                  icon: TvMinimalPlay,
                   variant: "ghost",
                 },
                 {
-                  title: "License",
-                  icon: Award,
+                  title: "Settings",
+                  icon: Settings,
                   variant: "ghost",
                 },
               ]}
