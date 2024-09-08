@@ -3,7 +3,6 @@ import Cookies from "js-cookie";
 
 import {
   Settings,
-  DownloadCloud,
   LayoutDashboard,
   ShieldCheck,
   TvMinimalPlay,
@@ -11,7 +10,6 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import Monitoring from "@/components/monitoring";
 import { Nav } from "@/components/nav";
 import { Label } from "@/components/ui/label";
 import {
@@ -22,7 +20,13 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
 // interface Props {
 //   defaultLayout: number[] | undefined;
@@ -41,54 +45,60 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
+  const panelRef = React.useRef();
   const defaultLayout = [265, 440, 655];
-  const defaultCollapsed = false;
-  const isCollapsed = false;
-  //   defaultLayout = [265, 440, 655],
-  //   defaultCollapsed = false,
-  //   navCollapsedSize,
-  // }: Props
-  //   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
+  const [isCollapsed, setIsCollapsed] = React.useState(
+    Cookies.get("collapsed") === "true" || false
+  );
+  const { pathname } = useLocation();
 
-  //   const updateLayoutCookie = (sizes: number[]) => {
-  //     Cookies.set("react-resizable-panels:layout", JSON.stringify(sizes));
-  //   };
+  const updateCollapsedCookie = (value: boolean) => {
+    Cookies.set("collapsed", value);
+  };
 
-  //   const updateCollapsedCookie = (collapsed: boolean) => {
-  //     Cookies.set("react-resizable-panels:collapsed", JSON.stringify(collapsed));
-  //   };
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        panelRef.current?.collapse();
+      } else {
+        panelRef.current?.expand();
+      }
+    };
 
-  //   const [defaultLayout, setDefaultLayout] = useState(undefined);
-  //   const [defaultCollapsed, setDefaultCollapsed] = useState(undefined);
+    handleResize(); // Check on initial render
 
-  //   useEffect(() => {
-  //     const layout = Cookies.get("react-resizable-panels:layout");
-  //     const collapsed = Cookies.get("react-resizable-panels:collapsed");
+    window.addEventListener("resize", handleResize);
 
-  //     if (layout) {
-  //       try {
-  //         setDefaultLayout(JSON.parse(layout));
-  //       } catch (error) {
-  //         console.error("Error parsing layout cookie:", error);
-  //       }
-  //     }
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-  //     if (collapsed) {
-  //       try {
-  //         setDefaultCollapsed(JSON.parse(collapsed));
-  //       } catch (error) {
-  //         console.error("Error parsing collapsed cookie:", error);
-  //       }
-  //     }
-  //   }, []);
+  const ConnectionInfo = () => (
+    <>
+      {isConnected && (
+        <p className="text-muted-foreground text-xs flex items-center">
+          <span className="inline-block h-2 w-2 rounded-full bg-green-600 mr-2"></span>
+          Server Connected
+        </p>
+      )}
+      {!isConnected && (
+        <p className="text-muted-foreground text-xs flex items-center">
+          <span className="inline-block h-2 w-2 rounded-full bg-orange-600 mr-2"></span>
+          Server Disconnected
+        </p>
+      )}
+      <p className="text-sm">Less than a minute ago</p>
+      <p className="text-muted-foreground text-xs mt-3">System Utilization</p>
+      <p className="text-sm">CPU: {systemStatus.cpu.toFixed(1)}%</p>
+      <p className="text-sm">GPU: {systemStatus.gpu.toFixed(1)}%</p>
+    </>
+  );
 
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup
         direction="horizontal"
-        onLayout={(sizes: number[]) => {
-          //   updateLayoutCookie(sizes);
-        }}
         className="h-full max-h-[100vh] items-stretch"
       >
         <ResizablePanel
@@ -98,9 +108,10 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
           minSize={15}
           maxSize={20}
           onCollapse={(collapsed) => {
-            // setIsCollapsed(collapsed);
-            // updateCollapsedCookie(collapsed);
+            setIsCollapsed(collapsed);
+            updateCollapsedCookie(collapsed);
           }}
+          ref={panelRef}
           className={cn(
             isCollapsed
               ? "min-w-[50px] transition-all duration-300 ease-in-out"
@@ -120,7 +131,14 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
                 height={25}
                 className="mx-3"
               />
-              <Label className="font-semibold text-lg">iSafe Guard</Label>
+              <Label
+                className={cn(
+                  "font-semibold text-lg line-clamp-1",
+                  isCollapsed && "hidden"
+                )}
+              >
+                iSafe Guard
+              </Label>
             </div>
             <Separator />
             <Nav
@@ -129,47 +147,59 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
                 {
                   title: "Monitoring",
                   icon: LayoutDashboard,
-                  variant: "default",
+                  variant: pathname === "/" ? "default" : "ghost",
+                  href: "/",
                 },
                 {
                   title: "Security Cameras",
                   icon: ShieldCheck,
-                  variant: "ghost",
+                  variant: pathname.includes("/camera") ? "default" : "ghost",
+                  href: "/camera",
                 },
                 {
                   title: "Saved Events",
                   icon: TvMinimalPlay,
-                  variant: "ghost",
+                  variant: pathname.includes("/event") ? "default" : "ghost",
+                  href: "/event",
                 },
                 {
                   title: "Settings",
                   icon: Settings,
-                  variant: "ghost",
+                  variant: pathname.includes("/setting") ? "default" : "ghost",
+                  href: "/setting",
                 },
               ]}
             />
           </div>
 
-          <div className="p-5 mb-4">
-            {isConnected && (
-              <p className="text-muted-foreground text-xs flex items-center">
-                <span className="inline-block h-2 w-2 rounded-full bg-green-600 mr-2"></span>
-                Server Connected
-              </p>
-            )}
-            {!isConnected && (
-              <p className="text-muted-foreground text-xs flex items-center">
-                <span className="inline-block h-2 w-2 rounded-full bg-orange-600 mr-2"></span>
-                Server Disconnected
-              </p>
-            )}
-            <p className="text-sm">Less than a minute ago</p>
-            <p className="text-muted-foreground text-xs mt-3">
-              System Utilization
-            </p>
-            <p className="text-sm">CPU: {systemStatus.cpu.toFixed(1)}%</p>
-            <p className="text-sm">GPU: {systemStatus.gpu.toFixed(1)}%</p>
+          <div className={cn("p-5 mb-4", isCollapsed && "hidden")}>
+            <ConnectionInfo />
           </div>
+          <Popover>
+            <PopoverTrigger
+              className={cn(isCollapsed ? "block absolute bottom-4" : "hidden")}
+            >
+              <Button size="icon" variant={"ghost"} className="mx-2 h-9 w-9 ">
+                <div className="flex h-3 w-3 relative">
+                  <span
+                    className={cn(
+                      "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+                      isConnected ? "bg-green-600" : "bg-orange-600"
+                    )}
+                  ></span>
+                  <span
+                    className={cn(
+                      "relative inline-flex rounded-full h-3 w-3",
+                      isConnected ? "bg-green-600" : "bg-orange-600"
+                    )}
+                  ></span>
+                </div>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <ConnectionInfo />
+            </PopoverContent>
+          </Popover>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>

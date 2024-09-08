@@ -14,6 +14,8 @@ import CameraDetail from "./pages/CameraDetail";
 import socket from "./services/socketService";
 
 import { message } from "antd";
+import EventDetail from "./pages/EventDetail";
+import EventList from "./pages/EventList";
 
 function App() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -83,6 +85,8 @@ function App() {
         >
           <Route path="/" element={<MainPage />} />
           <Route path="/camera/:streamId" element={<CameraDetail />} />
+          <Route path="/event" element={<EventList />} />
+          <Route path="/event/:eventId" element={<EventDetail />} />
         </Route>
       </Route>
     )

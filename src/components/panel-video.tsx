@@ -42,14 +42,13 @@ export default function PanelVideo({
   } = useRequest(startStream);
 
   const handleStartStream = async () => {
-    await startStreamRequest(camera);
-
-    if (data) {
-      setHasStartedStreaming(true);
-      setIsStreaming(true);
-    }
-    console.log("Response: ", data);
-    console.log("Error: ", error);
+    // await startStreamRequest(camera);
+    // if (data) {
+    //   setHasStartedStreaming(true);
+    //   setIsStreaming(true);
+    // }
+    // console.log("Response: ", data);
+    // console.log("Error: ", error);
   };
 
   const handleSetIsStreaming = () => {
@@ -112,10 +111,10 @@ export default function PanelVideo({
 
     // Cleanup function to remove listeners and leave the room
     return () => {
-      console.log("Leaving room");
-      socket.off(VIDEO_EVENT, handleFrameEvent); // Remove specific event listener
-      socket.emit("leave", { room: streamId });
-      window.removeEventListener("resize", resizeCanvas);
+      // console.log("Leaving room");
+      // socket.off(VIDEO_EVENT, handleFrameEvent); // Remove specific event listener
+      // socket.emit("leave", { room: streamId });
+      // window.removeEventListener("resize", resizeCanvas);
     };
   }, [streamId]);
 

@@ -130,11 +130,11 @@ export default function MainPage() {
     <div className="">
       <div className="pb-4">
         <p className="mb-4 font-semibold text-xl">Online</p>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
           {cameras.map((item, index) => (
             <div
               key={index}
-              className="relative rounded-md overflow-hidden h-60"
+              className="relative rounded-md overflow-hidden aspect-video"
               onClick={() => navigate(`/camera/${item.stream_id}`)}
             >
               <PanelVideo camera={item} streamId={item.stream_id} />
@@ -151,10 +151,10 @@ export default function MainPage() {
       <Separator />
       <div className="py-4">
         <p className="mb-4 font-semibold text-xl">Offline</p>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[0, 1].map((item, index) => (
             <div className="relative" key={index}>
-              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-60 flex justify-center items-center cursor-pointer">
+              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 aspect-video flex justify-center items-center cursor-pointer">
                 <Icons.offline className="opacity-30" size={50} />
               </div>
               <Info />
