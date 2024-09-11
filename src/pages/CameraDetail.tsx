@@ -55,7 +55,7 @@ function CameraDetail() {
         {loading ? (
           <Skeleton className="w-full rounded-md aspect-video" />
         ) : (
-          <div className="relative rounded-md w-full overflow-hidden">
+          <div className="relative rounded-md aspect-w-16 aspect-h-9 overflow-hidden">
             <PanelVideo streamId={streamId} />
 
             <div className="absolute left-0 top-0 right-0 bottom-0 flex flex-col justify-between">
