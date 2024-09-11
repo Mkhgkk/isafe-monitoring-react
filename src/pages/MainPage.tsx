@@ -10,14 +10,14 @@ import { useNavigate } from "react-router-dom";
 export const cameras = [
   {
     id: "camera1",
-    cam_ip: null,
+    cam_ip: "223.171.86.249",
     model_name: "PPE",
-    ptz_password: null,
-    ptz_port: null,
-    ptz_username: null,
+    ptz_password: "1q2w3e4r.",
+    ptz_port: 80,
+    ptz_username: "admin",
     rtsp_link: "rtsp://admin:1q2w3e4r.@218.54.201.82:554/idis?trackid=2",
     stream_id: "stream1",
-    supports_ptz: false,
+    supports_ptz: true,
     ptz_autotrack: false,
     location: "Laboratory",
   },
@@ -89,7 +89,89 @@ export const cameras = [
     ptz_autotrack: false,
     location: "Bridge Construction",
   },
+  {
+    id: "camera7",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart456!@223.171.153.189:554/profile2/media.smp",
+    stream_id: "stream7",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera8",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart456!@223.171.147.33:554/profile2/media.smp",
+    stream_id: "stream8",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera9",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart1357!@223.171.83.140:554/profile2/media.smp",
+    stream_id: "stream9",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera10",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart1357!@223.171.32.194:554/profile2/media.smp",
+    stream_id: "stream10",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera11",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart1357!@223.171.153.134:554/profile2/media.smp",
+    stream_id: "stream11",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera12",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart456!@223.171.89.221:554/profile2/media.smp",
+    stream_id: "stream12",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
 ];
+
+// rtsp://admin:smart1357!@223.171.32.194:554/profile2/media.smp
+// rtsp://admin:smart1357!@223.171.153.134:554/profile2/media.smp
+// rtsp://admin:smart456!@223.171.89.221:554/profile2/media.smp
 
 interface InfoProps {
   bg?: boolean;
@@ -130,11 +212,11 @@ export default function MainPage() {
     <div className="">
       <div className="pb-4">
         <p className="mb-4 font-semibold text-xl">Online</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
+        <div className="grid grid-cols-3 gap-4">
           {cameras.map((item, index) => (
             <div
               key={index}
-              className="relative rounded-md overflow-hidden aspect-video"
+              className="relative rounded-md overflow-hidden h-60"
               onClick={() => navigate(`/camera/${item.stream_id}`)}
             >
               <PanelVideo camera={item} streamId={item.stream_id} />
@@ -151,10 +233,10 @@ export default function MainPage() {
       <Separator />
       <div className="py-4">
         <p className="mb-4 font-semibold text-xl">Offline</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {[0, 1].map((item, index) => (
             <div className="relative" key={index}>
-              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 aspect-video flex justify-center items-center cursor-pointer">
+              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-60 flex justify-center items-center cursor-pointer">
                 <Icons.offline className="opacity-30" size={50} />
               </div>
               <Info />
