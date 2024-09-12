@@ -153,8 +153,8 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
                 {
                   title: "Security Cameras",
                   icon: ShieldCheck,
-                  variant: pathname.includes("/camera") ? "default" : "ghost",
-                  href: "/camera",
+                  variant: pathname.includes("/stream") ? "default" : "ghost",
+                  href: "/stream",
                 },
                 {
                   title: "Saved Events",

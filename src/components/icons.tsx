@@ -16,6 +16,11 @@ import {
   Cctv,
   BadgeAlert,
   ArrowLeft,
+  Link,
+  ArrowUpDown,
+  EllipsisVertical,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -35,7 +40,12 @@ export const Icons = {
   videoOff: VideoOff,
   alert: BadgeAlert,
   arrowLeft: ArrowLeft,
+  link: Link,
+  arrowUpDown: ArrowUpDown,
   cctv: Cctv,
+  dotsVerfical: EllipsisVertical,
+  eye: Eye,
+  eyeOff: EyeOff,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
