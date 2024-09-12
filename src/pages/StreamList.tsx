@@ -242,9 +242,15 @@ function StreamList() {
           const status = getValue();
 
           return (
-            <Badge variant={status} className="uppercase">
-              {status}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <span
+                className={cn(
+                  "relative inline-flex rounded-full h-3 w-3",
+                  status === "active" ? "bg-green-600" : "bg-orange-600"
+                )}
+              />
+              <span className="capitalize">{status}</span>
+            </div>
           );
         },
       }),
