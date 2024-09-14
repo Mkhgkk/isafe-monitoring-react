@@ -10,6 +10,7 @@ interface PanelVideoProps {
   streamId: string;
   camera: any;
   onClick?: () => void;
+  config?: boolean;
 }
 
 const PowerButton = ({ onClick }: any) => {
@@ -25,7 +26,11 @@ const PowerButton = ({ onClick }: any) => {
   );
 };
 
-export default function PanelVideo({ camera, streamId }: PanelVideoProps) {
+export default function PanelVideo({
+  camera,
+  streamId,
+  config,
+}: PanelVideoProps) {
   const {
     data,
     loading,
@@ -76,7 +81,7 @@ export default function PanelVideo({ camera, streamId }: PanelVideoProps) {
       <div className="w-full h-full max-h-screen max-w-screen block">
         <WebRTCStream streamId={streamId} />
       </div>
-      <PowerButton onClick={handleStartStream} />
+      {!config && <PowerButton onClick={handleStartStream} />}
     </>
     // </div>
   );

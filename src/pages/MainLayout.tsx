@@ -46,14 +46,14 @@ interface MainLayoutProps {
 
 export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
   const panelRef = React.useRef();
-  const defaultLayout = [265, 440, 655];
+  const defaultLayout = [265, 1000];
   const [isCollapsed, setIsCollapsed] = React.useState(
     Cookies.get("collapsed") === "true" || false
   );
   const { pathname } = useLocation();
 
   const updateCollapsedCookie = (value: boolean) => {
-    Cookies.set("collapsed", value);
+    Cookies.set("collapsed", `${value}`);
   };
 
   React.useEffect(() => {
@@ -65,7 +65,7 @@ export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
       }
     };
 
-    handleResize(); // Check on initial render
+    handleResize();
 
     window.addEventListener("resize", handleResize);
 

@@ -1,21 +1,15 @@
 import { Icons } from "@/components/icons";
-import StreamForm from "@/components/stream-form";
-import { Badge } from "@/components/ui/badge";
+import AutoTrackDialog from "@/components/stream/autotrack-dialog";
+import DeleteDialog from "@/components/stream/delete-dialog";
+import PreviewDialog from "@/components/stream/preview-dialog";
+import StreamForm from "@/components/stream/stream-form";
 import { Button } from "@/components/ui/button";
 import { DataTable, SortingHeader } from "@/components/ui/data-table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -25,7 +19,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
 import React, { useMemo, useState } from "react";
@@ -221,44 +214,6 @@ const PasswordCell = ({ value }: { value?: string }) => {
   );
 };
 
-const DeleteDialog = ({ id, name }: { id: string; name: string }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = (value: boolean) => {
-    setOpen(value);
-  };
-
-  const handleDelete = () => {
-    console.log(id);
-    setOpen(false);
-  };
-  return (
-    <Dialog open={open} onOpenChange={handleOpen}>
-      <DialogTrigger asChild>
-        <DropdownMenuItem
-          onSelect={(e) => e.preventDefault()}
-          className="text-destructive focus:text-destructive"
-        >
-          <Icons.delete className="w-4 h-4 text-destructive mr-2" />
-          Delete
-        </DropdownMenuItem>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-xs">
-        <DialogHeader>
-          <DialogTitle>Confirm</DialogTitle>
-        </DialogHeader>
-        <DialogDescription>
-          {`Are you sure deleting ${name}?`}
-        </DialogDescription>
-        <DialogFooter>
-          <Button variant="destructive" onClick={handleDelete}>
-            Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
 function StreamList() {
   const columnHelper = createColumnHelper();
   const [messageApi, contextHolder] = message.useMessage();
@@ -292,7 +247,7 @@ function StreamList() {
             <div className="flex items-center gap-2">
               <span
                 className={cn(
-                  "relative inline-flex rounded-full h-3 w-3",
+                  "relative inline-flex rounded-full h-2 w-2",
                   status === "active" ? "bg-green-600" : "bg-orange-600"
                 )}
               />
@@ -370,14 +325,16 @@ function StreamList() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <Icons.preview className="w-4 h-4 text-muted-foreground mr-2" />
-                  Preview
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Icons.autoTrack className="w-4 h-4 text-muted-foreground mr-2" />
-                  Autotrack
-                </DropdownMenuItem>
+                <PreviewDialog
+                  url={row.original.link}
+                  streamId={row.original.id}
+                  name={row.original.name}
+                />
+                <AutoTrackDialog
+                  url={row.original.link}
+                  streamId={row.original.id}
+                  name={row.original.name}
+                />
                 <StreamForm
                   initialData={row.original}
                   trigger={

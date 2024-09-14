@@ -7,10 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
-import FormField from "./form/FormField";
+} from "../ui/dialog";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+import FormField from "../form/FormField";
 
 // Define the form data interface
 interface StreamFormData {
@@ -76,7 +76,7 @@ function StreamForm({
               id="link"
               label="link"
               register={register}
-              error={errors.url?.message as string}
+              error={errors.link?.message as string}
               required
             />
             <div className="grid grid-cols-4 gap-3">
@@ -85,7 +85,6 @@ function StreamForm({
                 label="IP"
                 register={register}
                 error={errors.ip?.message as string}
-                required
                 type="text"
                 className="col-span-3"
               />
@@ -94,7 +93,6 @@ function StreamForm({
                 label="Port"
                 register={register}
                 error={errors.port?.message as string}
-                required
                 type="text"
                 className="col-span-1"
               />

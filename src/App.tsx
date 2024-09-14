@@ -43,37 +43,37 @@ function App() {
     }
   }, [isConnected]);
 
-  useEffect(() => {
-    messageApi.open({
-      key: "updatable",
-      type: "loading",
-      content: "Connecting...",
-      duration: 0,
-    });
+  // useEffect(() => {
+  //   messageApi.open({
+  //     key: "updatable",
+  //     type: "loading",
+  //     content: "Connecting...",
+  //     duration: 0,
+  //   });
 
-    socket.connect();
+  //   socket.connect();
 
-    socket.on("connect", () => {
-      setIsConnected(true);
-      console.log("Connected to socket server");
-    });
+  //   socket.on("connect", () => {
+  //     setIsConnected(true);
+  //     console.log("Connected to socket server");
+  //   });
 
-    socket.on("disconnect", () => {
-      setIsConnected(false);
-      console.log("Socket server disconnected");
-    });
+  //   socket.on("disconnect", () => {
+  //     setIsConnected(false);
+  //     console.log("Socket server disconnected");
+  //   });
 
-    socket.on("system_status", (data) => {
-      setSystemStatus(data);
-      // console.log("System Status: ", data);
-    });
+  //   socket.on("system_status", (data) => {
+  //     setSystemStatus(data);
+  //     // console.log("System Status: ", data);
+  //   });
 
-    return () => {
-      socket.off("connect");
-      socket.off("system_status");
-      socket.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("connect");
+  //     socket.off("system_status");
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
