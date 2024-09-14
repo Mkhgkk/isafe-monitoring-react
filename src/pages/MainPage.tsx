@@ -6,6 +6,8 @@ import { Icons } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import ScheduleForm from "@/components/schedule-form";
 
 export const cameras = [
   {
@@ -211,7 +213,18 @@ export default function MainPage() {
   return (
     <div className="">
       <div className="pb-4">
-        <p className="mb-4 font-semibold text-xl">Online</p>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xl font-semibold">Scheduled</h1>
+          <ScheduleForm
+            trigger={
+              <Button>
+                <Icons.plus className="w-5 h-5 mr-2" />
+                New Schedule
+              </Button>
+            }
+          />
+        </div>
+        <p className="mb-4 font-semibold text-lg">Ongoing</p>
         <div className="grid grid-cols-3 gap-4">
           {cameras.map((item, index) => (
             <div
@@ -232,7 +245,7 @@ export default function MainPage() {
       </div>
       <Separator />
       <div className="py-4">
-        <p className="mb-4 font-semibold text-xl">Offline</p>
+        <p className="mb-4 font-semibold text-lg">Upcoming</p>
         <div className="grid grid-cols-3 gap-4">
           {[0, 1].map((item, index) => (
             <div className="relative " key={index}>

@@ -50,7 +50,12 @@ function StreamForm({
   return (
     <Dialog onOpenChange={handleOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent
+        className="sm:max-w-[480px]"
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
         <DialogHeader>
           <DialogTitle>
             {initialData ? "Edit stream" : "New stream"}
