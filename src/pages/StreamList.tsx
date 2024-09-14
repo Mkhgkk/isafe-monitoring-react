@@ -1,7 +1,16 @@
 import { Icons } from "@/components/icons";
+import StreamForm from "@/components/stream-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DataTable, SortingHeader } from "@/components/ui/data-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,9 +25,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
-import { ArrowUpDown } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 const data = [
@@ -27,10 +36,10 @@ const data = [
     name: "Stream2", //string,
     description: "Labaratory camear", //string?
     status: "active", // "active" | "inactive"
-    ptzPassword: "1234", //string?
-    ptzUsername: "usernmae1", //string?
-    ptzPort: 8080, //number?
-    ptzIp: "0.0.0.1", //string?
+    password: "1234", //string?
+    username: "usernmae1", //string?
+    port: 8080, //number?
+    ip: "0.0.0.1", //string?
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -38,10 +47,10 @@ const data = [
     name: "Stream1",
     description: "Warehouse camera",
     status: "inactive",
-    ptzPassword: "5678",
-    ptzUsername: "username2",
-    ptzPort: 8081,
-    ptzIp: "0.0.0.2",
+    password: "5678",
+    username: "username2",
+    port: 8081,
+    ip: "0.0.0.2",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -49,10 +58,10 @@ const data = [
     name: "Stream3",
     description: "Parking lot camera",
     status: "active",
-    ptzPassword: "abcd",
-    ptzUsername: "username3",
-    ptzPort: 8082,
-    ptzIp: "0.0.0.3",
+    password: "abcd",
+    username: "username3",
+    port: 8082,
+    ip: "0.0.0.3",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -60,10 +69,10 @@ const data = [
     name: "Stream4",
     description: "Lobby camera",
     status: "active",
-    ptzPassword: "efgh",
-    ptzUsername: "username4",
-    ptzPort: 8083,
-    ptzIp: "0.0.0.4",
+    password: "efgh",
+    username: "username4",
+    port: 8083,
+    ip: "0.0.0.4",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -71,10 +80,10 @@ const data = [
     name: "Stream5",
     description: "Office camera",
     status: "inactive",
-    ptzPassword: "ijkl",
-    ptzUsername: "username5",
-    ptzPort: 8084,
-    ptzIp: "0.0.0.5",
+    password: "ijkl",
+    username: "username5",
+    port: 8084,
+    ip: "0.0.0.5",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -82,10 +91,10 @@ const data = [
     name: "Stream6",
     description: "Conference room camera",
     status: "active",
-    ptzPassword: "mnop",
-    ptzUsername: "username6",
-    ptzPort: 8085,
-    ptzIp: "0.0.0.6",
+    password: "mnop",
+    username: "username6",
+    port: 8085,
+    ip: "0.0.0.6",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -93,10 +102,10 @@ const data = [
     name: "Stream7",
     description: "Entrance camera",
     status: "inactive",
-    ptzPassword: "qrst",
-    ptzUsername: "username7",
-    ptzPort: 8086,
-    ptzIp: "0.0.0.7",
+    password: "qrst",
+    username: "username7",
+    port: 8086,
+    ip: "0.0.0.7",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -104,10 +113,10 @@ const data = [
     name: "Stream8",
     description: "Loading dock camera",
     status: "active",
-    ptzPassword: "uvwx",
-    ptzUsername: "username8",
-    ptzPort: 8087,
-    ptzIp: "0.0.0.8",
+    password: "uvwx",
+    username: "username8",
+    port: 8087,
+    ip: "0.0.0.8",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -115,10 +124,10 @@ const data = [
     name: "Stream9",
     description: "Hallway camera",
     status: "inactive",
-    ptzPassword: "yzab",
-    ptzUsername: "username9",
-    ptzPort: 8088,
-    ptzIp: "0.0.0.9",
+    password: "yzab",
+    username: "username9",
+    port: 8088,
+    ip: "0.0.0.9",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -126,10 +135,10 @@ const data = [
     name: "Stream10",
     description: "Breakroom camera",
     status: "active",
-    ptzPassword: "cdef",
-    ptzUsername: "username10",
-    ptzPort: 8089,
-    ptzIp: "0.0.0.10",
+    password: "cdef",
+    username: "username10",
+    port: 8089,
+    ip: "0.0.0.10",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -137,10 +146,10 @@ const data = [
     name: "Stream11",
     description: "Cafeteria camera",
     status: "inactive",
-    ptzPassword: "ghij",
-    ptzUsername: "username11",
-    ptzPort: 8090,
-    ptzIp: "0.0.0.11",
+    password: "ghij",
+    username: "username11",
+    port: 8090,
+    ip: "0.0.0.11",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -148,10 +157,10 @@ const data = [
     name: "Stream12",
     description: "Staircase camera",
     status: "active",
-    ptzPassword: "klmn",
-    ptzUsername: "username12",
-    ptzPort: 8091,
-    ptzIp: "0.0.0.12",
+    password: "klmn",
+    username: "username12",
+    port: 8091,
+    ip: "0.0.0.12",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -159,10 +168,10 @@ const data = [
     name: "Stream13",
     description: "Elevator camera",
     status: "inactive",
-    ptzPassword: "opqr",
-    ptzUsername: "username13",
-    ptzPort: 8092,
-    ptzIp: "0.0.0.13",
+    password: "opqr",
+    username: "username13",
+    port: 8092,
+    ip: "0.0.0.13",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -170,10 +179,10 @@ const data = [
     name: "Stream14",
     description: "Backdoor camera",
     status: "active",
-    ptzPassword: "stuv",
-    ptzUsername: "username14",
-    ptzPort: 8093,
-    ptzIp: "0.0.0.14",
+    password: "stuv",
+    username: "username14",
+    port: 8093,
+    ip: "0.0.0.14",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
   {
@@ -181,10 +190,10 @@ const data = [
     name: "Stream15",
     description: "Storage room camera",
     status: "inactive",
-    ptzPassword: "wxyz",
-    ptzUsername: "username15",
-    ptzPort: 8094,
-    ptzIp: "0.0.0.15",
+    password: "wxyz",
+    username: "username15",
+    port: 8094,
+    ip: "0.0.0.15",
     link: "https://www.youtube.com/watch?v=3v1n1v5Z2Z4",
   },
 ];
@@ -209,6 +218,44 @@ const PasswordCell = ({ value }: { value?: string }) => {
         )}
       </Button>
     </div>
+  );
+};
+
+const DeleteDialog = ({ id, name }: { id: string; name: string }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = (value: boolean) => {
+    setOpen(value);
+  };
+
+  const handleDelete = () => {
+    console.log(id);
+    setOpen(false);
+  };
+  return (
+    <Dialog open={open} onOpenChange={handleOpen}>
+      <DialogTrigger asChild>
+        <DropdownMenuItem
+          onSelect={(e) => e.preventDefault()}
+          className="text-destructive focus:text-destructive"
+        >
+          <Icons.delete className="w-4 h-4 text-destructive mr-2" />
+          Delete
+        </DropdownMenuItem>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-xs">
+        <DialogHeader>
+          <DialogTitle>Confirm</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>
+          {`Are you sure deleting ${name}?`}
+        </DialogDescription>
+        <DialogFooter>
+          <Button variant="destructive" onClick={handleDelete}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -254,23 +301,23 @@ function StreamList() {
           );
         },
       }),
-      columnHelper.accessor("ptzUsername", {
-        id: "ptzUsername",
+      columnHelper.accessor("username", {
+        id: "username",
         header: ({ column }) => (
           <SortingHeader column={column} title="Username" />
         ),
       }),
-      columnHelper.accessor("ptzPassword", {
-        id: "ptzPassword",
+      columnHelper.accessor("password", {
+        id: "password",
         header: "Password",
         cell: ({ getValue }) => <PasswordCell value={getValue()} />,
       }),
-      columnHelper.accessor("ptzIp", {
-        id: "ptzIp",
+      columnHelper.accessor("ip", {
+        id: "ip",
         header: ({ column }) => <SortingHeader column={column} title="IP" />,
       }),
-      columnHelper.accessor("ptzPort", {
-        id: "ptzPort",
+      columnHelper.accessor("port", {
+        id: "port",
         header: ({ column }) => <SortingHeader column={column} title="Port" />,
       }),
 
@@ -323,12 +370,24 @@ function StreamList() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Preview</DropdownMenuItem>
-                <DropdownMenuItem>Configure PTZ</DropdownMenuItem>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive focus:text-destructive">
-                  Delete
+                <DropdownMenuItem>
+                  <Icons.preview className="w-4 h-4 text-muted-foreground mr-2" />
+                  Preview
                 </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Icons.autoTrack className="w-4 h-4 text-muted-foreground mr-2" />
+                  Autotrack
+                </DropdownMenuItem>
+                <StreamForm
+                  initialData={row.original}
+                  trigger={
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Icons.edit className="w-4 h-4 text-muted-foreground mr-2" />
+                      Edit
+                    </DropdownMenuItem>
+                  }
+                />
+                <DeleteDialog id={row.original.id} name={row.original.name} />
               </DropdownMenuContent>
             </DropdownMenu>
           );
@@ -342,8 +401,21 @@ function StreamList() {
     <div>
       {contextHolder}
       <div className="flex justify-between pb-4 items-center">
-        <h1 className="text-xl font-semibold">Streams</h1>
-        <Button>New Stream</Button>
+        <div>
+          <h1 className="text-xl font-semibold">Streams</h1>
+          <p className="text-sm text-muted-foreground">
+            <span className="text-green-600">2</span> Active /{" "}
+            <span className="text-orange-600">6</span> Inactive
+          </p>
+        </div>
+        <StreamForm
+          trigger={
+            <Button>
+              <Icons.plus className="w-5 h-5 mr-2" />
+              New Stream
+            </Button>
+          }
+        />
       </div>
       <DataTable columns={columns} data={data} filterKey="name" />
     </div>

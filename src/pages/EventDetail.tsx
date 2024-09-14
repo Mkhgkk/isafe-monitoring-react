@@ -24,7 +24,7 @@ function EventDetail() {
         </p>
       </div>
       {loading ? (
-        <Skeleton className="rounded-md w-full lg:max-w-5xl mb-5 aspect-video" />
+        <Skeleton className="rounded-md w-full lg:max-w-5xl mb-5 aspect-[16/9]" />
       ) : (
         <div className="overflow-hidden rounded-md w-full lg:max-w-5xl mb-5">
           <video

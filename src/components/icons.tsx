@@ -21,6 +21,12 @@ import {
   EllipsisVertical,
   Eye,
   EyeOff,
+  MonitorPlay,
+  Settings2,
+  Pencil,
+  Trash2,
+  Scan,
+  Plus,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -46,6 +52,11 @@ export const Icons = {
   dotsVerfical: EllipsisVertical,
   eye: Eye,
   eyeOff: EyeOff,
+  preview: MonitorPlay,
+  autoTrack: Scan,
+  edit: Pencil,
+  delete: Trash2,
+  plus: Plus,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
