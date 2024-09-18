@@ -214,7 +214,14 @@ export default function MainPage() {
     <div className="">
       <div className="pb-4">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-semibold">Scheduled</h1>
+          <div>
+            <h1 className="text-xl font-semibold">Scheduled</h1>
+
+            <p className="text-sm text-muted-foreground">
+              <span className="text-green-600">2</span> Ongoing /{" "}
+              <span className="text-orange-600">6</span> Upcoming
+            </p>
+          </div>
           <ScheduleForm
             trigger={
               <Button>
