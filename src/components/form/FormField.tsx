@@ -1,4 +1,4 @@
-import { Path, UseFormRegister } from "react-hook-form";
+import { FieldValues, Path, UseFormRegister, Validate } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,8 @@ const FormField = <TFormData extends Record<string, any>>({
   mask,
   inputFormat,
   placeholder,
+  requiredMark = true,
+  validate,
   ...props
 }: {
   id: Path<TFormData>;
@@ -27,6 +29,8 @@ const FormField = <TFormData extends Record<string, any>>({
   mask?: string;
   inputFormat?: string;
   placeholder?: string;
+  requiredMark?: boolean;
+  validate?: Validate<any, FieldValues>;
 }) => {
   const registerWithMask = useHookFormMask(register);
 
@@ -34,7 +38,9 @@ const FormField = <TFormData extends Record<string, any>>({
     <div className={cn("grid gap-1", className)}>
       <Label className="text-xs">
         {label}
-        {required && <span className="text-destructive"> *</span>}
+        {required && requiredMark && (
+          <span className="text-destructive"> *</span>
+        )}
       </Label>
       <Input
         id={id as string}
@@ -44,8 +50,12 @@ const FormField = <TFormData extends Record<string, any>>({
           ? registerWithMask(id, mask, {
               inputFormat,
               required: required ? `${label} is required` : false,
+              validate,
             })
-          : register(id, required ? { required: `${label} is required` } : {}))}
+          : register(
+              id,
+              required ? { required: `${label} is required`, validate } : {}
+            ))}
         {...props}
       />
       {error && <span className="text-red-500 text-xs">{error}</span>}

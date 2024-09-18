@@ -17,6 +17,9 @@ import { message } from "antd";
 import EventDetail from "./pages/EventDetail";
 import EventList from "./pages/EventList";
 import StreamList from "./pages/StreamList";
+import LoginPage from "./pages/LoginPage";
+import AuthLayout from "./pages/AuthLayout";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -89,6 +92,10 @@ function App() {
           <Route path="/camera/:streamId" element={<CameraDetail />} />
           <Route path="/event" element={<EventList />} />
           <Route path="/event/:eventId" element={<EventDetail />} />
+        </Route>
+        <Route path="/" element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/sign-up" element={<SignupPage />} />
         </Route>
       </Route>
     )

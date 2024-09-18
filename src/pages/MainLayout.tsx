@@ -20,19 +20,13 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-
-// interface Props {
-//   defaultLayout: number[] | undefined;
-//   defaultCollapsed?: boolean;
-//   navCollapsedSize: number;
-// }
 
 interface SystemStatus {
   cpu: number;
@@ -44,7 +38,14 @@ interface MainLayoutProps {
   systemStatus: SystemStatus;
 }
 
-export function MainLayout({ systemStatus, isConnected }: MainLayoutProps) {
+export const MainLayout = (props: MainLayoutProps) => {
+  const token = localStorage.getItem("token");
+
+  return <Layout {...props} />;
+  // return token ? <Layout {...props} /> : <Navigate to="/login" />;
+};
+
+function Layout({ systemStatus, isConnected }: MainLayoutProps) {
   const panelRef = React.useRef();
   const defaultLayout = [265, 1000];
   const [isCollapsed, setIsCollapsed] = React.useState(
