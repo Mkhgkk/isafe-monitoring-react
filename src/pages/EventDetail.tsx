@@ -5,9 +5,11 @@ import image from "@/assets/1.jpg";
 import { useNavigate } from "react-router-dom";
 import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Icons } from "@/components/icons";
 
 function EventDetail() {
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,7 +20,14 @@ function EventDetail() {
   return (
     <div className="pb-4">
       <div className=" mb-4">
-        <h1 className="text-xl font-semibold">Camera name</h1>
+        <div className="flex items-center gap-2">
+          <Icons.arrowLeft
+            onClick={() => navigate(-1)}
+            className="cursor-pointer"
+          />
+          <h1 className="text-xl font-semibold">Camera name</h1>
+        </div>
+        {/* <h1 className="text-xl font-semibold">Camera name</h1> */}
         <p className="text-sm text-muted-foreground">
           Accured at 2024.08.08 13:44:30
         </p>
