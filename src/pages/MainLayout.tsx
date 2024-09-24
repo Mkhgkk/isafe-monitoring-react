@@ -27,6 +27,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Icons } from "@/components/icons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface SystemStatus {
   cpu: number;
@@ -115,7 +123,7 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
           ref={panelRef}
           className={cn(
             isCollapsed
-              ? "min-w-[50px] transition-all duration-300 ease-in-out"
+              ? "min-w-[50px] transition-all duration-300 ease-in-out flex flex-col justify-between"
               : "flex flex-col justify-between"
           )}
         >
@@ -148,8 +156,8 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
                 {
                   title: "Monitoring",
                   icon: LayoutDashboard,
-                  variant: pathname === "/" ? "default" : "ghost",
-                  href: "/",
+                  variant: pathname.includes("/camera") ? "default" : "ghost",
+                  href: "/camera",
                 },
                 {
                   title: "Security Cameras",
@@ -173,34 +181,69 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
             />
           </div>
 
-          <div className={cn("p-5 mb-4", isCollapsed && "hidden")}>
-            <ConnectionInfo />
-          </div>
-          <Popover>
-            <PopoverTrigger
-              className={cn(isCollapsed ? "block absolute bottom-4" : "hidden")}
-            >
-              <Button size="icon" variant={"ghost"} className="mx-2 h-9 w-9 ">
-                <div className="flex h-3 w-3 relative">
-                  <span
-                    className={cn(
-                      "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
-                      isConnected ? "bg-green-600" : "bg-orange-600"
-                    )}
-                  ></span>
-                  <span
-                    className={cn(
-                      "relative inline-flex rounded-full h-3 w-3",
-                      isConnected ? "bg-green-600" : "bg-orange-600"
-                    )}
-                  ></span>
-                </div>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
+          <div>
+            <div className={cn("p-5 ", isCollapsed && "hidden")}>
               <ConnectionInfo />
-            </PopoverContent>
-          </Popover>
+            </div>
+            <Popover>
+              <PopoverTrigger className={cn(!isCollapsed && "hidden")}>
+                <Button
+                  size="icon"
+                  variant={"ghost"}
+                  className="mx-2 h-9 w-9 mb-2"
+                >
+                  <div className="flex h-3 w-3 relative">
+                    <span
+                      className={cn(
+                        "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+                        isConnected ? "bg-green-600" : "bg-orange-600"
+                      )}
+                    ></span>
+                    <span
+                      className={cn(
+                        "relative inline-flex rounded-full h-3 w-3",
+                        isConnected ? "bg-green-600" : "bg-orange-600"
+                      )}
+                    ></span>
+                  </div>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent side="right">
+                <ConnectionInfo />
+              </PopoverContent>
+            </Popover>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "border-t w-full gap-3 justify-start rounded-none h-14",
+                    !isCollapsed && "px-4"
+                  )}
+                  size={"sm"}
+                >
+                  <Avatar className="w-7 h-7">
+                    <AvatarImage
+                      // src="https://github.com/shadcn.png"
+                      src={undefined}
+                    />
+                    <AvatarFallback>
+                      <Icons.user className="w-4 h-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <Label className={cn(isCollapsed && "hidden")}>
+                    Username
+                  </Label>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="right">
+                <DropdownMenuItem onSelect={() => console.log("logout")}>
+                  <Icons.logout className="w-4 h-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>

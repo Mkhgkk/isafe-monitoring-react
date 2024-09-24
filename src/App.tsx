@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -87,9 +88,10 @@ function App() {
             <MainLayout isConnected={isConnected} systemStatus={systemStatus} />
           }
         >
-          <Route path="/" element={<MainPage />} />
-          <Route path="/stream" element={<StreamList />} />
+          <Route path="/" element={<Navigate to="/camera" />} />
+          <Route path="/camera" element={<MainPage />} />
           <Route path="/camera/:streamId" element={<CameraDetail />} />
+          <Route path="/stream" element={<StreamList />} />
           <Route path="/event" element={<EventList />} />
           <Route path="/event/:eventId" element={<EventDetail />} />
         </Route>

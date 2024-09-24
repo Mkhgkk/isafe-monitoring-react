@@ -339,7 +339,7 @@ function StreamList() {
                   initialData={row.original}
                   trigger={
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <Icons.edit className="w-4 h-4 text-muted-foreground mr-2" />
+                      <Icons.edit className="w-4 h-4 text-zinc-800 mr-2" />
                       Edit
                     </DropdownMenuItem>
                   }
@@ -374,7 +374,12 @@ function StreamList() {
           }
         />
       </div>
-      <DataTable columns={columns} data={data} filterKey="name" />
+      <DataTable
+        columns={columns}
+        data={data}
+        filterKey="name"
+        onRefresh={() => console.log("refresh")}
+      />
     </div>
   );
 }

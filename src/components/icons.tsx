@@ -27,6 +27,9 @@ import {
   Trash2,
   Scan,
   Plus,
+  RotateCw,
+  User,
+  LogOut,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -57,6 +60,9 @@ export const Icons = {
   edit: Pencil,
   delete: Trash2,
   plus: Plus,
+  refresh: RotateCw,
+  user: User,
+  logout: LogOut,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>

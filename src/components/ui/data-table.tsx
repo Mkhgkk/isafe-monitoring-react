@@ -40,12 +40,14 @@ type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey?: string;
+  onRefresh?: () => void;
 };
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filterKey,
+  onRefresh,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -70,7 +72,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border p-4">
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between items-center">
         {filterKey && (
           <Input
             placeholder={`Search by ${filterKey}`}
@@ -82,6 +84,12 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-xs"
           />
+        )}
+        {onRefresh && (
+          <Button variant="outline" size="sm">
+            <Icons.refresh className="w-4 h-4 mr-1.5 text-zinc-800" />
+            Refresh
+          </Button>
         )}
       </div>
       <div className="border rounded-md">

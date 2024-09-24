@@ -36,7 +36,7 @@ function AutoTrackDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <Icons.autoTrack className="w-4 h-4 text-muted-foreground mr-2" />
+          <Icons.autoTrack className="w-4 h-4 text-zinc-800 mr-2" />
           Autotrack
         </DropdownMenuItem>
       </DialogTrigger>

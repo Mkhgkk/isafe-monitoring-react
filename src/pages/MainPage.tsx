@@ -18,7 +18,7 @@ export const cameras = [
     ptz_port: 80,
     ptz_username: "admin",
     rtsp_link: "rtsp://admin:1q2w3e4r.@218.54.201.82:554/idis?trackid=2",
-    stream_id: "stream1",
+    stream_id: "1",
     supports_ptz: true,
     ptz_autotrack: false,
     location: "Laboratory",
@@ -31,7 +31,7 @@ export const cameras = [
     ptz_port: 80,
     ptz_username: "root",
     rtsp_link: "rtsp://root:fsnetworks!@192.168.0.128:554/cam0_0",
-    stream_id: "stream2",
+    stream_id: "2",
     supports_ptz: true,
     ptz_autotrack: false,
     location: "Laboratory",
@@ -44,7 +44,7 @@ export const cameras = [
     ptz_port: 80,
     ptz_username: "root",
     rtsp_link: "rtsp://root:fsnetworks!@192.168.0.133:554/cam0_0",
-    stream_id: "stream3",
+    stream_id: "3",
     supports_ptz: true,
     ptz_autotrack: false,
     location: "Laboratory",
@@ -58,7 +58,7 @@ export const cameras = [
     ptz_username: null,
     rtsp_link:
       "rtsp://dhh:a12345678@dhh3-4.iptime.org:3554/cam/realmonitor?channel=1&subtype=0",
-    stream_id: "stream4",
+    stream_id: "4",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -72,7 +72,7 @@ export const cameras = [
     ptz_username: null,
     rtsp_link:
       "rtsp://khh:a12345678@khh5-1.iptime.org:554/cam/realmonitor?channel=1&subtype=0",
-    stream_id: "stream5",
+    stream_id: "5",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -86,7 +86,7 @@ export const cameras = [
     ptz_username: null,
     rtsp_link:
       "rtsp://dhh:a12345678@dhh00.iptime.org:2554/cam/realmonitor?channel=1&subtype=0",
-    stream_id: "stream6",
+    stream_id: "6",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -99,7 +99,7 @@ export const cameras = [
     ptz_port: null,
     ptz_username: null,
     rtsp_link: "rtsp://admin:smart456!@223.171.153.189:554/profile2/media.smp",
-    stream_id: "stream7",
+    stream_id: "7",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -112,7 +112,7 @@ export const cameras = [
     ptz_port: null,
     ptz_username: null,
     rtsp_link: "rtsp://admin:smart456!@223.171.147.33:554/profile2/media.smp",
-    stream_id: "stream8",
+    stream_id: "8",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -125,7 +125,7 @@ export const cameras = [
     ptz_port: null,
     ptz_username: null,
     rtsp_link: "rtsp://admin:smart1357!@223.171.83.140:554/profile2/media.smp",
-    stream_id: "stream9",
+    stream_id: "9",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -138,7 +138,7 @@ export const cameras = [
     ptz_port: null,
     ptz_username: null,
     rtsp_link: "rtsp://admin:smart1357!@223.171.32.194:554/profile2/media.smp",
-    stream_id: "stream10",
+    stream_id: "10",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -151,7 +151,7 @@ export const cameras = [
     ptz_port: null,
     ptz_username: null,
     rtsp_link: "rtsp://admin:smart1357!@223.171.153.134:554/profile2/media.smp",
-    stream_id: "stream11",
+    stream_id: "10",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -164,7 +164,7 @@ export const cameras = [
     ptz_port: null,
     ptz_username: null,
     rtsp_link: "rtsp://admin:smart456!@223.171.89.221:554/profile2/media.smp",
-    stream_id: "stream12",
+    stream_id: "12",
     supports_ptz: false,
     ptz_autotrack: false,
     location: "Bridge Construction",
@@ -231,32 +231,35 @@ export default function MainPage() {
             }
           />
         </div>
-        <p className="mb-4 font-semibold text-lg">Ongoing</p>
-        <div className="grid grid-cols-3 gap-4">
-          {cameras.map((item, index) => (
-            <div
-              key={index}
-              className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
-              onClick={() => navigate(`/camera/${item.stream_id}`)}
-            >
-              <PanelVideo camera={item} streamId={item.stream_id} />
-              <Info
-                cameraName={item.id}
-                modelName={item.model_name}
-                location={item.location}
-                bg
-              />
-            </div>
-          ))}
+        {/* <Separator /> */}
+        <div className="border p-4 rounded-md">
+          <p className="mb-5 font-semibold text-lg ">Ongoing</p>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {cameras.map((item, index) => (
+              <div
+                key={index}
+                className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
+                onClick={() => navigate(`/camera/${item.stream_id}`)}
+              >
+                <PanelVideo camera={item} streamId={item.stream_id} />
+                <Info
+                  cameraName={item.id}
+                  modelName={item.model_name}
+                  location={item.location}
+                  bg
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <Separator />
-      <div className="py-4">
-        <p className="mb-4 font-semibold text-lg">Upcoming</p>
-        <div className="grid grid-cols-3 gap-4">
+      {/* <Separator /> */}
+      <div className="border p-4 rounded-md">
+        <p className="mb-5 font-semibold text-lg">Upcoming</p>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {[0, 1].map((item, index) => (
-            <div className="relative " key={index}>
-              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-60 flex justify-center items-center cursor-pointer">
+            <div className="relative" key={index}>
+              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center cursor-pointer aspect-[16/9]">
                 <Icons.offline className="opacity-30" size={50} />
               </div>
               <Info />

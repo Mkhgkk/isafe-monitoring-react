@@ -21,9 +21,9 @@ import {
 
 function EventItemSkeleton() {
   return (
-    <div className="">
-      <Skeleton className="w-full rounded-sm aspect-[16/9] mb-1 border" />
-      <div className="">
+    <div>
+      <Skeleton className="w-full rounded-sm aspect-[16/9] mb-2 border" />
+      <div>
         <Skeleton className="h-5 w-20 mb-2 rounded-sm" />
         <Skeleton className="h-3 w-28 rounded-sm mb-0.5" />
         <Skeleton className="h-3 w-28" />
@@ -106,7 +106,7 @@ export default function EventList() {
           ) : (
             <div className="gap-2" onClick={() => navigate("/event/" + item)}>
               <img src={image} className="w-full rounded-sm aspect-[16/9]" />
-              <div className="">
+              <div className="mt-1">
                 <p className="font-semibold mb-1">Security</p>
                 <p className="text-xs text-zinc-500">Whatever infor</p>
                 <p className="text-xs text-zinc-500">12:01:03 PM</p>
