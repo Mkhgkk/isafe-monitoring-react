@@ -138,7 +138,7 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
                 src="src/assets/logoBlack.png"
                 width={25}
                 height={25}
-                className="mx-3"
+                className={cn(isCollapsed ? "mx-auto" : "mx-3")}
               />
               <Label
                 className={cn(
@@ -186,11 +186,11 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
               <ConnectionInfo />
             </div>
             <Popover>
-              <PopoverTrigger className={cn(!isCollapsed && "hidden")}>
+              <PopoverTrigger className={cn(isCollapsed ? "w-full" : "hidden")}>
                 <Button
                   size="icon"
                   variant={"ghost"}
-                  className="mx-2 h-9 w-9 mb-2"
+                  className="h-9 w-9 mb-2 mx-auto"
                 >
                   <div className="flex h-3 w-3 relative">
                     <span
@@ -217,8 +217,8 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
                 <Button
                   variant="ghost"
                   className={cn(
-                    "border-t w-full gap-3 justify-start rounded-none h-14",
-                    !isCollapsed && "px-4"
+                    "border-t w-full gap-3 rounded-none h-14",
+                    !isCollapsed && "px-4 justify-start"
                   )}
                   size={"sm"}
                 >
