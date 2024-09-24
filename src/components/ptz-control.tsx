@@ -74,7 +74,7 @@ function PTZControl({ streamId }: PTZControlProps) {
 
     // make request
     // const url = "http://192.168.0.10:5000/api/change_autotrack";
-    const url = `http://${config.BACKEND_URL}/api/change_autotrack`;
+    const url = `http://${config.BACKEND_URL}/api/stream/change_autotrack`;
     const data = {
       stream_id: streamId,
     };
