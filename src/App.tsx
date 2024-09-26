@@ -25,18 +25,14 @@ import SignupPage from "./pages/SignupPage";
 import { Client, Account, Models } from "appwrite";
 import { AppwriteProvider } from "./context/AppwriteContext";
 import { Toaster } from "@/components/ui/toaster";
-
-const client = new Client();
-
-client.setEndpoint("http://localhost/v1").setProject("66f4c2e6001ef89c0f5c");
-
-const account = new Account(client);
+import { useAppwrite } from "./context/AppwriteContext";
 
 function App() {
-  const [user, setUser] = useState<Models.User<{}> | null>(null);
+  const [user, setUser] = useState<Models.User<object> | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
   const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });
   const [isConnected, setIsConnected] = useState(false);
+  // const {account} = useAppwrite()
 
   // useEffect(() => {
   //   account

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 import {
@@ -20,7 +20,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   Popover,
   PopoverContent,
@@ -46,38 +46,55 @@ interface SystemStatus {
 interface MainLayoutProps {
   isConnected: boolean;
   systemStatus: SystemStatus;
+  // user: Models.User<object>;
 }
 
 export const MainLayout = (props: MainLayoutProps) => {
-  const [user, setUser] = React.useState<Models.User<{}> | null>(null);
+  const [user, setUser] = useState<Models.User<object> | null>(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const { account } = useAppwrite();
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    account
-      .get<Models.User<object>>()
-      .then((response) => {
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await account.get<Models.User<object>>();
         setUser(response);
         console.log("main layout", response);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("No user logged in", error);
-      })
-      .finally(() => {});
-  }, [account]);
+        navigate("/login");
+      } finally {
+        setLoading(false); // Ensure loading state is updated
+      }
+    };
 
-  if (user === null) {
-    return <div>Loading...</div>;
+    fetchUser();
+  }, [account, navigate]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading state while checking user
   }
-  return user ? <Layout {...props} /> : <Navigate to="/login" />;
-};
 
-function Layout({ systemStatus, isConnected }: MainLayoutProps) {
+  return user ? <Layout user={user} {...props} /> : <Navigate to="/login" />;
+};
+interface LayoutProps {
+  user: Models.User<object>;
+}
+
+function Layout({
+  systemStatus,
+  isConnected,
+  user,
+}: MainLayoutProps & LayoutProps) {
   const panelRef = React.useRef();
   const defaultLayout = [265, 1000];
   const [isCollapsed, setIsCollapsed] = React.useState(
     Cookies.get("collapsed") === "true" || false
   );
   const { pathname } = useLocation();
+  const { account } = useAppwrite();
+  const navigate = useNavigate();
 
   const updateCollapsedCookie = (value: boolean) => {
     Cookies.set("collapsed", `${value}`);
@@ -121,6 +138,20 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
       <p className="text-sm">GPU: {systemStatus.gpu.toFixed(1)}%</p>
     </>
   );
+
+  const handleLogout = async () => {
+    // console.log("handle logout");
+    // console.log(user);
+    try {
+      const result = await account.deleteSession(
+        "current" // sessionId
+      );
+      console.log(result);
+      navigate("/login");
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -250,12 +281,12 @@ function Layout({ systemStatus, isConnected }: MainLayoutProps) {
                     </AvatarFallback>
                   </Avatar>
                   <Label className={cn(isCollapsed && "hidden")}>
-                    Username
+                    {user && user.name}
                   </Label>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="right">
-                <DropdownMenuItem onSelect={() => console.log("logout")}>
+                <DropdownMenuItem onSelect={handleLogout}>
                   <Icons.logout className="w-4 h-4 mr-2" />
                   Logout
                 </DropdownMenuItem>

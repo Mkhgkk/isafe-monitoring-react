@@ -96,7 +96,7 @@ function LoginPage() {
             />
 
             <div>
-              <Button className="w-full mt-4" type="submit">
+              <Button disabled={loading} className="w-full mt-4" type="submit">
                 Login
               </Button>
               <Button
