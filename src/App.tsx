@@ -21,10 +21,32 @@ import LoginPage from "./pages/LoginPage";
 import AuthLayout from "./pages/AuthLayout";
 import SignupPage from "./pages/SignupPage";
 
+import { Client, Account, Models } from "appwrite";
+
+const client = new Client();
+
+client.setEndpoint("http://localhost/v1").setProject("66f4c2e6001ef89c0f5c");
+
+const account = new Account(client);
+
 function App() {
+  const [user, setUser] = useState<Models.User<{}> | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
   const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });
   const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    account
+      .get<Models.User<object>>()
+      .then((response) => {
+        setUser(response);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("No user logged in", error);
+      })
+      .finally(() => {});
+  }, []);
 
   useEffect(() => {
     if (!isConnected) {
