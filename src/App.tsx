@@ -23,6 +23,7 @@ import AuthLayout from "./pages/AuthLayout";
 import SignupPage from "./pages/SignupPage";
 
 import { Client, Account, Models } from "appwrite";
+import { AppwriteProvider } from "./context/AppwriteContext";
 
 const client = new Client();
 
@@ -36,18 +37,18 @@ function App() {
   const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });
   const [isConnected, setIsConnected] = useState(false);
 
-  useEffect(() => {
-    account
-      .get<Models.User<object>>()
-      .then((response) => {
-        setUser(response);
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error("No user logged in", error);
-      })
-      .finally(() => {});
-  }, []);
+  // useEffect(() => {
+  //   account
+  //     .get<Models.User<object>>()
+  //     .then((response) => {
+  //       setUser(response);
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.error("No user logged in", error);
+  //     })
+  //     .finally(() => {});
+  // }, []);
 
   useEffect(() => {
     if (!isConnected) {
@@ -126,12 +127,12 @@ function App() {
   );
 
   return (
-    <>
+    <AppwriteProvider>
       {contextHolder}
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
       </ThemeProvider>
-    </>
+    </AppwriteProvider>
   );
 }
 

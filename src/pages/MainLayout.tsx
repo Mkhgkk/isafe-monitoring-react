@@ -35,6 +35,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAppwrite } from "../context/AppwriteContext";
+import { Client, Account, Models } from "appwrite";
 
 interface SystemStatus {
   cpu: number;
@@ -47,10 +49,25 @@ interface MainLayoutProps {
 }
 
 export const MainLayout = (props: MainLayoutProps) => {
-  const token = localStorage.getItem("token");
+  const [user, setUser] = React.useState<Models.User<{}> | null>(null);
+  const { account } = useAppwrite();
 
-  return <Layout {...props} />;
-  // return token ? <Layout {...props} /> : <Navigate to="/login" />;
+  React.useEffect(() => {
+    account
+      .get<Models.User<object>>()
+      .then((response) => {
+        setUser(response);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("No user logged in", error);
+      })
+      .finally(() => {});
+  }, []);
+
+  // const token = localStorage.getItem("token");
+  // return <Layout {...props} />;
+  return user ? <Layout {...props} /> : <Navigate to="/login" />;
 };
 
 function Layout({ systemStatus, isConnected }: MainLayoutProps) {
