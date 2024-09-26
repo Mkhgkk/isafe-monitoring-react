@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import React from "react";
+import React, { useState } from "react";
 import logo from "@/assets/logoBlack.png";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import FormField from "@/components/form/FormField";
+import { useAppwrite } from "../context/AppwriteContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface SignupFormData {
   username: string;
@@ -30,9 +32,40 @@ function SignupPage() {
     watch,
     reset,
   } = useForm();
+  const { account } = useAppwrite();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<SignupFormData> = (data) => {
+  const { toast } = useToast();
+
+  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
+    setLoading(true);
     console.log(data); // Handle form submission
+    const { email, usernmae: name, password } = data;
+    try {
+      const uniqueID = "iguard_" + Math.random().toString(36).substring(2);
+      const response = await account.create(uniqueID, email, password, name);
+      console.log("User signed up:", response);
+      toast({
+        variant: "default",
+        title: "Signup Successful",
+        description: "You can now login into your account!",
+      });
+      // navigate to login screen
+      navigate("/login");
+      setSuccess(true);
+    } catch (err: any) {
+      console.error("Signup error:", err);
+      setError(err.message || "Something went wrong.");
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,7 +132,9 @@ function SignupPage() {
             />
 
             <div>
-              <Button className="w-full mt-4">Create account</Button>
+              <Button disabled={loading} className="w-full mt-4">
+                Create account
+              </Button>
               <Button
                 className="w-full"
                 variant="link"

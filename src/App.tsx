@@ -24,6 +24,7 @@ import SignupPage from "./pages/SignupPage";
 
 import { Client, Account, Models } from "appwrite";
 import { AppwriteProvider } from "./context/AppwriteContext";
+import { Toaster } from "@/components/ui/toaster";
 
 const client = new Client();
 
@@ -132,6 +133,7 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
       </ThemeProvider>
+      <Toaster />
     </AppwriteProvider>
   );
 }
