@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,6 +13,7 @@ import logo from "@/assets/logoBlack.png";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import FormField from "@/components/form/FormField";
+import { useAppwrite } from "../context/AppwriteContext";
 
 interface LoginFormData {
   email: string;
@@ -19,6 +21,7 @@ interface LoginFormData {
 }
 
 function LoginPage() {
+  const { account } = useAppwrite();
   const navigate = useNavigate();
   const {
     register,
@@ -27,11 +30,38 @@ function LoginPage() {
     reset,
   } = useForm();
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    console.log(data);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
-    localStorage.setItem("token", "1234");
-    navigate("/", { replace: true });
+  useEffect(() => {
+    try {
+      account.get().then((response) => {
+        navigate("/");
+      });
+    } catch (err: any) {
+      console.log(err);
+    }
+  }, []);
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
+    try {
+      console.log(data);
+      const { email, password } = data;
+      const session = await account.createEmailPasswordSession(email, password);
+
+      console.log("User logged in:", session);
+      navigate("/");
+      setSuccess(true);
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError(err.message || "Invalid credentials. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+
+    // localStorage.setItem("token", "1234");
+    // navigate("/", { replace: true });
   };
 
   return (

@@ -57,16 +57,17 @@ export const MainLayout = (props: MainLayoutProps) => {
       .get<Models.User<object>>()
       .then((response) => {
         setUser(response);
-        console.log(response);
+        console.log("main layout", response);
       })
       .catch((error) => {
         console.error("No user logged in", error);
       })
       .finally(() => {});
-  }, []);
+  }, [account]);
 
-  // const token = localStorage.getItem("token");
-  // return <Layout {...props} />;
+  if (user === null) {
+    return <div>Loading...</div>;
+  }
   return user ? <Layout {...props} /> : <Navigate to="/login" />;
 };
 
