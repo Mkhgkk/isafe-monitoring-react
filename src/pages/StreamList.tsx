@@ -18,10 +18,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAppwrite } from "@/context/AppwriteContext";
 import { cn } from "@/lib/utils";
 import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const data = [
   {
@@ -217,6 +218,38 @@ const PasswordCell = ({ value }: { value?: string }) => {
 function StreamList() {
   const columnHelper = createColumnHelper();
   const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(false);
+  const { databases, appwriteClient } = useAppwrite();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const response = await databases.listDocuments(
+          "isafe-guard-db",
+          "66f504260003d64837e5"
+        );
+        console.log(response);
+      } catch (err: any) {
+        console.log("StreamList - Failed to get list of streams: ", err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    // Correct subscription event for creation of documents in the collection
+    const unsubscribe = appwriteClient.subscribe(
+      // "databases.isafe-guard-db.66f504260003d64837e5.documents",
+      // "documents", // this is working
+      "databases.isafe-guard-db.collections.66f504260003d64837e5.documents",
+      (response) => {
+        console.log("StreamList.tsx - Subscription returned data: ", response);
+      }
+    );
+
+    // Correct unsubscription
+    return () => unsubscribe();
+  }, []);
 
   const columns = useMemo(
     () => [
