@@ -22,10 +22,32 @@ import LoginPage from "./pages/LoginPage";
 import AuthLayout from "./pages/AuthLayout";
 import SignupPage from "./pages/SignupPage";
 
+import { Client, Account, Models } from "appwrite";
+
+const client = new Client();
+
+client.setEndpoint("http://localhost/v1").setProject("66f4c2e6001ef89c0f5c");
+
+const account = new Account(client);
+
 function App() {
+  const [user, setUser] = useState<Models.User<{}> | null>(null);
   const [messageApi, contextHolder] = message.useMessage();
   const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });
   const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    account
+      .get<Models.User<object>>()
+      .then((response) => {
+        setUser(response);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("No user logged in", error);
+      })
+      .finally(() => {});
+  }, []);
 
   useEffect(() => {
     if (!isConnected) {
@@ -47,37 +69,37 @@ function App() {
     }
   }, [isConnected]);
 
-  // useEffect(() => {
-  //   messageApi.open({
-  //     key: "updatable",
-  //     type: "loading",
-  //     content: "Connecting...",
-  //     duration: 0,
-  //   });
+  useEffect(() => {
+    messageApi.open({
+      key: "updatable",
+      type: "loading",
+      content: "Connecting...",
+      duration: 0,
+    });
 
-  //   socket.connect();
+    socket.connect();
 
-  //   socket.on("connect", () => {
-  //     setIsConnected(true);
-  //     console.log("Connected to socket server");
-  //   });
+    socket.on("connect", () => {
+      setIsConnected(true);
+      console.log("Connected to socket server");
+    });
 
-  //   socket.on("disconnect", () => {
-  //     setIsConnected(false);
-  //     console.log("Socket server disconnected");
-  //   });
+    socket.on("disconnect", () => {
+      setIsConnected(false);
+      console.log("Socket server disconnected");
+    });
 
-  //   socket.on("system_status", (data) => {
-  //     setSystemStatus(data);
-  //     // console.log("System Status: ", data);
-  //   });
+    socket.on("system_status", (data) => {
+      setSystemStatus(data);
+      // console.log("System Status: ", data);
+    });
 
-  //   return () => {
-  //     socket.off("connect");
-  //     socket.off("system_status");
-  //     socket.disconnect();
-  //   };
-  // }, []);
+    return () => {
+      socket.off("connect");
+      socket.off("system_status");
+      socket.disconnect();
+    };
+  }, []);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
