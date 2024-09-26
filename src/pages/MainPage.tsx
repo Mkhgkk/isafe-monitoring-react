@@ -30,13 +30,8 @@ export const cameras = [
     ptz_password: "fsnetworks1!",
     ptz_port: 80,
     ptz_username: "root",
-<<<<<<< HEAD
-    rtsp_link: "rtsp://root:fsnetworks!@192.168.0.128:554/cam0_0",
-    stream_id: "2",
-=======
     rtsp_link: "rtsp://root:fsnetworks!@192.168.0.149:554/cam0_0",
     stream_id: "stream2",
->>>>>>> appwrite
     supports_ptz: true,
     ptz_autotrack: false,
     location: "Laboratory",
