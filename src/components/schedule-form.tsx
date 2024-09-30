@@ -31,6 +31,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm();
 
   const onSubmit: SubmitHandler<ScheduleFormData> = (data) => {
@@ -56,14 +57,15 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <SelectField
-              id="streamId"
+              id="stream_id"
               label="Stream"
               register={register}
               options={[
-                { value: "1", label: "Stream 1" },
-                { value: "2", label: "Stream 2" },
+                { value: "stream1", label: "Stream 1" },
+                { value: "stream2", label: "Stream 2" },
               ]}
-              error={errors.streamId?.message as string}
+              error={errors.stream_id?.message as string}
+              setValue={setValue}
               required
             />
             <FormField
@@ -79,13 +81,14 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 label="Start date"
                 register={register}
                 error={errors.startDate?.message as string}
+                setValue={setValue}
                 required
               />
               <FormField
                 id="startTime"
                 label="Start time"
                 register={register}
-                error={errors.startAt?.message as string}
+                error={errors.startTime?.message as string}
                 required
                 mask="datetime"
                 inputFormat="HH:mm"
@@ -97,14 +100,15 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 id="endDate"
                 label="End date"
                 register={register}
-                error={errors.startAt?.message as string}
+                error={errors.endDate?.message as string}
+                setValue={setValue}
                 required
               />
               <FormField
                 id="endTime"
                 label="End time"
                 register={register}
-                error={errors.startAt?.message as string}
+                error={errors.endTime?.message as string}
                 required
                 mask="datetime"
                 inputFormat="HH:mm"

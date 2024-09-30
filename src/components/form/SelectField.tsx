@@ -18,6 +18,7 @@ const SelectField = <TFormData extends Record<string, any>>({
   error,
   required,
   className,
+  setValue,
 }: {
   id: Path<TFormData>;
   label: string;
@@ -26,6 +27,7 @@ const SelectField = <TFormData extends Record<string, any>>({
   error?: string;
   required?: boolean;
   className?: string;
+  setValue?: () => void;
 }) => (
   <div className={cn("grid gap-1", className)}>
     <Label className="text-xs">
@@ -33,7 +35,8 @@ const SelectField = <TFormData extends Record<string, any>>({
       {required && <span className="text-destructive"> *</span>}
     </Label>
     <Select
-      onValueChange={(value) => register(id).onChange({ target: { value } })} // Handles form value change
+      // onValueChange={(value) => register(id).onChange({ target: { value } })} // Handles form value change
+      onValueChange={(value) => setValue(id, value)} // Handles form value change
     >
       <SelectTrigger>
         <SelectValue placeholder={`Select ${label}`} />

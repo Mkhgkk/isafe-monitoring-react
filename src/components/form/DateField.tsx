@@ -18,6 +18,7 @@ const DateField = <TFormData extends Record<string, any>>({
   register,
   error,
   required,
+  setValue,
   className,
 }: {
   id: Path<TFormData>;
@@ -26,6 +27,7 @@ const DateField = <TFormData extends Record<string, any>>({
   error?: string;
   required?: boolean;
   className?: string;
+  setValue?: () => void;
 }) => {
   const [date, setDate] = React.useState<Date | undefined>();
   const [open, setOpen] = React.useState(false);
@@ -57,7 +59,8 @@ const DateField = <TFormData extends Record<string, any>>({
             selected={date}
             onSelect={(selectedDate) => {
               setDate(selectedDate);
-              register(id).onChange({ target: { value: selectedDate } });
+              setValue(id, selectedDate);
+              // register(id).onChange({ target: { value: selectedDate } });
               setOpen(false);
             }}
             numberOfMonths={1}
