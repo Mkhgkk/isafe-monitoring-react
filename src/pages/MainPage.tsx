@@ -18,7 +18,7 @@ export const cameras = [
     ptz_port: 80,
     ptz_username: "admin",
     rtsp_link: "rtsp://admin:1q2w3e4r.@218.54.201.82:554/idis?trackid=2",
-    stream_id: "stream1",
+    stream_id: "1",
     supports_ptz: true,
     ptz_autotrack: false,
     location: "Laboratory",

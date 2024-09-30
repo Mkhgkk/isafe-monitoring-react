@@ -69,6 +69,7 @@ function StreamForm({
         );
 
         console.log("Document updated successfully:", response);
+        reset();
       } else {
         // handle create  new stream
         const response = await databases.createDocument(
@@ -87,6 +88,7 @@ function StreamForm({
           }
         );
         console.log("Document created successfully:", response);
+        reset();
       }
 
       setOpen(false);
