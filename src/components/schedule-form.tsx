@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   Dialog,
@@ -14,6 +14,7 @@ import FormField from "@/components/form/FormField";
 import SelectField from "./form/SelectField";
 import DateField from "./form/DateField";
 import { Separator } from "./ui/separator";
+import { useAppwrite } from "@/context/AppwriteContext";
 
 // Define the form data interface
 interface ScheduleFormData {
@@ -25,6 +26,17 @@ interface ScheduleFormData {
   desc?: string;
 }
 
+const getUnixTimestamp = (date: Date, time: string) => {
+  const [hours, minutes] = time.split(":").map(Number);
+
+  date.setHours(hours);
+  date.setMinutes(minutes);
+
+  const unixTimestamp = Math.floor(date.getTime() / 1000);
+
+  return unixTimestamp;
+};
+
 function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   const {
     register,
@@ -34,8 +46,51 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
     setValue,
   } = useForm();
 
-  const onSubmit: SubmitHandler<ScheduleFormData> = (data) => {
+  const { databases } = useAppwrite();
+
+  const [loading, setLoading] = useState(false);
+  const [streams, setStreams] = useState([]);
+
+  const fetchStreams = async () => {
+    try {
+      setLoading(true);
+      const response = await databases.listDocuments(
+        "isafe-guard-db",
+        "66f504260003d64837e5"
+      );
+      console.log(
+        "Schedule Form - List of streams: ",
+        response.documents.map((item) => item.stream_id)
+      );
+      setStreams(response.documents.map((item) => item.stream_id));
+    } catch (err: any) {
+      console.log("Schedule Form - Failed to get list of streams: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStreams();
+  }, []);
+
+  const onSubmit: SubmitHandler<ScheduleFormData> = async (data) => {
     console.log(data); // Handle form submission
+
+    console.log(getUnixTimestamp(data.startDate, data.startTime));
+
+    return;
+
+    try {
+      // create schedule
+      setLoading(true);
+    } catch (err) {
+      // handle error
+      console.log(err);
+    } finally {
+      // stop loading
+      setLoading(false);
+    }
   };
 
   const handleOpen = (value: boolean) => {
@@ -60,10 +115,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
               id="stream_id"
               label="Stream"
               register={register}
-              options={[
-                { value: "stream1", label: "Stream 1" },
-                { value: "stream2", label: "Stream 2" },
-              ]}
+              options={streams.map((item) => ({ value: item, label: item }))}
               error={errors.stream_id?.message as string}
               setValue={setValue}
               required
