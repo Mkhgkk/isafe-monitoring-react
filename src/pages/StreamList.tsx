@@ -325,6 +325,12 @@ function StreamList() {
           <SortingHeader column={column} title="Location" />
         ),
       }),
+      columnHelper.accessor("ptz_username", {
+        id: "ptz_username",
+        header: ({ column }) => (
+          <SortingHeader column={column} title="PTZ username" />
+        ),
+      }),
       columnHelper.accessor("ptz_password", {
         id: "ptz_password",
         header: "PTZ Password",

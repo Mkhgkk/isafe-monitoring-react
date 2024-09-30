@@ -22,6 +22,7 @@ interface StreamFormData {
   ptz_port?: number;
   location?: string;
   ptz_password?: string;
+  ptz_username?: string;
 }
 
 function StreamForm({
@@ -63,6 +64,7 @@ function StreamForm({
             ptz_password: data.ptz_password,
             ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
             location: data.location,
+            ptz_username: data.ptz_username,
           }
         );
 
@@ -81,6 +83,7 @@ function StreamForm({
             ptz_password: data.ptz_password,
             ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
             location: data.location,
+            ptz_username: data.ptz_username,
           }
         );
         console.log("Document created successfully:", response);
@@ -127,6 +130,12 @@ function StreamForm({
               register={register}
               error={errors.description?.message as string}
             />
+            <FormField
+              id="location"
+              label="Camera Location"
+              register={register}
+              error={errors.location?.message as string}
+            />
             <Separator className="mt-2" />
             <FormField
               id="rtsp_link"
@@ -155,10 +164,10 @@ function StreamForm({
             </div>
             <div className="grid grid-cols-2 gap-3">
               <FormField
-                id="location"
-                label="Camera Location"
+                id="ptz_username"
+                label="PTZ username"
                 register={register}
-                error={errors.location?.message as string}
+                error={errors.ptz_username?.message as string}
               />
               <FormField
                 id="ptz_password"

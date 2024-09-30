@@ -78,7 +78,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 id="startDate"
                 label="Start date"
                 register={register}
-                error={errors.startAt?.message as string}
+                error={errors.startDate?.message as string}
                 required
               />
               <FormField
