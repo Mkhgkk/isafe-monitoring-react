@@ -48,21 +48,44 @@ function StreamForm({
   const onSubmit: SubmitHandler<StreamFormData> = async (data) => {
     try {
       setLoading(true);
-      const response = await databases.createDocument(
-        "isafe-guard-db",
-        "66f504260003d64837e5",
-        "unique()",
-        {
-          description: data.description,
-          cam_ip: data.cam_ip,
-          rtsp_link: data.rtsp_link,
-          stream_id: data.stream_id,
-          ptz_password: data.ptz_password,
-          ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
-          location: data.location,
-        }
-      );
-      console.log("Document created successfully:", response);
+
+      if (initialData) {
+        // handle update stream
+        const response = await databases.updateDocument(
+          "isafe-guard-db",
+          "66f504260003d64837e5",
+          data.$id,
+          {
+            description: data.description,
+            cam_ip: data.cam_ip,
+            rtsp_link: data.rtsp_link,
+            stream_id: data.stream_id,
+            ptz_password: data.ptz_password,
+            ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
+            location: data.location,
+          }
+        );
+
+        console.log("Document updated successfully:", response);
+      } else {
+        // handle create  new stream
+        const response = await databases.createDocument(
+          "isafe-guard-db",
+          "66f504260003d64837e5",
+          "unique()",
+          {
+            description: data.description,
+            cam_ip: data.cam_ip,
+            rtsp_link: data.rtsp_link,
+            stream_id: data.stream_id,
+            ptz_password: data.ptz_password,
+            ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
+            location: data.location,
+          }
+        );
+        console.log("Document created successfully:", response);
+      }
+
       setOpen(false);
     } catch (err: any) {
       console.log(err);

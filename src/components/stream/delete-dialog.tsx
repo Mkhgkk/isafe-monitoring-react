@@ -52,7 +52,7 @@ const DeleteDialog = ({ $id, stream_id }: { id: string; name: string }) => {
           <DialogTitle>Confirm</DialogTitle>
         </DialogHeader>
         <DialogDescription>
-          {`Are you sure deleting ${stream_id}?`}
+          {`Are you sure you want to delete ${stream_id}?`}
         </DialogDescription>
         <DialogFooter>
           <Button variant="destructive" onClick={handleDelete}>
