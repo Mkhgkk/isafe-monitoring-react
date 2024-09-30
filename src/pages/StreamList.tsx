@@ -410,7 +410,10 @@ function StreamList() {
                     </DropdownMenuItem>
                   }
                 />
-                <DeleteDialog id={row.original.id} name={row.original.name} />
+                <DeleteDialog
+                  $id={row.original.$id}
+                  stream_id={row.original.stream_id}
+                />
               </DropdownMenuContent>
             </DropdownMenu>
           );
