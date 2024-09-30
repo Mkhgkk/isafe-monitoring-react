@@ -222,22 +222,24 @@ function StreamList() {
   const [data, setData] = useState([]);
   const { databases, appwriteClient } = useAppwrite();
 
+  const fetchStreams = async () => {
+    try {
+      setLoading(true);
+      const response = await databases.listDocuments(
+        "isafe-guard-db",
+        "66f504260003d64837e5"
+      );
+      console.log(response.documents);
+      setData(response.documents);
+    } catch (err: any) {
+      console.log("StreamList - Failed to get list of streams: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const response = await databases.listDocuments(
-          "isafe-guard-db",
-          "66f504260003d64837e5"
-        );
-        console.log(response.documents);
-        setData(response.documents);
-      } catch (err: any) {
-        console.log("StreamList - Failed to get list of streams: ", err);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    fetchStreams();
 
     const unsubscribe = appwriteClient.subscribe(
       "databases.isafe-guard-db.collections.66f504260003d64837e5.documents",
@@ -276,7 +278,6 @@ function StreamList() {
       }
     );
 
-    // Correct unsubscription
     return () => unsubscribe();
   }, []);
 
@@ -446,6 +447,8 @@ function StreamList() {
       <DataTable
         columns={columns}
         data={data}
+        fetchFn={fetchStreams}
+        loading={loading}
         filterKey="name"
         onRefresh={() => console.log("refresh")}
       />
