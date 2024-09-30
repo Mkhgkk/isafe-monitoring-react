@@ -24,7 +24,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 
-const data = [
+const data_ = [
   {
     id: "1", //string unique
     name: "Stream2", //string,
@@ -219,6 +219,7 @@ function StreamList() {
   const columnHelper = createColumnHelper();
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
   const { databases, appwriteClient } = useAppwrite();
 
   useEffect(() => {
@@ -229,7 +230,8 @@ function StreamList() {
           "isafe-guard-db",
           "66f504260003d64837e5"
         );
-        console.log(response);
+        console.log(response.documents);
+        setData(response.documents);
       } catch (err: any) {
         console.log("StreamList - Failed to get list of streams: ", err);
       } finally {
@@ -237,13 +239,40 @@ function StreamList() {
       }
     })();
 
-    // Correct subscription event for creation of documents in the collection
     const unsubscribe = appwriteClient.subscribe(
-      // "databases.isafe-guard-db.66f504260003d64837e5.documents",
-      // "documents", // this is working
       "databases.isafe-guard-db.collections.66f504260003d64837e5.documents",
       (response) => {
         console.log("StreamList.tsx - Subscription returned data: ", response);
+        if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.create"
+          )
+        ) {
+          setData((prevState) => [...prevState, response.payload]);
+        } else if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.delete"
+          )
+        ) {
+          // handle delete
+          setData((prevState) => [
+            ...prevState.filter((item) => item.$id !== response.payload.$id),
+          ]);
+        } else if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.update"
+          )
+        ) {
+          // handle update
+          setData((prevState) => {
+            const index = prevState.findIndex(
+              (item) => item.$id === response.payload.$id
+            );
+            const newState = [...prevState];
+            newState[index] = response.payload;
+            return newState;
+          });
+        }
       }
     );
 
@@ -253,12 +282,12 @@ function StreamList() {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("id", {
+      columnHelper.accessor("$id", {
         id: "id",
         header: "",
         cell: ({ row }) => <span className="pl-3">{row.index + 1}</span>,
       }),
-      columnHelper.accessor("name", {
+      columnHelper.accessor("stream_id", {
         id: "name",
         header: ({ column }) => <SortingHeader column={column} title="Name" />,
       }),
@@ -268,13 +297,13 @@ function StreamList() {
           <SortingHeader column={column} title="Description" />
         ),
       }),
-      columnHelper.accessor("status", {
+      columnHelper.accessor("is_active", {
         id: "status",
         header: ({ column }) => (
           <SortingHeader column={column} title="Status" />
         ),
         cell: ({ getValue }) => {
-          const status = getValue();
+          const status = getValue() ? "active" : "inactive";
 
           return (
             <div className="flex items-center gap-2">
@@ -289,29 +318,33 @@ function StreamList() {
           );
         },
       }),
-      columnHelper.accessor("username", {
-        id: "username",
+      columnHelper.accessor("location", {
+        id: "location",
         header: ({ column }) => (
-          <SortingHeader column={column} title="Username" />
+          <SortingHeader column={column} title="Location" />
         ),
       }),
-      columnHelper.accessor("password", {
-        id: "password",
-        header: "Password",
+      columnHelper.accessor("ptz_password", {
+        id: "ptz_password",
+        header: "PTZ Password",
         cell: ({ getValue }) => <PasswordCell value={getValue()} />,
       }),
-      columnHelper.accessor("ip", {
-        id: "ip",
-        header: ({ column }) => <SortingHeader column={column} title="IP" />,
+      columnHelper.accessor("cam_ip", {
+        id: "cam_ip",
+        header: ({ column }) => (
+          <SortingHeader column={column} title="Cam IP" />
+        ),
       }),
-      columnHelper.accessor("port", {
-        id: "port",
-        header: ({ column }) => <SortingHeader column={column} title="Port" />,
+      columnHelper.accessor("ptz_port", {
+        id: "ptz_port",
+        header: ({ column }) => (
+          <SortingHeader column={column} title="PTZ Port" />
+        ),
       }),
 
-      columnHelper.accessor("link", {
-        id: "link",
-        header: "Link",
+      columnHelper.accessor("rtsp_link", {
+        id: "rtsp_link",
+        header: "RTSP Link",
         cell: ({ getValue }) => (
           <TooltipProvider>
             <Tooltip>
