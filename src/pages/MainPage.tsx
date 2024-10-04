@@ -263,21 +263,26 @@ export default function MainPage() {
         <div className="border p-4 rounded-md">
           <p className="mb-5 font-semibold text-lg ">Ongoing</p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {cameras.map((item, index) => (
-              <div
-                key={index}
-                className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
-                onClick={() => navigate(`/camera/${item.stream_id}`)}
-              >
-                <PanelVideo camera={item} streamId={item.stream_id} />
-                <Info
-                  cameraName={item.id}
-                  modelName={item.model_name}
-                  location={item.location}
-                  bg
-                />
-              </div>
-            ))}
+            {schedules
+              .filter(
+                (schedule) =>
+                  schedule.start_timestamp < Math.floor(Date.now() / 1000)
+              )
+              .map((item, index) => (
+                <div
+                  key={index}
+                  className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
+                  onClick={() => navigate(`/camera/${item.stream_id}`)}
+                >
+                  <PanelVideo camera={item} streamId={item.stream_id} />
+                  <Info
+                    cameraName={item.stream_id}
+                    modelName={item.model_name}
+                    location={item.location}
+                    bg
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </div>
@@ -285,14 +290,24 @@ export default function MainPage() {
       <div className="border p-4 rounded-md">
         <p className="mb-5 font-semibold text-lg">Upcoming</p>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[0, 1].map((item, index) => (
-            <div className="relative" key={index}>
-              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center cursor-pointer aspect-[16/9]">
-                <Icons.offline className="opacity-30" size={50} />
+          {schedules
+            .filter(
+              (schedule) =>
+                schedule.start_timestamp > Math.floor(Date.now() / 1000)
+            )
+            .map((item, index) => (
+              <div className="relative" key={index}>
+                <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center cursor-pointer aspect-[16/9]">
+                  <Icons.offline className="opacity-30" size={50} />
+                </div>
+                <Info
+                  cameraName={item.stream_id}
+                  modelName={item.model_name}
+                  location={item.location}
+                  bg
+                />
               </div>
-              <Info />
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
