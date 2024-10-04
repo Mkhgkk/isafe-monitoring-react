@@ -24,6 +24,8 @@ interface ScheduleFormData {
   endDate: string;
   endTime: string;
   desc?: string;
+  location: string;
+  model_name: string;
 }
 
 const getUnixTimestamp = (date: Date, time: string) => {
@@ -88,6 +90,8 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
           stream_id: data.stream_id,
           start_timestamp: getUnixTimestamp(data.startDate, data.startTime),
           end_timestamp: getUnixTimestamp(data.endDate, data.endTime),
+          location: data.location,
+          model_name: data.model_name,
         }
       );
 
@@ -129,6 +133,29 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
               options={streams.map((item) => ({ value: item, label: item }))}
               error={errors.stream_id?.message as string}
               setValue={setValue}
+              required
+            />
+            <SelectField
+              id="model_name"
+              label="Model"
+              register={register}
+              // options={streams.map((item) => ({ value: item, label: item }))}
+              options={[
+                { value: "PPE", label: "PPE" },
+                { value: "Scaffolding", label: "Scaffolding" },
+                { value: "Ladder", label: "Ladder" },
+                { value: "MobileScaffolding", label: "Mobile Scaffolding" },
+                { value: "CuttingWelding", label: "Cutting Welding" },
+              ]}
+              error={errors.model_name?.message as string}
+              setValue={setValue}
+              required
+            />
+            <FormField
+              id="location"
+              label="Location"
+              register={register}
+              error={errors.location?.message as string}
               required
             />
             <FormField

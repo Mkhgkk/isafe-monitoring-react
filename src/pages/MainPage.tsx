@@ -11,6 +11,7 @@ import ScheduleForm from "@/components/schedule-form";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useAppwrite } from "@/context/AppwriteContext";
+import { Query } from "appwrite";
 
 export const cameras = [
   {
@@ -222,7 +223,8 @@ export default function MainPage() {
       setLoading(true);
       const response = await databases.listDocuments(
         "isafe-guard-db",
-        "66fa20d600253c7d4503"
+        "66fa20d600253c7d4503",
+        [Query.greaterThan("end_timestamp", Math.floor(Date.now() / 1000))]
       );
       console.log("List of schedules: ", response.documents);
       setSchedules(response.documents);
