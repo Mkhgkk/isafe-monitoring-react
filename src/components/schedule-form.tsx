@@ -76,15 +76,6 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   }, []);
 
   const onSubmit: SubmitHandler<ScheduleFormData> = async (data) => {
-    console.log(data); // Handle form submission
-
-    // console.log(
-    //   "unix time: ",
-    //   getUnixTimestamp(data.startDate, data.startTime)
-    // );
-
-    // return;
-
     try {
       // create schedule
       setLoading(true);

@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ScheduleForm from "@/components/schedule-form";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useAppwrite } from "@/context/AppwriteContext";
 
 export const cameras = [
   {
@@ -210,6 +213,29 @@ export const Info = ({
 
 export default function MainPage() {
   const navigate = useNavigate();
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { databases } = useAppwrite();
+
+  const fetchSchedules = async () => {
+    try {
+      setLoading(true);
+      const response = await databases.listDocuments(
+        "isafe-guard-db",
+        "66fa20d600253c7d4503"
+      );
+      console.log("List of schedules: ", response.documents);
+      setSchedules(response.documents);
+    } catch (err: any) {
+      console.log("MainPage - Failed to get list of streams: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchedules();
+  }, []);
   return (
     <div className="">
       <div className="pb-4">
