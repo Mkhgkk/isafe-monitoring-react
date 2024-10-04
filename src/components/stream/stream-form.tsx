@@ -20,7 +20,6 @@ interface StreamFormData {
   rtsp_link: string;
   cam_ip?: string;
   ptz_port?: number;
-  location?: string;
   ptz_password?: string;
   ptz_username?: string;
 }
@@ -63,7 +62,6 @@ function StreamForm({
             stream_id: data.stream_id,
             ptz_password: data.ptz_password,
             ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
-            location: data.location,
             ptz_username: data.ptz_username,
           }
         );
@@ -83,7 +81,6 @@ function StreamForm({
             stream_id: data.stream_id,
             ptz_password: data.ptz_password,
             ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
-            location: data.location,
             ptz_username: data.ptz_username,
           }
         );
@@ -133,12 +130,12 @@ function StreamForm({
               register={register}
               error={errors.description?.message as string}
             />
-            <FormField
+            {/* <FormField
               id="location"
               label="Camera Location"
               register={register}
               error={errors.location?.message as string}
-            />
+            /> */}
             <Separator className="mt-2" />
             <FormField
               id="rtsp_link"

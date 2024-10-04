@@ -319,12 +319,12 @@ function StreamList() {
           );
         },
       }),
-      columnHelper.accessor("location", {
-        id: "location",
-        header: ({ column }) => (
-          <SortingHeader column={column} title="Location" />
-        ),
-      }),
+      // columnHelper.accessor("location", {
+      //   id: "location",
+      //   header: ({ column }) => (
+      //     <SortingHeader column={column} title="Location" />
+      //   ),
+      // }),
       columnHelper.accessor("ptz_username", {
         id: "ptz_username",
         header: ({ column }) => (
