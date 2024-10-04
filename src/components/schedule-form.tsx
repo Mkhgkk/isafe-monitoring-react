@@ -50,6 +50,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
 
   const [loading, setLoading] = useState(false);
   const [streams, setStreams] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const fetchStreams = async () => {
     try {
@@ -77,13 +78,31 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   const onSubmit: SubmitHandler<ScheduleFormData> = async (data) => {
     console.log(data); // Handle form submission
 
-    console.log(getUnixTimestamp(data.startDate, data.startTime));
+    // console.log(
+    //   "unix time: ",
+    //   getUnixTimestamp(data.startDate, data.startTime)
+    // );
 
-    return;
+    // return;
 
     try {
       // create schedule
       setLoading(true);
+      const response = await databases.createDocument(
+        "isafe-guard-db",
+        "66fa20d600253c7d4503",
+        "unique()",
+        {
+          description: data.description,
+          stream_id: data.stream_id,
+          start_timestamp: getUnixTimestamp(data.startDate, data.startTime),
+          end_timestamp: getUnixTimestamp(data.endDate, data.endTime),
+        }
+      );
+
+      console.log("Document created successfully:", response);
+      setOpen(false);
+      reset();
     } catch (err) {
       // handle error
       console.log(err);
@@ -95,10 +114,11 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
 
   const handleOpen = (value: boolean) => {
     if (!value) reset();
+    setOpen(value);
   };
 
   return (
-    <Dialog onOpenChange={handleOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         className="sm:max-w-[480px]"

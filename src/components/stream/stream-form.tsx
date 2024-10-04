@@ -101,10 +101,11 @@ function StreamForm({
 
   const handleOpen = (value: boolean) => {
     if (!value) reset();
+    setOpen(value);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         className="sm:max-w-[480px]"
