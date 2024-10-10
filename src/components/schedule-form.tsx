@@ -15,6 +15,8 @@ import SelectField from "./form/SelectField";
 import DateField from "./form/DateField";
 import { Separator } from "./ui/separator";
 import { useAppwrite } from "@/context/AppwriteContext";
+import useRequest from "@/hooks/useRequest";
+import { createSchedule } from "../api/stream";
 
 // Define the form data interface
 interface ScheduleFormData {
@@ -53,6 +55,32 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [streams, setStreams] = useState([]);
   const [open, setOpen] = useState(false);
+  const {
+    data,
+    error,
+    request: createScheduleRequest,
+  } = useRequest(createSchedule);
+
+  const handleCreateSchedule = async (schedule) => {
+    try {
+      const stream = streams.find(
+        (item) => item.stream_id == schedule.stream_id
+      );
+
+      const result = await createSchedule({
+        stream_document_id: stream.$id,
+        ...schedule,
+      });
+
+      if (result) {
+        console.log("API results: ", result);
+      } else {
+        console.log("Error: ", error);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const fetchStreams = async () => {
     try {
@@ -65,7 +93,8 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
         "Schedule Form - List of streams: ",
         response.documents.map((item) => item.stream_id)
       );
-      setStreams(response.documents.map((item) => item.stream_id));
+      // setStreams(response.documents.map((item) => item.stream_id));
+      setStreams(response.documents);
     } catch (err: any) {
       console.log("Schedule Form - Failed to get list of streams: ", err);
     } finally {
@@ -81,21 +110,32 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
     try {
       // create schedule
       setLoading(true);
-      const response = await databases.createDocument(
-        "isafe-guard-db",
-        "66fa20d600253c7d4503",
-        "unique()",
-        {
-          description: data.description,
-          stream_id: data.stream_id,
-          start_timestamp: getUnixTimestamp(data.startDate, data.startTime),
-          end_timestamp: getUnixTimestamp(data.endDate, data.endTime),
-          location: data.location,
-          model_name: data.model_name,
-        }
-      );
+      // const response = await databases.createDocument(
+      //   "isafe-guard-db",
+      //   "66fa20d600253c7d4503",
+      //   "unique()",
+      // {
+      //   description: data.description,
+      //   stream_id: data.stream_id,
+      //   start_timestamp: getUnixTimestamp(data.startDate, data.startTime),
+      //   end_timestamp: getUnixTimestamp(data.endDate, data.endTime),
+      //   location: data.location,
+      //   model_name: data.model_name,
+      // }
+      // );
 
-      console.log("Document created successfully:", response);
+      // console.log("Document created successfully:", response);
+      // TODO:
+      // start stream from backend
+      await handleCreateSchedule({
+        description: data.description,
+        stream_id: data.stream_id,
+        start_timestamp: getUnixTimestamp(data.startDate, data.startTime),
+        end_timestamp: getUnixTimestamp(data.endDate, data.endTime),
+        location: data.location,
+        model_name: data.model_name,
+      });
+      // return;
       setOpen(false);
       reset();
     } catch (err) {
@@ -130,7 +170,10 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
               id="stream_id"
               label="Stream"
               register={register}
-              options={streams.map((item) => ({ value: item, label: item }))}
+              options={streams.map((item) => ({
+                value: item.stream_id,
+                label: item.stream_id,
+              }))}
               error={errors.stream_id?.message as string}
               setValue={setValue}
               required

@@ -216,7 +216,7 @@ export default function MainPage() {
   const navigate = useNavigate();
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { databases } = useAppwrite();
+  const { databases, appwriteClient } = useAppwrite();
 
   const fetchSchedules = async () => {
     try {
@@ -237,6 +237,31 @@ export default function MainPage() {
 
   useEffect(() => {
     fetchSchedules();
+
+    const unsubscribe = appwriteClient.subscribe(
+      "databases.isafe-guard-db.collections.66fa20d600253c7d4503.documents",
+      (response) => {
+        if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.create"
+          )
+        ) {
+          // handle new schedule created
+          setSchedules((prevState) => [...prevState, response.payload]);
+        } else if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.delete"
+          )
+        ) {
+          // handle delete schedule
+          setSchedules((prevState) => [
+            ...prevState.filter((item) => item.$id !== response.payload.$id),
+          ]);
+        }
+      }
+    );
+
+    return () => unsubscribe();
   }, []);
   return (
     <div className="">
