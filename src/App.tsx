@@ -109,11 +109,11 @@ function App() {
           }
         >
           <Route path="/" element={<Navigate to="/camera" />} />
-          <Route path="/camera" element={<MainPage />} />
-          <Route path="/camera/:streamId" element={<CameraDetail />} />
-          <Route path="/stream" element={<StreamList />} />
-          <Route path="/event" element={<EventList />} />
-          <Route path="/event/:eventId" element={<EventDetail />} />
+          <Route path="/cameras" element={<MainPage />} />
+          <Route path="/cameras/:streamId" element={<CameraDetail />} />
+          <Route path="/streams" element={<StreamList />} />
+          <Route path="/events" element={<EventList />} />
+          <Route path="/events/:eventId" element={<EventDetail />} />
         </Route>
         <Route path="/" element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />

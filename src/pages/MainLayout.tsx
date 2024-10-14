@@ -55,6 +55,7 @@ export const MainLayout = (props: MainLayoutProps) => {
   const { account } = useAppwrite();
   const navigate = useNavigate();
 
+  return <Layout user={user} {...props} />;
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -205,20 +206,20 @@ function Layout({
                 {
                   title: "Monitoring",
                   icon: LayoutDashboard,
-                  variant: pathname.includes("/camera") ? "default" : "ghost",
-                  href: "/camera",
+                  variant: pathname.includes("/cameras") ? "default" : "ghost",
+                  href: "/cameras",
                 },
                 {
                   title: "Security Cameras",
                   icon: ShieldCheck,
-                  variant: pathname.includes("/stream") ? "default" : "ghost",
-                  href: "/stream",
+                  variant: pathname.includes("/streams") ? "default" : "ghost",
+                  href: "/streams",
                 },
                 {
                   title: "Saved Events",
                   icon: TvMinimalPlay,
-                  variant: pathname.includes("/event") ? "default" : "ghost",
-                  href: "/event",
+                  variant: pathname.includes("/events") ? "default" : "ghost",
+                  href: "/events",
                 },
                 {
                   title: "Settings",

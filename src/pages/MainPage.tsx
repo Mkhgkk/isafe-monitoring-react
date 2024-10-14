@@ -287,6 +287,11 @@ export default function MainPage() {
         {/* <Separator /> */}
         <div className="border p-4 rounded-md">
           <p className="mb-5 font-semibold text-lg ">Ongoing</p>
+          {schedules.length === 0 && (
+            <p className="text-sm text-muted-foreground mb-4 text-center">
+              No ongoing schedule.
+            </p>
+          )}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {schedules
               .filter(
@@ -314,6 +319,11 @@ export default function MainPage() {
       {/* <Separator /> */}
       <div className="border p-4 rounded-md">
         <p className="mb-5 font-semibold text-lg">Upcoming</p>
+        {schedules.length === 0 && (
+          <p className="text-sm text-muted-foreground mb-4 text-center">
+            No upcoming schedule.
+          </p>
+        )}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {schedules
             .filter(
