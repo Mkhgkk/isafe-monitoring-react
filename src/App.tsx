@@ -108,7 +108,7 @@ function App() {
             <MainLayout isConnected={isConnected} systemStatus={systemStatus} />
           }
         >
-          <Route path="/" element={<Navigate to="/camera" />} />
+          <Route path="/" element={<Navigate to="/cameras" />} />
           <Route path="/cameras" element={<MainPage />} />
           <Route path="/cameras/:streamId" element={<CameraDetail />} />
           <Route path="/streams" element={<StreamList />} />

@@ -104,7 +104,7 @@ export default function EventList() {
           loading ? (
             <EventItemSkeleton key={item} />
           ) : (
-            <div className="gap-2" onClick={() => navigate("/event/" + item)}>
+            <div className="gap-2" onClick={() => navigate("/events/" + item)}>
               <img src={image} className="w-full rounded-sm aspect-[16/9]" />
               <div className="mt-1">
                 <p className="font-semibold mb-1">Security</p>

@@ -302,7 +302,7 @@ export default function MainPage() {
                 <div
                   key={index}
                   className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
-                  onClick={() => navigate(`/camera/${item.stream_id}`)}
+                  onClick={() => navigate(`/cameras/${item.stream_id}`)}
                 >
                   <PanelVideo camera={item} streamId={item.stream_id} />
                   <Info

@@ -27,7 +27,7 @@ function EventCard({ item, className }: Props) {
   return (
     <div
       className={cn("flex gap-2", className)}
-      onClick={() => navigate("/event/" + item)}
+      onClick={() => navigate("/events/" + item)}
     >
       <img src={image} className="w-[100px] h-[70px] rounded-sm" />
       <div className="flex flex-col jusitfy-center">
