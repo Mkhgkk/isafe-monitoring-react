@@ -224,8 +224,8 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 error={errors.startTime?.message as string}
                 required
                 mask="datetime"
-                inputFormat="HH:mm"
-                placeholder="HH:mm"
+                inputFormat="HH:MM"
+                placeholder="HH:MM"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -244,8 +244,8 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 error={errors.endTime?.message as string}
                 required
                 mask="datetime"
-                inputFormat="HH:mm"
-                placeholder="HH:mm"
+                inputFormat="HH:MM"
+                placeholder="HH:MM"
               />
             </div>
           </div>
