@@ -56,7 +56,6 @@ export const MainLayout = (props: MainLayoutProps) => {
   const { account } = useAppwrite();
   const navigate = useNavigate();
 
-  return <Layout user={user} {...props} />;
   useEffect(() => {
     const fetchUser = async () => {
       try {
