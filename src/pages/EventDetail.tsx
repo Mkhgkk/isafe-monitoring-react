@@ -37,7 +37,10 @@ function EventDetail() {
       ) : (
         <div className="overflow-hidden rounded-md w-full lg:max-w-5xl mb-5">
           <video
-            src={video1}
+            // src={video1}
+            src={
+              "http://localhost:5000/static/videos/video_PPE_20241014211017.mp4"
+            }
             controls={true}
             autoPlay
             muted

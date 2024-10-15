@@ -49,9 +49,14 @@ function PTZControl({ streamId }: PTZControlProps) {
       setSliderValue(value);
     });
 
+    socket.on("ptz-location", (data) => {
+      console.log("ptz location: ", data);
+    });
+
     return () => {
       console.log("Leaving ptz room");
       socket.off("zoom-level");
+      socket.off("ptz-location");
       socket.emit("leave_ptz", { stream_id: streamId });
     };
   }, [streamId]);
@@ -70,7 +75,7 @@ function PTZControl({ streamId }: PTZControlProps) {
 
   const handleAutoPTZ = () => {
     //take streamId
-    if (streamId !== "stream2") return;
+    if (streamId !== "stream1") return;
 
     // make request
     // const url = "http://192.168.0.10:5000/api/change_autotrack";
