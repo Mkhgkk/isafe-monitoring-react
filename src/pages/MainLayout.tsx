@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAppwrite } from "../context/AppwriteContext";
 import { Client, Account, Models } from "appwrite";
+import logo from "@/assets/logoBlack.png";
 
 interface SystemStatus {
   cpu: number;
@@ -185,7 +186,7 @@ function Layout({
               )}
             >
               <img
-                src="src/assets/logoBlack.png"
+                src={logo}
                 width={25}
                 height={25}
                 className={cn(isCollapsed ? "mx-auto" : "mx-3")}
