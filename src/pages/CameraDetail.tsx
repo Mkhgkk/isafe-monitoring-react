@@ -21,6 +21,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { cameras } from "./MainPage";
 import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAppwrite } from "@/context/AppwriteContext";
+import { Query } from "appwrite";
 
 function CameraDetail() {
   const { streamId } = useParams();
@@ -30,11 +32,54 @@ function CameraDetail() {
   const [filter, setFilter] = useState("all");
   const [ptz, setPtz] = useState(camera?.supports_ptz);
   const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState([]);
+  const { databases, appwriteClient } = useAppwrite();
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const response = await databases.listDocuments(
+        "isafe-guard-db",
+        "670d337f001f9ab7ff34",
+        [Query.equal("stream_id", streamId)]
+      );
+      console.log("List of events: ", response.documents);
+      setEvents(response.documents);
+    } catch (err: any) {
+      console.log("CameraDetail - Failed to get list of events: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    fetchEvents();
+
+    const unsubscribe = appwriteClient.subscribe(
+      "databases.isafe-guard-db.collections.670d337f001f9ab7ff34.documents",
+      (response) => {
+        if (response.payload.stream_id !== streamId) return;
+        if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.create"
+          )
+        ) {
+          // handle new schedule created
+          setEvents((prevState) => [...prevState, response.payload]);
+        } else if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.delete"
+          )
+        ) {
+          // handle delete schedule
+          setEvents((prevState) => [
+            ...prevState.filter((item) => item.$id !== response.payload.$id),
+          ]);
+        }
+      }
+    );
+
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -109,13 +154,11 @@ function CameraDetail() {
         <WeekCalendar />
         <ScrollArea className="h-[81vh]">
           <div className="grid gap-y-3">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) =>
-              loading ? (
-                <EventCardSkeleton key={item} />
-              ) : (
-                <EventCard item={item} key={item} />
-              )
-            )}
+            {loading
+              ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                  <EventCardSkeleton key={item} />
+                ))
+              : events.map((item) => <EventCard item={item} key={item} />)}
           </div>
         </ScrollArea>
       </div>
