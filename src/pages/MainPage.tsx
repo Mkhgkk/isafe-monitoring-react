@@ -287,7 +287,10 @@ export default function MainPage() {
         {/* <Separator /> */}
         <div className="border p-4 rounded-md">
           <p className="mb-5 font-semibold text-lg ">Ongoing</p>
-          {schedules.length === 0 && (
+          {schedules.filter(
+            (schedule) =>
+              schedule.start_timestamp < Math.floor(Date.now() / 1000)
+          ).length === 0 && (
             <p className="text-sm text-muted-foreground mb-4 text-center">
               No ongoing schedule.
             </p>
@@ -319,7 +322,9 @@ export default function MainPage() {
       {/* <Separator /> */}
       <div className="border p-4 rounded-md">
         <p className="mb-5 font-semibold text-lg">Upcoming</p>
-        {schedules.length === 0 && (
+        {schedules.filter(
+          (schedule) => schedule.start_timestamp > Math.floor(Date.now() / 1000)
+        ).length === 0 && (
           <p className="text-sm text-muted-foreground mb-4 text-center">
             No upcoming schedule.
           </p>
