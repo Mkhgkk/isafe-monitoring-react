@@ -41,7 +41,7 @@ function CameraDetail() {
       const response = await databases.listDocuments(
         "isafe-guard-db",
         "670d337f001f9ab7ff34",
-        [Query.equal("stream_id", streamId)]
+        [Query.orderDesc("timestamp"), Query.equal("stream_id", streamId)]
       );
       console.log("List of events: ", response.documents);
       setEvents(response.documents);
@@ -65,7 +65,7 @@ function CameraDetail() {
           )
         ) {
           // handle new schedule created
-          setEvents((prevState) => [...prevState, response.payload]);
+          setEvents((prevState) => [response.payload, ...prevState]);
         } else if (
           response.events.includes(
             "databases.*.collections.*.documents.*.delete"
