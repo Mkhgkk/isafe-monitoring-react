@@ -14,7 +14,7 @@ interface PanelVideoProps {
 
 const PowerButton = ({ onClick }: any) => {
   const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the event from bubbling up to the parent div
+    e.stopPropagation();
     onClick?.(e);
   };
 
@@ -51,8 +51,6 @@ export default function PanelVideo({
       setHasStartedStreaming(true);
       setIsStreaming(true);
     }
-    console.log("Response: ", data);
-    console.log("Error: ", error);
   };
 
   const handleSetIsStreaming = () => {
@@ -67,69 +65,59 @@ export default function PanelVideo({
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    let resizeTimeout: NodeJS.Timeout;
 
-    // Function to resize the canvas to fit the parent container while maintaining aspect ratio
     const resizeCanvas = () => {
       if (canvas) {
         const parentWidth = canvas.parentElement?.clientWidth || 0;
-        const aspectRatio = 1280 / 720; // Adjust this if you have a different video frame aspect ratio
-
-        // Set canvas width to parent width and height to maintain the aspect ratio
+        const aspectRatio = 1280 / 720;
         canvas.width = parentWidth;
         canvas.height = parentWidth / aspectRatio;
       }
     };
 
-    // Initial resize to set up the canvas size
-    resizeCanvas();
+    const debounceResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeCanvas, 100); // Debounce the resize event
+    };
 
-    // Add event listener to handle window resizing
-    window.addEventListener("resize", resizeCanvas);
-
-    // Join the room using socket and listen for 'frame' events
-    // socket.emit("join", { room: streamId });
+    resizeCanvas(); // Initial resize
+    window.addEventListener("resize", debounceResize); // Handle window resizing
 
     const handleFrameEvent = (data: any) => {
-      console.log("Frame received!");
       handleSetIsStreaming();
 
       if (canvas) {
         const ctx = canvas.getContext("2d");
 
         if (ctx) {
-          // Create an Image object
           const image = new Image();
           const blob = new Blob([new Uint8Array(data.image)], {
-            type: "image/jpeg",
+            type: "image/webp", // Use WebP for smaller image sizes
           });
           const url = URL.createObjectURL(blob);
 
-          image.onload = function () {
-            // Resize canvas again in case of any change
-            resizeCanvas();
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // Draw the image on the canvas
-            URL.revokeObjectURL(url); // Revoke the object URL after use
+          image.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(url);
           };
 
-          image.src = url; // Trigger image load and onload event
+          image.src = url;
         }
       }
     };
 
     socket.on(VIDEO_EVENT, handleFrameEvent);
 
-    // Cleanup function to remove listeners and leave the room
     return () => {
-      console.log("Leaving room");
-      socket.off(VIDEO_EVENT, handleFrameEvent); // Remove specific event listener
+      socket.off(VIDEO_EVENT, handleFrameEvent);
       socket.emit("leave", { room: streamId });
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", debounceResize);
     };
   }, [streamId]);
 
   return (
-    // <div onClick={onClick}>
     <>
       {!isStreaming && (
         <div className="absolute w-full h-full">
@@ -144,10 +132,7 @@ export default function PanelVideo({
       <canvas
         ref={canvasRef}
         className="w-full h-full max-h-screen max-w-screen block"
-        // style={{ width: "100%", height: "auto", display: "block" }} // Use display: block to remove any inline-block space issues
       />
-      {/* <PowerButton onClick={handleStartStream} /> */}
     </>
-    // </div>
   );
 }
