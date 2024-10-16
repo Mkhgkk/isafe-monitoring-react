@@ -38,6 +38,7 @@ import {
 import { useAppwrite } from "../context/AppwriteContext";
 import { Client, Account, Models } from "appwrite";
 import logo from "@/assets/logoBlack.png";
+import { useConnectionContext } from "@/context/ConnectionContext";
 
 interface SystemStatus {
   cpu: number;
@@ -55,6 +56,12 @@ export const MainLayout = (props: MainLayoutProps) => {
   const [loading, setLoading] = useState(true); // Add loading state
   const { account } = useAppwrite();
   const navigate = useNavigate();
+
+  const { setIsConnected } = useConnectionContext();
+
+  useEffect(() => {
+    setIsConnected(props.isConnected);
+  }, [props.isConnected, setIsConnected]);
 
   useEffect(() => {
     const fetchUser = async () => {

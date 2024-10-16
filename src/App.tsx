@@ -26,6 +26,7 @@ import { Client, Account, Models } from "appwrite";
 import { AppwriteProvider } from "./context/AppwriteContext";
 import { Toaster } from "@/components/ui/toaster";
 import { useAppwrite } from "./context/AppwriteContext";
+import { ConnectionProvider } from "./context/ConnectionContext";
 
 function App() {
   const [user, setUser] = useState<Models.User<object> | null>(null);
@@ -124,13 +125,15 @@ function App() {
   );
 
   return (
-    <AppwriteProvider>
-      {contextHolder}
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <RouterProvider router={router} />
-      </ThemeProvider>
-      <Toaster />
-    </AppwriteProvider>
+    <ConnectionProvider>
+      <AppwriteProvider>
+        {contextHolder}
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+          <RouterProvider router={router} />
+        </ThemeProvider>
+        <Toaster />
+      </AppwriteProvider>
+    </ConnectionProvider>
   );
 }
 

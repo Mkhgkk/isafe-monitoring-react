@@ -4,6 +4,7 @@ import { startStream } from "../api/stream";
 import useRequest from "@/hooks/useRequest";
 
 import { Icons } from "@/components/icons";
+import { useConnectionContext } from "@/context/ConnectionContext";
 
 interface PanelVideoProps {
   streamId: string;
@@ -41,6 +42,8 @@ export default function PanelVideo({
     request: startStreamRequest,
   } = useRequest(startStream);
 
+  const { isConnected } = useConnectionContext();
+
   const handleStartStream = async () => {
     await startStreamRequest(camera);
 
@@ -55,6 +58,12 @@ export default function PanelVideo({
   const handleSetIsStreaming = () => {
     if (!isStreaming) setIsStreaming(true);
   };
+
+  useEffect(() => {
+    if (!isConnected) return;
+
+    socket.emit("join", { room: streamId });
+  }, [isConnected, streamId]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -78,7 +87,7 @@ export default function PanelVideo({
     window.addEventListener("resize", resizeCanvas);
 
     // Join the room using socket and listen for 'frame' events
-    socket.emit("join", { room: streamId });
+    // socket.emit("join", { room: streamId });
 
     const handleFrameEvent = (data: any) => {
       console.log("Frame received!");
