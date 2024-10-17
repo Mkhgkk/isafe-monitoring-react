@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import video1 from "@/assets/1.mp4";
-
+import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
@@ -21,8 +19,9 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppwrite } from "@/context/AppwriteContext";
-import { Query } from "appwrite";
 import StreamInfo from "@/components/stream/stream-info";
+import { eventService } from "@/api";
+import { EventDocument } from "@/type";
 
 export const cameras = [
   {
@@ -195,20 +194,18 @@ function CameraDetail() {
 
   const [filter, setFilter] = useState("all");
   const [ptz, setPtz] = useState(camera?.supports_ptz);
-  const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState([]);
-  const { databases, appwriteClient } = useAppwrite();
+  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState<EventDocument[]>([]);
+  const { appwriteClient } = useAppwrite();
 
   const fetchEvents = async () => {
+    if (!streamId) return;
+
     try {
-      const response = await databases.listDocuments(
-        "isafe-guard-db",
-        "670d337f001f9ab7ff34",
-        [Query.orderDesc("timestamp"), Query.equal("stream_id", streamId)]
-      );
-      console.log("List of events: ", response.documents);
-      setEvents(response.documents);
-    } catch (err: any) {
+      setLoading(true);
+      const documents = await eventService.fetchEvents(streamId);
+      setEvents(documents as EventDocument[]);
+    } catch (err) {
       console.log("CameraDetail - Failed to get list of events: ", err);
     } finally {
       setLoading(false);
@@ -221,14 +218,15 @@ function CameraDetail() {
     const unsubscribe = appwriteClient.subscribe(
       "databases.isafe-guard-db.collections.670d337f001f9ab7ff34.documents",
       (response) => {
-        if (response.payload.stream_id !== streamId) return;
+        const payload = response.payload as EventDocument;
+        if (payload.stream_id !== streamId) return;
         if (
           response.events.includes(
             "databases.*.collections.*.documents.*.create"
           )
         ) {
           // handle new schedule created
-          setEvents((prevState) => [response.payload, ...prevState]);
+          setEvents((prevState) => [payload, ...prevState]);
         } else if (
           response.events.includes(
             "databases.*.collections.*.documents.*.delete"
@@ -236,7 +234,7 @@ function CameraDetail() {
         ) {
           // handle delete schedule
           setEvents((prevState) => [
-            ...prevState.filter((item) => item.$id !== response.payload.$id),
+            ...prevState.filter((item) => item.$id !== payload.$id),
           ]);
         }
       }
@@ -281,9 +279,9 @@ function CameraDetail() {
 
               <div className="flex justify-between items-end">
                 <StreamInfo
-                  modelName={streamData.model_name}
-                  cameraName={streamData.stream_id}
-                  location={streamData.location}
+                  modelName={streamData?.model_name}
+                  cameraName={streamData?.stream_id}
+                  location={streamData?.location}
                   bg
                   className="static p-5"
                 />

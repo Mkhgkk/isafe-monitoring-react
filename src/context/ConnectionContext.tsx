@@ -1,8 +1,23 @@
-import React, { createContext, useState, useContext } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  PropsWithChildren,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
-const ConnectionContext = createContext();
+interface ConnectionContextType {
+  isConnected: boolean;
+  setIsConnected: Dispatch<SetStateAction<boolean>>;
+}
 
-export function ConnectionProvider({ children }) {
+const ConnectionContext = createContext<ConnectionContextType>({
+  isConnected: false,
+  setIsConnected: () => {},
+});
+
+export function ConnectionProvider({ children }: PropsWithChildren) {
   const [isConnected, setIsConnected] = useState(false);
   return (
     <ConnectionContext.Provider value={{ isConnected, setIsConnected }}>

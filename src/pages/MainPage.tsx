@@ -7,17 +7,9 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useAppwrite } from "@/context/AppwriteContext";
 import { scheduleService } from "@/api";
-import { Models } from "appwrite";
 import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface Schedule extends Models.Document {
-  start_timestamp: number;
-  end_timestamp: number;
-  location: string;
-  description?: string;
-  stream_id: string;
-}
+import { ScheduleDocument } from "@/type";
 
 // rtsp://admin:smart1357!@223.171.32.194:554/profile2/media.smp
 // rtsp://admin:smart1357!@223.171.153.134:554/profile2/media.smp
@@ -25,8 +17,12 @@ interface Schedule extends Models.Document {
 
 export default function MainPage() {
   const navigate = useNavigate();
-  const [ongoingSchedules, setOngoingSchedules] = useState<Schedule[]>([]);
-  const [upcomingSchedules, setUpcomingSchedules] = useState<Schedule[]>([]);
+  const [ongoingSchedules, setOngoingSchedules] = useState<ScheduleDocument[]>(
+    []
+  );
+  const [upcomingSchedules, setUpcomingSchedules] = useState<
+    ScheduleDocument[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const { appwriteClient } = useAppwrite();
 
@@ -34,7 +30,8 @@ export default function MainPage() {
     try {
       setLoading(true);
 
-      const response = await scheduleService.fetchSchedules();
+      const response =
+        (await scheduleService.fetchSchedules()) as ScheduleDocument[];
       const currentTime = Math.floor(Date.now() / 1000);
       const ongoing = response.filter(
         (schedule) => schedule.start_timestamp < currentTime
@@ -56,26 +53,28 @@ export default function MainPage() {
 
   useEffect(() => {
     fetchSchedules();
+
     const unsubscribe = appwriteClient.subscribe(
       "databases.isafe-guard-db.collections.66fa20d600253c7d4503.documents",
       (response) => {
         const { events, payload } = response;
         const currentTime = Math.floor(Date.now() / 1000);
 
+        const schedulePayload = payload as ScheduleDocument;
+
         if (events.includes("databases.*.collections.*.documents.*.create")) {
-          if (payload.start_timestamp < currentTime) {
-            setOngoingSchedules((prev) => [...prev, payload]);
-          } else {
-            setUpcomingSchedules((prev) => [...prev, payload]);
-          }
+          if (schedulePayload.start_timestamp < currentTime)
+            setOngoingSchedules((prev) => [...prev, schedulePayload]);
+          else setUpcomingSchedules((prev) => [...prev, schedulePayload]);
         } else if (
           events.includes("databases.*.collections.*.documents.*.delete")
         ) {
           setOngoingSchedules((prev) =>
-            prev.filter((item) => item.$id !== payload.$id)
+            prev.filter((item) => item.$id !== schedulePayload.$id)
           );
+
           setUpcomingSchedules((prev) =>
-            prev.filter((item) => item.$id !== payload.$id)
+            prev.filter((item) => item.$id !== schedulePayload.$id)
           );
         }
       }
