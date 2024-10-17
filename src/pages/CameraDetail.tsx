@@ -17,7 +17,7 @@ import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import PTZControl from "@/components/ptz-control";
 import PanelVideo from "@/components/panel-video";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { cameras } from "./MainPage";
 import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,6 +28,8 @@ function CameraDetail() {
   const { streamId } = useParams();
   const camera = cameras.find((item) => item.stream_id == streamId);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { streamData } = location.state;
 
   const [filter, setFilter] = useState("all");
   const [ptz, setPtz] = useState(camera?.supports_ptz);
@@ -94,7 +96,9 @@ function CameraDetail() {
         </div>
         <div className="flex items-center mb-3">
           <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2" />
-          <p className="text-sm text-muted-foreground">{camera?.location}</p>
+          <p className="text-sm text-muted-foreground">
+            {streamData?.location}
+          </p>
         </div>
 
         {loading ? (
@@ -115,7 +119,13 @@ function CameraDetail() {
               {ptz && <PTZControl streamId={streamId} />}
 
               <div className="flex justify-between items-end">
-                <Info bg className="static p-5" />
+                <Info
+                  modelName={streamData.model_name}
+                  cameraName={streamData.stream_id}
+                  location={streamData.location}
+                  bg
+                  className="static p-5"
+                />
 
                 <Button
                   className={cn(
