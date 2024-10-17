@@ -11,18 +11,22 @@ import { Models } from "appwrite";
 import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
 
+interface Schedule extends Models.Document {
+  start_timestamp: number;
+  end_timestamp: number;
+  location: string;
+  description?: string;
+  stream_id: string;
+}
+
 // rtsp://admin:smart1357!@223.171.32.194:554/profile2/media.smp
 // rtsp://admin:smart1357!@223.171.153.134:554/profile2/media.smp
 // rtsp://admin:smart456!@223.171.89.221:554/profile2/media.smp
 
 export default function MainPage() {
   const navigate = useNavigate();
-  const [ongoingSchedules, setOngoingSchedules] = useState<
-    Models.Document<object>[]
-  >([]);
-  const [upcomingSchedules, setUpcomingSchedules] = useState<
-    Models.Document<object>[]
-  >([]);
+  const [ongoingSchedules, setOngoingSchedules] = useState<Schedule[]>([]);
+  const [upcomingSchedules, setUpcomingSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(false);
   const { appwriteClient } = useAppwrite();
 
