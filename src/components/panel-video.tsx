@@ -84,26 +84,30 @@ export default function PanelVideo({
     resizeCanvas(); // Initial resize
     window.addEventListener("resize", debounceResize); // Handle window resizing
 
+    let lastFrameTime = 0;
+    const FRAME_THROTTLE = 1000 / 30; // Targeting 30 FPS
+
     const handleFrameEvent = (data: any) => {
+      const now = Date.now();
+      if (now - lastFrameTime < FRAME_THROTTLE) {
+        return; // Skip frame if too soon
+      }
+
+      lastFrameTime = now;
       handleSetIsStreaming();
 
       if (canvas) {
         const ctx = canvas.getContext("2d");
 
         if (ctx) {
-          const image = new Image();
           const blob = new Blob([new Uint8Array(data.image)], {
-            type: "image/webp", // Use WebP for smaller image sizes
+            type: "image/webp",
           });
-          const url = URL.createObjectURL(blob);
 
-          image.onload = () => {
+          createImageBitmap(blob).then((imageBitmap) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            URL.revokeObjectURL(url);
-          };
-
-          image.src = url;
+            ctx.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height);
+          });
         }
       }
     };
