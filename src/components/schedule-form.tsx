@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   Dialog,
@@ -14,9 +14,10 @@ import FormField from "@/components/form/FormField";
 import SelectField from "./form/SelectField";
 import DateField from "./form/DateField";
 import { Separator } from "./ui/separator";
-import { useAppwrite } from "@/context/AppwriteContext";
 import useRequest from "@/hooks/useRequest";
 import { createSchedule } from "../api/stream";
+import { useQuery } from "@tanstack/react-query";
+import { streamService } from "@/api";
 
 // Define the form data interface
 interface ScheduleFormData {
@@ -43,6 +44,7 @@ const getUnixTimestamp = (date: Date, time: string) => {
 
 function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -50,16 +52,19 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
     setValue,
   } = useForm();
 
-  const { databases } = useAppwrite();
-
   const [loading, setLoading] = useState(false);
-  const [streams, setStreams] = useState([]);
+  // const [streams, setStreams] = useState([]);
   const [open, setOpen] = useState(false);
   const {
     data,
     error,
     request: createScheduleRequest,
   } = useRequest(createSchedule);
+
+  const { data: streams } = useQuery({
+    queryKey: ["streamService.fetchStreams"],
+    queryFn: streamService.fetchStreams,
+  });
 
   const handleCreateSchedule = async (schedule) => {
     try {
@@ -81,30 +86,6 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
       console.log(err);
     }
   };
-
-  const fetchStreams = async () => {
-    try {
-      setLoading(true);
-      const response = await databases.listDocuments(
-        "isafe-guard-db",
-        "66f504260003d64837e5"
-      );
-      console.log(
-        "Schedule Form - List of streams: ",
-        response.documents.map((item) => item.stream_id)
-      );
-      // setStreams(response.documents.map((item) => item.stream_id));
-      setStreams(response.documents);
-    } catch (err: any) {
-      console.log("Schedule Form - Failed to get list of streams: ", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchStreams();
-  }, []);
 
   const onSubmit: SubmitHandler<ScheduleFormData> = async (data) => {
     try {
@@ -170,10 +151,12 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
               id="stream_id"
               label="Stream"
               register={register}
-              options={streams.map((item) => ({
-                value: item.stream_id,
-                label: item.stream_id,
-              }))}
+              options={
+                streams?.map((item) => ({
+                  value: item.stream_id,
+                  label: item.stream_id,
+                })) ?? []
+              }
               error={errors.stream_id?.message as string}
               setValue={setValue}
               required
@@ -198,12 +181,14 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
               id="location"
               label="Location"
               register={register}
+              control={control}
               error={errors.location?.message as string}
               required
             />
             <FormField
               id="description"
               label="Description"
+              control={control}
               register={register}
               error={errors.description?.message as string}
             />
@@ -218,6 +203,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 required
               />
               <FormField
+                control={control}
                 id="startTime"
                 label="Start time"
                 register={register}
@@ -238,6 +224,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 required
               />
               <FormField
+                control={control}
                 id="endTime"
                 label="End time"
                 register={register}

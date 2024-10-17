@@ -19,7 +19,6 @@ import { message } from "antd";
 import socket from "@/services/socketService";
 
 export const MainLayout = () => {
-  //Why do you need this?
   const { setIsConnected: setIsConnectedContext } = useConnectionContext();
   const [messageApi, contextHolder] = message.useMessage();
   const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });

@@ -43,3 +43,13 @@ export const scheduleService = {
     return response.documents;
   },
 };
+
+export const streamService = {
+  fetchStreams: async () => {
+    const response = await databases.listDocuments(
+      "isafe-guard-db",
+      "66f504260003d64837e5"
+    );
+    return response.documents;
+  },
+};

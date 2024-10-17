@@ -13,19 +13,24 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import FormField from "@/components/form/FormField";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
+const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export type LoginFormData = z.infer<typeof loginFormSchema>;
 
 function LoginPage() {
   const navigate = useNavigate();
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -62,33 +67,25 @@ function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="grid gap-4">
             <FormField
+              control={control}
               id="email"
               label="Email"
-              register={register}
               error={errors.email?.message as string}
-              required
               placeholder="m@example.com"
-              requiredMark={false}
             />
             <FormField
+              control={control}
               id="password"
               label="Password"
               type="password"
-              register={register}
               error={errors.password?.message as string}
-              required
-              requiredMark={false}
             />
 
             <div>
               {error && (
                 <p className="text-sm text-center text-destructive">{error}</p>
               )}
-              <Button
-                disabled={isPending}
-                className="w-full mt-4"
-                type="submit"
-              >
+              <Button className="w-full mt-4" type="submit" loading={isPending}>
                 Login
               </Button>
               <Button

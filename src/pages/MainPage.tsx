@@ -117,7 +117,11 @@ export default function MainPage() {
               <div
                 key={index}
                 className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
-                onClick={() => navigate(`/cameras/${item.stream_id}`)}
+                onClick={() =>
+                  navigate(`/cameras/${item.stream_id}`, {
+                    state: { streamData: item },
+                  })
+                }
               >
                 <PanelVideo camera={item} streamId={item.stream_id} />
                 <StreamInfo

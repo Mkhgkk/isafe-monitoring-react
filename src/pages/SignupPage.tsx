@@ -14,22 +14,36 @@ import FormField from "@/components/form/FormField";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface SignupFormData {
-  username: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-}
+const signUpSchema = z
+  .object({
+    username: z.string().min(3, "Username must be at least 3 characters"),
+    email: z.string().email(),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    passwordConfirm: z.string(),
+  })
+  .superRefine(({ password, passwordConfirm }, ctx) => {
+    if (password !== passwordConfirm) {
+      ctx.addIssue({
+        path: ["passwordConfirm"],
+        message: "Passwords do not match",
+        code: "custom",
+      });
+    }
+  });
+
+export type SignupFormData = z.infer<typeof signUpSchema>;
 
 function SignupPage() {
   const navigate = useNavigate();
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -48,7 +62,8 @@ function SignupPage() {
       });
       navigate("/login");
     },
-    onError: () => {
+    onError: (e) => {
+      console.log(e);
       //handle case where user already exists
       toast({
         variant: "destructive",
@@ -79,57 +94,36 @@ function SignupPage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="grid gap-4">
             <FormField
+              control={control}
               id="username"
               label="Username"
-              register={register}
               error={errors.username?.message as string}
-              required
               placeholder="John Doe"
-              requiredMark={false}
             />
             <FormField
+              control={control}
               id="email"
               label="Email"
-              register={register}
               error={errors.email?.message as string}
-              required
               placeholder="m@example.com"
-              requiredMark={false}
-              validate={(val: string) => {
-                if (!/^\S+@\S+$/i.test(val)) return "Invalid email address";
-              }}
             />
             <FormField
+              control={control}
               id="password"
               label="Password"
               type="password"
-              register={register}
               error={errors.password?.message as string}
-              required
-              requiredMark={false}
-              validate={(val: string) => {
-                if (val.length < 8) {
-                  return "Password must be at least 8 characters";
-                }
-              }}
             />
             <FormField
+              control={control}
               id="passwordConfirm"
               label="Password Confirmation"
               type="password"
-              register={register}
               error={errors.passwordConfirm?.message as string}
-              required
-              requiredMark={false}
-              validate={(val: string) => {
-                if (watch("password") != val) {
-                  return "Your passwords do no match";
-                }
-              }}
             />
 
             <div>
-              <Button disabled={isPending} className="w-full mt-4">
+              <Button loading={isPending} className="w-full mt-4">
                 Create account
               </Button>
               <Button

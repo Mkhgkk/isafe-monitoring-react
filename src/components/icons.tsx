@@ -22,7 +22,6 @@ import {
   Eye,
   EyeOff,
   MonitorPlay,
-  Settings2,
   Pencil,
   Trash2,
   Scan,
@@ -32,7 +31,7 @@ import {
   LogOut,
 } from "lucide-react";
 
-export type Icon = LucideIcon;
+export type Icon = typeof LucideIcon;
 
 export const Icons = {
   sun: SunMedium,
@@ -63,6 +62,7 @@ export const Icons = {
   refresh: RotateCw,
   user: User,
   logout: LogOut,
+  loading: LoaderCircle,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
