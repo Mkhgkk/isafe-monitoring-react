@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import video1 from "@/assets/1.mp4";
-import { Info } from "./MainPage";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -18,11 +17,174 @@ import { cn } from "@/lib/utils";
 import PTZControl from "@/components/ptz-control";
 import PanelVideo from "@/components/panel-video";
 import { useNavigate, useParams } from "react-router-dom";
-import { cameras } from "./MainPage";
+
 import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppwrite } from "@/context/AppwriteContext";
 import { Query } from "appwrite";
+import StreamInfo from "@/components/stream/stream-info";
+
+export const cameras = [
+  {
+    id: "camera1",
+    cam_ip: "223.171.86.249",
+    model_name: "PPE",
+    ptz_password: "1q2w3e4r.",
+    ptz_port: 80,
+    ptz_username: "admin",
+    rtsp_link: "rtsp://admin:1q2w3e4r.@218.54.201.82:554/idis?trackid=2",
+    stream_id: "1",
+    supports_ptz: true,
+    ptz_autotrack: false,
+    location: "Laboratory",
+  },
+  {
+    id: "camera2",
+    cam_ip: "192.168.0.149",
+    model_name: "PPE",
+    ptz_password: "fsnetworks1!",
+    ptz_port: 80,
+    ptz_username: "root",
+    rtsp_link: "rtsp://root:fsnetworks!@192.168.0.149:554/cam0_0",
+    stream_id: "stream2",
+    supports_ptz: true,
+    ptz_autotrack: false,
+    location: "Laboratory",
+  },
+  {
+    id: "camera3",
+    cam_ip: "192.168.0.133",
+    model_name: "PPE",
+    ptz_password: "fsnetworks1!",
+    ptz_port: 80,
+    ptz_username: "root",
+    rtsp_link: "rtsp://root:fsnetworks!@192.168.0.133:554/cam0_0",
+    stream_id: "3",
+    supports_ptz: true,
+    ptz_autotrack: false,
+    location: "Laboratory",
+  },
+  {
+    id: "camera4",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link:
+      "rtsp://dhh:a12345678@dhh3-4.iptime.org:3554/cam/realmonitor?channel=1&subtype=0",
+    stream_id: "4",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera5",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link:
+      "rtsp://khh:a12345678@khh5-1.iptime.org:554/cam/realmonitor?channel=1&subtype=0",
+    stream_id: "5",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera6",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link:
+      "rtsp://dhh:a12345678@dhh00.iptime.org:2554/cam/realmonitor?channel=1&subtype=0",
+    stream_id: "6",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera7",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart456!@223.171.153.189:554/profile2/media.smp",
+    stream_id: "7",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera8",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart456!@223.171.147.33:554/profile2/media.smp",
+    stream_id: "8",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera9",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart1357!@223.171.83.140:554/profile2/media.smp",
+    stream_id: "9",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera10",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart1357!@223.171.32.194:554/profile2/media.smp",
+    stream_id: "10",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera11",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart1357!@223.171.153.134:554/profile2/media.smp",
+    stream_id: "10",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+  {
+    id: "camera12",
+    cam_ip: null,
+    model_name: "PPE",
+    ptz_password: null,
+    ptz_port: null,
+    ptz_username: null,
+    rtsp_link: "rtsp://admin:smart456!@223.171.89.221:554/profile2/media.smp",
+    stream_id: "12",
+    supports_ptz: false,
+    ptz_autotrack: false,
+    location: "Bridge Construction",
+  },
+];
 
 function CameraDetail() {
   const { streamId } = useParams();
@@ -37,7 +199,6 @@ function CameraDetail() {
 
   const fetchEvents = async () => {
     try {
-      setLoading(true);
       const response = await databases.listDocuments(
         "isafe-guard-db",
         "670d337f001f9ab7ff34",
@@ -115,7 +276,7 @@ function CameraDetail() {
               {ptz && <PTZControl streamId={streamId} />}
 
               <div className="flex justify-between items-end">
-                <Info bg className="static p-5" />
+                <StreamInfo bg className="static p-5" />
 
                 <Button
                   className={cn(

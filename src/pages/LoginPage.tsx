@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,13 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import logo from "@/assets/logoBlack.png";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import FormField from "@/components/form/FormField";
-import { useAppwrite } from "../context/AppwriteContext";
+import { useMutation } from "@tanstack/react-query";
+import { authService } from "@/api";
 
 interface LoginFormData {
   email: string;
@@ -21,52 +20,38 @@ interface LoginFormData {
 }
 
 function LoginPage() {
-  const { account } = useAppwrite();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
 
-  useEffect(() => {
-    try {
-      account.get().then((response) => {
-        navigate("/");
-      });
-    } catch (err: any) {
-      console.log(err);
-    }
-  }, []);
+  const { mutate: login, isPending } = useMutation({
+    mutationFn: authService.login,
+    onSuccess: () => {
+      navigate("/");
+    },
+    onError: (err) => {
+      setError(err.message || "Invalid credentials. Please try again.");
+    },
+  });
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-    try {
-      console.log(data);
-      const { email, password } = data;
-      const session = await account.createEmailPasswordSession(email, password);
-
-      console.log("User logged in:", session);
-      navigate("/");
-      setSuccess(true);
-    } catch (err: any) {
-      console.error("Login error:", err);
-      setError(err.message || "Invalid credentials. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-
-    // localStorage.setItem("token", "1234");
-    // navigate("/", { replace: true });
+    setError(null);
+    login(data);
   };
 
   return (
     <div className="flex h-screen w-screen justify-center items-center">
-      <Card className="min-w-[400px]">
+      <Card className="min-w-[400px] max-w-[400px]">
         <CardHeader className="space-y-1">
           <img src={logo} width={30} height={30} className="mb-2" />
           <CardTitle className="text-2xl">Welcome to iSafe-guard</CardTitle>
@@ -96,7 +81,14 @@ function LoginPage() {
             />
 
             <div>
-              <Button disabled={loading} className="w-full mt-4" type="submit">
+              {error && (
+                <p className="text-sm text-center text-destructive">{error}</p>
+              )}
+              <Button
+                disabled={isPending}
+                className="w-full mt-4"
+                type="submit"
+              >
                 Login
               </Button>
               <Button
