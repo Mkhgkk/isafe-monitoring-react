@@ -70,7 +70,9 @@ function SideBar({
   const { mutate: logout } = useMutation({
     mutationFn: authService.logout,
     onSuccess: () => {
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 500);
     },
     onError: (err) => {
       console.error(err);

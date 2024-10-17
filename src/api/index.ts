@@ -1,5 +1,6 @@
 import { account, databases } from "@/services/appwrite";
 import { Query } from "appwrite";
+import apiClient from "./apiClient";
 
 export const authService = {
   login: async ({ email, password }: { email: string; password: string }) => {
@@ -41,6 +42,21 @@ export const scheduleService = {
       [Query.greaterThan("end_timestamp", Math.floor(Date.now() / 1000))]
     );
     return response.documents;
+  },
+  createSchedule: async (schedule: {
+    description?: string;
+    stream_id: string;
+    start_timestamp: number;
+    end_timestamp: number;
+    location: string;
+    model_name: string;
+    stream_document_id: string;
+  }) => {
+    const response = await apiClient.post(
+      "/api/stream/create_schedule",
+      schedule
+    );
+    return response.data;
   },
 };
 
