@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
+import { DayPickerProps } from "react-day-picker";
 
 const DateField = <TFormData extends Record<string, any>>({
   id,
@@ -19,6 +20,7 @@ const DateField = <TFormData extends Record<string, any>>({
   error,
   requiredMark,
   className,
+  ...props
 }: {
   control: Control<TFormData>;
   id: Path<TFormData>;
@@ -26,7 +28,7 @@ const DateField = <TFormData extends Record<string, any>>({
   error?: string;
   requiredMark?: boolean;
   className?: string;
-}) => {
+} & DayPickerProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -67,6 +69,7 @@ const DateField = <TFormData extends Record<string, any>>({
                   setOpen(false);
                 }}
                 numberOfMonths={1}
+                {...props}
               />
             </PopoverContent>
           </Popover>

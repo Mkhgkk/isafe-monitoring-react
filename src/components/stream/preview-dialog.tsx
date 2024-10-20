@@ -34,7 +34,7 @@ const PreviewDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <Icons.preview className="w-4 h-4 text-zinc-800 mr-2" />
+          <Icons.preview className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
           Preview
         </DropdownMenuItem>
       </DialogTrigger>

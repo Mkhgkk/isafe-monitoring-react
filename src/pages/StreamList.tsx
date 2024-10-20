@@ -48,7 +48,6 @@ const PasswordCell = ({ value }: { value?: string }) => {
 };
 
 function StreamList() {
-  const columnHelper = createColumnHelper();
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -112,6 +111,8 @@ function StreamList() {
 
     return () => unsubscribe();
   }, []);
+
+  const columnHelper = createColumnHelper();
 
   const columns = useMemo(
     () => [
@@ -244,7 +245,7 @@ function StreamList() {
                   initialData={row.original}
                   trigger={
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <Icons.edit className="w-4 h-4 text-zinc-800 mr-2" />
+                      <Icons.edit className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
                       Edit
                     </DropdownMenuItem>
                   }

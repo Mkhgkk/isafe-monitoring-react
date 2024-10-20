@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import image from "@/assets/1.jpg";
 import { Skeleton } from "./ui/skeleton";
 import config from "../config/default.config";
 import moment from "moment";

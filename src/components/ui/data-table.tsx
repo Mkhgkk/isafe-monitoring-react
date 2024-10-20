@@ -42,7 +42,6 @@ type DataTableProps<TData, TValue> = {
   filterKey?: string;
   onRefresh?: () => void;
   loading: boolean;
-  fetchFn: () => void;
 };
 
 export function DataTable<TData, TValue>({
@@ -50,7 +49,6 @@ export function DataTable<TData, TValue>({
   data,
   filterKey,
   onRefresh,
-  fetchFn,
   loading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -90,9 +88,9 @@ export function DataTable<TData, TValue>({
           />
         )}
         {onRefresh && (
-          <Button onClick={fetchFn} variant="outline" size="sm">
+          <Button onClick={onRefresh} variant="outline" size="sm">
             <Icons.refresh
-              className={`w-4 h-4 mr-1.5 text-zinc-800 ${
+              className={`w-4 h-4 mr-1.5 text-zinc-800 dark:text-white ${
                 loading ? "animate-spin" : ""
               }`}
             />
@@ -110,7 +108,7 @@ export function DataTable<TData, TValue>({
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
-                      className="text-black"
+                      className="text-black dark:text-white"
                     >
                       {header.isPlaceholder
                         ? null

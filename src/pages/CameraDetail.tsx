@@ -190,7 +190,7 @@ function CameraDetail() {
   const camera = cameras.find((item) => item.stream_id == streamId);
   const navigate = useNavigate();
   const location = useLocation();
-  const { streamData } = location.state;
+  const { streamData } = location.state ?? {};
 
   const [filter, setFilter] = useState("all");
   const [ptz, setPtz] = useState(camera?.supports_ptz);
@@ -267,12 +267,12 @@ function CameraDetail() {
             <PanelVideo streamId={streamId} />
 
             <div className="absolute left-0 top-0 right-0 bottom-0 flex flex-col justify-between">
-              <div className="py-1 px-3 bg-zinc-200 dark:bg-slate-700 bg-opacity-60 rounded-2xl flex items-center m-5 self-end space-x-1.5">
+              <div className="py-1 px-3 bg-zinc-200  bg-opacity-60 rounded-2xl flex items-center m-5 self-end space-x-1.5">
                 <div className="relative flex items-center justify-center h-3 w-3">
                   <span className="absolute inline-flex h-2 w-2 rounded-full bg-red-600" />
                   <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-600 opacity-75" />
                 </div>
-                <p className="text-xs font-semibold">Live</p>
+                <p className="text-xs font-semibold text-black">Live</p>
               </div>
 
               {ptz && <PTZControl streamId={streamId} />}
@@ -288,14 +288,13 @@ function CameraDetail() {
 
                 <Button
                   className={cn(
-                    "bg-opacity-60 bg-zinc-200 dark:bg-slate-700 text-black rounded-full hover:text-white m-5",
+                    "bg-opacity-60 bg-zinc-200 text-black rounded-full hover:text-white m-5",
                     ptz && "bg-primary text-white"
                   )}
                   size="sm"
                   onClick={() => setPtz(!ptz)}
                 >
-                  <Icons.control className="w-4 h-4 mr-2" />
-                  PTZ
+                  <Icons.control className="w-4 h-4" />
                 </Button>
               </div>
             </div>
@@ -328,6 +327,11 @@ function CameraDetail() {
                   <EventCardSkeleton key={item} />
                 ))
               : events.map((item) => <EventCard item={item} key={item} />)}
+            {events.length === 0 && !loading && (
+              <p className="text-muted-foreground text-center mt-10 text-sm">
+                No events found.
+              </p>
+            )}
           </div>
         </ScrollArea>
       </div>

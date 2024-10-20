@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logoBlack.png";
+import logo from "@/assets/logo.png";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { Nav } from "./nav";
@@ -20,14 +20,16 @@ import {
 import {
   Settings,
   LayoutDashboard,
-  ShieldCheck,
   TvMinimalPlay,
+  Cctv,
+  CalendarRange,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConnectionInfo from "./connection-info";
 import { Models } from "appwrite";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api";
+import NotificationPanel from "./notification-panel";
 
 type SideBarProps = {
   isCollapsed: boolean;
@@ -43,8 +45,13 @@ const links = [
     href: "/cameras",
   },
   {
-    title: "Security Cameras",
-    icon: ShieldCheck,
+    title: "Monitoring Schedules",
+    icon: CalendarRange,
+    href: "/schedules",
+  },
+  {
+    title: "Streams",
+    icon: Cctv,
     href: "/streams",
   },
   {
@@ -154,6 +161,24 @@ function SideBar({
             />
           </PopoverContent>
         </Popover>
+        <NotificationPanel
+          trigger={
+            <Button
+              variant="ghost"
+              className={cn(
+                "gap-3 w-full justify-start px-5 border-t h-14 rounded-none",
+                isCollapsed && "justify-center"
+              )}
+              size={"sm"}
+            >
+              <div className="relative">
+                <Icons.bell className="h-4 w-4" />
+                <div className="w-2 h-2 bg-red-500 absolute rounded-full -top-1 right-0" />
+              </div>
+              <span className={cn(isCollapsed && "hidden")}>Notifications</span>
+            </Button>
+          }
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button

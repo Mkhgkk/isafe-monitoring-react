@@ -21,6 +21,7 @@ import { AppwriteProvider } from "./context/AppwriteContext";
 import { Toaster } from "@/components/ui/toaster";
 import { ConnectionProvider } from "./context/ConnectionContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ScheduleList from "./pages/ScheduleList";
 
 function App() {
   const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<Navigate to="/cameras" />} />
           <Route path="/cameras" element={<MainPage />} />
           <Route path="/cameras/:streamId" element={<CameraDetail />} />
+          <Route path="/schedules" element={<ScheduleList />} />
           <Route path="/streams" element={<StreamList />} />
           <Route path="/events" element={<EventList />} />
           <Route path="/events/:eventId" element={<EventDetail />} />
@@ -48,7 +50,7 @@ function App() {
     <ConnectionProvider>
       <AppwriteProvider>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <RouterProvider router={router} />
           </ThemeProvider>
           <Toaster />

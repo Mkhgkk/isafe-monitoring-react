@@ -25,11 +25,18 @@ function WeekCalendar() {
           key={index}
           className={cn(
             "flex flex-col items-center p-1 rounded-md cursor-pointer",
-            `${selectedDate === day && "bg-black"}`
+            `${selectedDate === day && "bg-primary"}`
           )}
           onClick={() => setSelectedDate(day)}
         >
-          <p className="text-xs text-zinc-400">{moment(day).format("ddd")}</p>
+          <p
+            className={cn(
+              "text-xs text-zinc-400",
+              selectedDate === day && "text-white"
+            )}
+          >
+            {moment(day).format("ddd")}
+          </p>
           <p
             className={cn("text-sm", `${selectedDate === day && "text-white"}`)}
           >

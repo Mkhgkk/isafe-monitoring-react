@@ -1,7 +1,8 @@
 import { account, databases } from "@/services/appwrite";
 import { Query } from "appwrite";
 import apiClient from "./apiClient";
-import { Schedule } from "@/type";
+import { Schedule, ScheduleDocument } from "@/type";
+import { orderColumns } from "@tanstack/react-table";
 
 export const authService = {
   login: async ({ email, password }: { email: string; password: string }) => {
@@ -45,6 +46,16 @@ export const scheduleService = {
     return response.documents;
   },
 
+  fetchAllSchedules: async () => {
+    //TODO: Implement paging
+    const response = await databases.listDocuments(
+      "isafe-guard-db",
+      "66fa20d600253c7d4503",
+      [Query.orderDesc("start_timestamp")]
+    );
+    return response.documents;
+  },
+
   createSchedule: async (
     schedule: Schedule & {
       stream_document_id: string;
@@ -52,6 +63,15 @@ export const scheduleService = {
   ) => {
     const response = await apiClient.post(
       "/api/stream/create_schedule",
+      schedule
+    );
+    return response.data;
+  },
+
+  deleteSchedule: async (schedule: ScheduleDocument) => {
+    //TODO: Implement delete schedule
+    const response = await apiClient.post(
+      "/api/stream/delete_schedule",
       schedule
     );
     return response.data;

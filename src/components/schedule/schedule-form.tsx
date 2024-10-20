@@ -10,38 +10,45 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import FormField from "@/components/form/FormField";
-import SelectField from "./form/SelectField";
-import DateField from "./form/DateField";
-import { Separator } from "./ui/separator";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import SelectField from "../form/SelectField";
+import DateField from "../form/DateField";
+import { Separator } from "../ui/separator";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { scheduleService, streamService } from "@/api";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getUnixTimestamp } from "@/utils";
 
 const timeRegex = /^([01]\d|2[0-4]):([0-5]\d)$/;
-const scheduleFormSchema = z.object({
-  stream_id: z.string(),
-  model_name: z.string(),
-  location: z.string(),
-  startDate: z.date(),
-  startTime: z.string().regex(timeRegex, "Invalid time format"),
-  endDate: z.date(),
-  endTime: z.string().regex(timeRegex, "Invalid time format"),
-  description: z.string().optional(),
-});
+const scheduleFormSchema = z
+  .object({
+    stream_id: z.string(),
+    model_name: z.string(),
+    location: z.string(),
+    startDate: z.date(),
+    startTime: z.string().regex(timeRegex, "Invalid time format"),
+    endDate: z.date(),
+    endTime: z.string().regex(timeRegex, "Invalid time format"),
+    description: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const startDateTime = new Date(
+      `${data.startDate.toISOString().split("T")[0]}T${data.startTime}:00`
+    );
+    const endDateTime = new Date(
+      `${data.endDate.toISOString().split("T")[0]}T${data.endTime}:00`
+    );
+
+    if (startDateTime >= endDateTime) {
+      ctx.addIssue({
+        path: ["endDate"],
+        message: "End date must be greater than start date",
+        code: "custom",
+      });
+    }
+  });
 
 export type ScheduleFormData = z.infer<typeof scheduleFormSchema>;
-
-const getUnixTimestamp = (date: Date, time: string) => {
-  const [hours, minutes] = time.split(":").map(Number);
-
-  date.setHours(hours);
-  date.setMinutes(minutes);
-
-  const unixTimestamp = Math.floor(date.getTime() / 1000);
-
-  return unixTimestamp;
-};
 
 function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   const {
@@ -52,7 +59,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   } = useForm<ScheduleFormData>({
     resolver: zodResolver(scheduleFormSchema),
   });
-
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
   const { data: streams } = useQuery({
@@ -66,7 +73,14 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
       console.log("Schedule created successfully");
       setOpen(false);
       reset();
+      queryClient.invalidateQueries({
+        queryKey: ["scheduleService.fetchSchedules"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["scheduleService.fetchAllSchedules"],
+      });
     },
+
     onError: (err) => {
       console.log("Error creating schedule: ", err);
     },
@@ -154,6 +168,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 label="Start date"
                 error={errors.startDate?.message as string}
                 requiredMark
+                disabled={{ before: new Date() }}
               />
               <FormField
                 control={control}
@@ -172,6 +187,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
                 control={control}
                 error={errors.endDate?.message as string}
                 requiredMark
+                disabled={{ before: new Date() }}
               />
               <FormField
                 control={control}

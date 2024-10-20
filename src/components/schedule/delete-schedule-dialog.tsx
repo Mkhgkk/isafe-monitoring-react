@@ -11,30 +11,28 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
-import { useAppwrite } from "@/context/AppwriteContext";
+import { ScheduleDocument } from "@/type";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { scheduleService } from "@/api";
 
-const DeleteDialog = ({ $id, stream_id }: { id: string; name: string }) => {
+const DeleteScheduleDialog = ({ schedule }: { schedule: ScheduleDocument }) => {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const handleOpen = (value: boolean) => {
     setOpen(value);
   };
-
-  const { databases } = useAppwrite();
+  const { mutate: deleteSchedule, isPending } = useMutation({
+    mutationFn: scheduleService.deleteSchedule,
+    onSuccess: () => {
+      setOpen(false);
+      queryClient.invalidateQueries({
+        queryKey: ["scheduleService.fetchSchedules"],
+      });
+    },
+  });
 
   const handleDelete = async () => {
-    try {
-      const result = await databases.deleteDocument(
-        "isafe-guard-db",
-        "66f504260003d64837e5",
-        $id
-      );
-
-      console.log(result);
-
-      setOpen(false);
-    } catch (err) {
-      console.log(err);
-    }
+    deleteSchedule(schedule);
   };
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
@@ -52,10 +50,14 @@ const DeleteDialog = ({ $id, stream_id }: { id: string; name: string }) => {
           <DialogTitle>Confirm</DialogTitle>
         </DialogHeader>
         <DialogDescription>
-          {`Are you sure you want to delete ${stream_id}?`}
+          Are you sure you want to delete this schedule?
         </DialogDescription>
         <DialogFooter>
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            loading={isPending}
+          >
             Delete
           </Button>
         </DialogFooter>
@@ -64,4 +66,4 @@ const DeleteDialog = ({ $id, stream_id }: { id: string; name: string }) => {
   );
 };
 
-export default DeleteDialog;
+export default DeleteScheduleDialog;
