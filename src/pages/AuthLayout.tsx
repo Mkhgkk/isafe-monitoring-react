@@ -13,7 +13,7 @@ function AuthLayout() {
   return data ? (
     <Navigate to="/" />
   ) : (
-    <div className="w-screen h-screen bg-[url('@/assets/bg.jpg')] bg-cover">
+    <div className="w-screen h-screen bg-[url('@/assets/bg2.jpg')] bg-cover">
       <Outlet />
     </div>
   );

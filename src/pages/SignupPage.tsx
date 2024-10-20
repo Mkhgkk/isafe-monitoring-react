@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import logo from "@/assets/logoBlack.png";
+import logo from "@/assets/logo.png";
 
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
