@@ -1,3 +1,4 @@
+import { streamService } from "@/api";
 import { Icons } from "@/components/icons";
 import AutoTrackDialog from "@/components/stream/autotrack-dialog";
 import DeleteDialog from "@/components/stream/delete-dialog";
@@ -18,11 +19,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppwrite } from "@/context/AppwriteContext";
 import { cn } from "@/lib/utils";
+import { StreamDocument } from "@/type";
+import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const PasswordCell = ({ value }: { value?: string }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -49,75 +51,17 @@ const PasswordCell = ({ value }: { value?: string }) => {
 
 function StreamList() {
   const [messageApi, contextHolder] = message.useMessage();
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const { databases, appwriteClient } = useAppwrite();
 
-  const fetchStreams = async () => {
-    try {
-      setLoading(true);
-      const response = await databases.listDocuments(
-        "isafe-guard-db",
-        "66f504260003d64837e5"
-      );
-      console.log(response.documents);
-      setData(response.documents);
-    } catch (err: any) {
-      console.log("StreamList - Failed to get list of streams: ", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, isFetching, refetch } = useQuery({
+    queryKey: ["streamService.fetchStreams"],
+    queryFn: streamService.fetchStreams,
+  });
 
-  useEffect(() => {
-    fetchStreams();
-
-    const unsubscribe = appwriteClient.subscribe(
-      "databases.isafe-guard-db.collections.66f504260003d64837e5.documents",
-      (response) => {
-        console.log("StreamList.tsx - Subscription returned data: ", response);
-        if (
-          response.events.includes(
-            "databases.*.collections.*.documents.*.create"
-          )
-        ) {
-          setData((prevState) => [...prevState, response.payload]);
-        } else if (
-          response.events.includes(
-            "databases.*.collections.*.documents.*.delete"
-          )
-        ) {
-          // handle delete
-          setData((prevState) => [
-            ...prevState.filter((item) => item.$id !== response.payload.$id),
-          ]);
-        } else if (
-          response.events.includes(
-            "databases.*.collections.*.documents.*.update"
-          )
-        ) {
-          // handle update
-          setData((prevState) => {
-            const index = prevState.findIndex(
-              (item) => item.$id === response.payload.$id
-            );
-            const newState = [...prevState];
-            newState[index] = response.payload;
-            return newState;
-          });
-        }
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
-
-  const columnHelper = createColumnHelper();
-
+  const columnHelper = createColumnHelper<StreamDocument>();
   const columns = useMemo(
     () => [
-      columnHelper.accessor("$id", {
-        id: "id",
+      columnHelper.accessor("stream_id", {
+        id: "index",
         header: "",
         cell: ({ row }) => <span className="pl-3">{row.index + 1}</span>,
       }),
@@ -152,12 +96,6 @@ function StreamList() {
           );
         },
       }),
-      // columnHelper.accessor("location", {
-      //   id: "location",
-      //   header: ({ column }) => (
-      //     <SortingHeader column={column} title="Location" />
-      //   ),
-      // }),
       columnHelper.accessor("ptz_username", {
         id: "ptz_username",
         header: ({ column }) => (
@@ -213,11 +151,8 @@ function StreamList() {
           </TooltipProvider>
         ),
       }),
-      columnHelper.accessor("preview", {
-        id: "preview",
-        header: "",
-      }),
-      columnHelper.accessor("action", {
+
+      columnHelper.accessor("", {
         id: "id",
         header: "",
 
@@ -251,7 +186,7 @@ function StreamList() {
                   }
                 />
                 <DeleteDialog
-                  $id={row.original.$id}
+                  id={row.original.$id}
                   stream_id={row.original.stream_id}
                 />
               </DropdownMenuContent>
@@ -285,11 +220,10 @@ function StreamList() {
       </div>
       <DataTable
         columns={columns}
-        data={data}
-        fetchFn={fetchStreams}
-        loading={loading}
+        data={data ?? []}
+        loading={isFetching}
         filterKey="name"
-        onRefresh={() => console.log("refresh")}
+        onRefresh={() => refetch()}
       />
     </div>
   );

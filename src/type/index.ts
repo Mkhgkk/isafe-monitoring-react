@@ -19,3 +19,15 @@ export type Event = {
   vedio_filename: string;
 };
 export type EventDocument = Models.Document & Event;
+
+export type Stream = {
+  stream_id: string;
+  description: string;
+  rtsp_link: string;
+  cam_ip?: string;
+  ptz_port?: number;
+  ptz_username?: string;
+  ptz_password?: string;
+  is_active?: boolean;
+};
+export type StreamDocument = Models.Document & Stream;

@@ -7,6 +7,7 @@ import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScheduleDocument } from "@/type";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ export default function MainPage() {
     },
   });
 
+  const { toast } = useToast();
+
   return (
     <div className="">
       <div className="pb-4">
@@ -54,8 +57,8 @@ export default function MainPage() {
           </Button>
         </div>
         <div className="border p-4 rounded-md">
-          <p className="mb-5 font-semibold text-lg ">Ongoing</p>
-          {isFetching && <Skeletons />}
+          <p className="mb-5 font-semibold text-lg">Ongoing</p>
+          {isFetching && data?.ongoingSchedules.length === 0 && <Skeletons />}
           {!isFetching && !data?.ongoingSchedules?.length && (
             <p className="text-sm text-muted-foreground mb-4 text-center">
               No ongoing schedule.
@@ -86,7 +89,7 @@ export default function MainPage() {
       </div>
       <div className="border p-4 rounded-md">
         <p className="mb-5 font-semibold text-lg">Upcoming</p>
-        {isFetching && <Skeletons />}
+        {isFetching && !data?.upcomingSchedules.length === 0 && <Skeletons />}
         {!isFetching && !data?.upcomingSchedules.length && (
           <p className="text-sm text-muted-foreground mb-4 text-center">
             No upcoming schedule.

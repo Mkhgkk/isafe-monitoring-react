@@ -52,8 +52,8 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <RouterProvider router={router} />
+            <Toaster />
           </ThemeProvider>
-          <Toaster />
         </QueryClientProvider>
       </AppwriteProvider>
     </ConnectionProvider>

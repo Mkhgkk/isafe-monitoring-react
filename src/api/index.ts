@@ -1,7 +1,7 @@
 import { account, databases } from "@/services/appwrite";
 import { Query } from "appwrite";
 import apiClient from "./apiClient";
-import { Schedule, ScheduleDocument } from "@/type";
+import { Schedule, ScheduleDocument, Stream, StreamDocument } from "@/type";
 import { orderColumns } from "@tanstack/react-table";
 
 export const authService = {
@@ -53,7 +53,7 @@ export const scheduleService = {
       "66fa20d600253c7d4503",
       [Query.orderDesc("start_timestamp")]
     );
-    return response.documents;
+    return response.documents as ScheduleDocument[];
   },
 
   createSchedule: async (
@@ -84,15 +84,63 @@ export const streamService = {
       "isafe-guard-db",
       "66f504260003d64837e5"
     );
-    return response.documents;
+    return response.documents as StreamDocument[];
   },
 
-  startStream: async (streamDetails) => {
+  startStream: async (streamDetails: StreamDocument) => {
     const response = await apiClient.post(
       "/api/stream/start_stream",
       streamDetails
     );
     return response.data;
+  },
+
+  updateStream: async (data: Stream & { $id: string }) => {
+    const response = await databases.updateDocument(
+      "isafe-guard-db",
+      "66f504260003d64837e5",
+      data.$id,
+      {
+        description: data.description,
+        cam_ip: data.cam_ip,
+        rtsp_link: data.rtsp_link,
+        stream_id: data.stream_id,
+        ptz_password: data.ptz_password,
+        ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
+        ptz_username: data.ptz_username,
+      }
+    );
+
+    return response;
+  },
+
+  createStream: async (data: Stream) => {
+    const response = await databases.createDocument(
+      "isafe-guard-db",
+      "66f504260003d64837e5",
+      "unique()",
+      {
+        description: data.description,
+        cam_ip: data.cam_ip,
+        rtsp_link: data.rtsp_link,
+        stream_id: data.stream_id,
+        ptz_password: data.ptz_password,
+        ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
+        ptz_username: data.ptz_username,
+      }
+    );
+
+    return response;
+  },
+
+  deleteStream: async (streamId: string) => {
+    const result = await databases.deleteDocument(
+      "isafe-guard-db",
+      "66f504260003d64837e5",
+      streamId
+    );
+
+    return result;
   },
 };
 

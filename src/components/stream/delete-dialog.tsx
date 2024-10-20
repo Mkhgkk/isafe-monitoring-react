@@ -11,30 +11,28 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
-import { useAppwrite } from "@/context/AppwriteContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { streamService } from "@/api";
 
-const DeleteDialog = ({ $id, stream_id }: { id: string; name: string }) => {
+const DeleteDialog = ({ id, stream_id }: { id: string; stream_id: string }) => {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
   const handleOpen = (value: boolean) => {
     setOpen(value);
   };
 
-  const { databases } = useAppwrite();
-
-  const handleDelete = async () => {
-    try {
-      const result = await databases.deleteDocument(
-        "isafe-guard-db",
-        "66f504260003d64837e5",
-        $id
-      );
-
-      console.log(result);
-
+  const { mutate: deleteStream, isPending } = useMutation({
+    mutationFn: streamService.deleteStream,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["streamService.fetchStreams"],
+      });
       setOpen(false);
-    } catch (err) {
-      console.log(err);
-    }
+    },
+  });
+
+  const handleDelete = () => {
+    deleteStream(id);
   };
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
@@ -55,7 +53,11 @@ const DeleteDialog = ({ $id, stream_id }: { id: string; name: string }) => {
           {`Are you sure you want to delete ${stream_id}?`}
         </DialogDescription>
         <DialogFooter>
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            loading={isPending}
+          >
             Delete
           </Button>
         </DialogFooter>

@@ -11,18 +11,23 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import FormField from "../form/FormField";
-import { useAppwrite } from "@/context/AppwriteContext";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { streamService } from "@/api";
 
-// Define the form data interface
-interface StreamFormData {
-  stream_id: string;
-  description?: string;
-  rtsp_link: string;
-  cam_ip?: string;
-  ptz_port?: number;
-  ptz_password?: string;
-  ptz_username?: string;
-}
+const streamFormSchema = z.object({
+  $id: z.string().optional(),
+  stream_id: z.string(),
+  description: z.string(),
+  rtsp_link: z.string(),
+  cam_ip: z.string().optional().nullable(),
+  ptz_port: z.number().optional().nullable(),
+  ptz_password: z.string().optional().nullable(),
+  ptz_username: z.string().optional().nullable(),
+});
+
+export type StreamFormData = z.infer<typeof streamFormSchema>;
 
 function StreamForm({
   trigger,
@@ -32,68 +37,44 @@ function StreamForm({
   initialData?: StreamFormData;
 }) {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
+    resolver: zodResolver(streamFormSchema),
     defaultValues: initialData,
   });
 
-  const [loading, setLoading] = useState(null);
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
-  const { databases } = useAppwrite();
+  const { mutate: createStream, isPending } = useMutation({
+    mutationFn: streamService.createStream,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["streamService.fetchStreams"],
+      });
+      setOpen(false);
+      reset();
+    },
+  });
+
+  const { mutate: updateStream, isPending: isUpdating } = useMutation({
+    mutationFn: streamService.updateStream,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["streamService.fetchStreams"],
+      });
+      setOpen(false);
+      reset();
+    },
+  });
 
   const onSubmit: SubmitHandler<StreamFormData> = async (data) => {
-    try {
-      setLoading(true);
-
-      if (initialData) {
-        // handle update stream
-        const response = await databases.updateDocument(
-          "isafe-guard-db",
-          "66f504260003d64837e5",
-          data.$id,
-          {
-            description: data.description,
-            cam_ip: data.cam_ip,
-            rtsp_link: data.rtsp_link,
-            stream_id: data.stream_id,
-            ptz_password: data.ptz_password,
-            ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
-            ptz_username: data.ptz_username,
-          }
-        );
-
-        console.log("Document updated successfully:", response);
-        reset();
-      } else {
-        // handle create  new stream
-        const response = await databases.createDocument(
-          "isafe-guard-db",
-          "66f504260003d64837e5",
-          "unique()",
-          {
-            description: data.description,
-            cam_ip: data.cam_ip,
-            rtsp_link: data.rtsp_link,
-            stream_id: data.stream_id,
-            ptz_password: data.ptz_password,
-            ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
-            ptz_username: data.ptz_username,
-          }
-        );
-        console.log("Document created successfully:", response);
-        reset();
-      }
-
-      setOpen(false);
-    } catch (err: any) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
+    if (initialData) {
+      updateStream(data);
+    } else createStream(data);
   };
 
   const handleOpen = (value: boolean) => {
@@ -118,17 +99,18 @@ function StreamForm({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <FormField
+              control={control}
               id="stream_id"
               label="Stream ID"
-              register={register}
               error={errors.stream_id?.message as string}
-              required
+              requiredMark
             />
             <FormField
+              control={control}
               id="description"
               label="Description"
-              register={register}
               error={errors.description?.message as string}
+              requiredMark
             />
             {/* <FormField
               id="location"
@@ -138,25 +120,25 @@ function StreamForm({
             /> */}
             <Separator className="mt-2" />
             <FormField
+              control={control}
               id="rtsp_link"
               label="RTSP Link"
-              register={register}
               error={errors.rtsp_link?.message as string}
-              required
+              requiredMark
             />
             <div className="grid grid-cols-4 gap-3">
               <FormField
+                control={control}
                 id="cam_ip"
                 label="Cam IP"
-                register={register}
                 error={errors.cam_ip?.message as string}
                 type="text"
                 className="col-span-3"
               />
               <FormField
+                control={control}
                 id="ptz_port"
                 label="PTZ Port"
-                register={register}
                 error={errors.ptz_port?.message as string}
                 type="number"
                 className="col-span-1"
@@ -164,22 +146,22 @@ function StreamForm({
             </div>
             <div className="grid grid-cols-2 gap-3">
               <FormField
+                control={control}
                 id="ptz_username"
                 label="PTZ username"
-                register={register}
                 error={errors.ptz_username?.message as string}
               />
               <FormField
+                control={control}
                 id="ptz_password"
                 label="PTZ Password"
-                register={register}
                 error={errors.ptz_password?.message as string}
                 type="text"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button disabled={loading} type="submit">
+            <Button loading={isPending || isUpdating} type="submit">
               {initialData ? "Save Changes" : "Add Stream"}
             </Button>
           </DialogFooter>

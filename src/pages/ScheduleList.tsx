@@ -30,7 +30,7 @@ function ScheduleList() {
   const columnHelper = createColumnHelper<ScheduleDocument>();
   const columns = useMemo(
     () => [
-      columnHelper.accessor("$id", {
+      columnHelper.accessor("stream_id", {
         id: "id",
         header: "",
         cell: ({ row }) => <span className="pl-3">{row.index + 1}</span>,
