@@ -58,7 +58,7 @@ export default function EventList() {
   const flatted = data?.pages.flatMap((page) => page);
 
   return (
-    <div className="h-[calc(100vh-40px)]">
+    <div className="h-[calc(100vh-50px)]">
       <div className="flex justify-between items-center pb-5">
         <h1 className="text-xl font-semibold">Events</h1>
         <div className="gap-2 hidden lg:flex">
@@ -77,7 +77,7 @@ export default function EventList() {
           </PopoverContent>
         </Popover>
       </div>
-      <ScrollArea className="h-[calc(100vh-72px)]">
+      <ScrollArea className="h-[calc(100vh-80px)]">
         {!isLoading && !flatted?.length && (
           <p className="text-muted-foreground text-center mt-[200px]">
             No events found.
