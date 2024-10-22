@@ -18,6 +18,7 @@ import { scheduleService, streamService } from "@/api";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getUnixTimestamp } from "@/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const timeRegex = /^([01]\d|2[0-4]):([0-5]\d)$/;
 const scheduleFormSchema = z
@@ -59,6 +60,7 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
   } = useForm<ScheduleFormData>({
     resolver: zodResolver(scheduleFormSchema),
   });
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
@@ -79,10 +81,18 @@ function ScheduleForm({ trigger }: { trigger: React.ReactNode }) {
       queryClient.invalidateQueries({
         queryKey: ["scheduleService.fetchAllSchedules"],
       });
+      toast({
+        description: "New schedule has been created successfully",
+        variant: "success",
+      });
     },
 
     onError: (err) => {
       console.log("Error creating schedule: ", err);
+      toast({
+        description: "Failed to create schedule",
+        variant: "destructive",
+      });
     },
   });
 

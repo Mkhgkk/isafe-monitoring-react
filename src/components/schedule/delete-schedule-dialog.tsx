@@ -14,8 +14,10 @@ import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { ScheduleDocument } from "@/type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { scheduleService } from "@/api";
+import { useToast } from "@/hooks/use-toast";
 
 const DeleteScheduleDialog = ({ schedule }: { schedule: ScheduleDocument }) => {
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const handleOpen = (value: boolean) => {
@@ -26,7 +28,18 @@ const DeleteScheduleDialog = ({ schedule }: { schedule: ScheduleDocument }) => {
     onSuccess: () => {
       setOpen(false);
       queryClient.invalidateQueries({
-        queryKey: ["scheduleService.fetchSchedules"],
+        queryKey: ["scheduleService.fetchAllSchedules"],
+      });
+      toast({
+        description: "Schedule has been deleted successfully",
+        variant: "success",
+      });
+    },
+    onError: (err) => {
+      console.log("Error deleting schedule: ", err);
+      toast({
+        description: "Failed to delete schedule",
+        variant: "destructive",
       });
     },
   });

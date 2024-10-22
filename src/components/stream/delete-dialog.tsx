@@ -13,9 +13,11 @@ import {
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { streamService } from "@/api";
+import { useToast } from "@/hooks/use-toast";
 
 const DeleteDialog = ({ id, stream_id }: { id: string; stream_id: string }) => {
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const handleOpen = (value: boolean) => {
     setOpen(value);
@@ -28,6 +30,17 @@ const DeleteDialog = ({ id, stream_id }: { id: string; stream_id: string }) => {
         queryKey: ["streamService.fetchStreams"],
       });
       setOpen(false);
+      toast({
+        description: "Stream has been deleted successfully",
+        variant: "success",
+      });
+    },
+    onError: (err) => {
+      console.log("Error deleting stream: ", err);
+      toast({
+        description: "Failed to delete stream",
+        variant: "destructive",
+      });
     },
   });
 

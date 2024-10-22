@@ -15,6 +15,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { streamService } from "@/api";
+import { useToast } from "@/hooks/use-toast";
 
 const streamFormSchema = z.object({
   $id: z.string().optional(),
@@ -46,6 +47,7 @@ function StreamForm({
     defaultValues: initialData,
   });
 
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
@@ -57,6 +59,17 @@ function StreamForm({
       });
       setOpen(false);
       reset();
+      toast({
+        description: "New stream has been created successfully",
+        variant: "success",
+      });
+    },
+    onError: (err) => {
+      console.log("Error creating stream: ", err);
+      toast({
+        description: "Failed to create new stream",
+        variant: "destructive",
+      });
     },
   });
 
@@ -68,6 +81,17 @@ function StreamForm({
       });
       setOpen(false);
       reset();
+      toast({
+        description: "Stream has been updated successfully",
+        variant: "success",
+      });
+    },
+    onError: (err) => {
+      console.log("Error updating stream: ", err);
+      toast({
+        description: "Failed to update stream",
+        variant: "destructive",
+      });
     },
   });
 

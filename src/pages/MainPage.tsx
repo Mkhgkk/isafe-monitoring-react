@@ -7,7 +7,6 @@ import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScheduleDocument } from "@/type";
 import { useQuery } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -31,8 +30,6 @@ export default function MainPage() {
       return { ongoingSchedules, upcomingSchedules };
     },
   });
-
-  const { toast } = useToast();
 
   return (
     <div className="">
