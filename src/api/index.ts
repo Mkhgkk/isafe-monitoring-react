@@ -2,7 +2,7 @@ import { account, databases } from "@/services/appwrite";
 import { Query } from "appwrite";
 import apiClient from "./apiClient";
 import { Schedule, ScheduleDocument, Stream, StreamDocument } from "@/type";
-import { orderColumns } from "@tanstack/react-table";
+import { EventFilters } from "@/components/event/list-filter";
 
 export const authService = {
   login: async ({ email, password }: { email: string; password: string }) => {
@@ -76,6 +76,15 @@ export const scheduleService = {
     );
     return response.data;
   },
+
+  fetchScheduleById: async (id: string) => {
+    const response = await databases.getDocument(
+      "isafe-guard-db", // Database ID
+      "66fa20d600253c7d4503", // Collection ID
+      id // Document ID
+    );
+    return response as ScheduleDocument;
+  },
 };
 
 export const streamService = {
@@ -85,6 +94,15 @@ export const streamService = {
       "66f504260003d64837e5"
     );
     return response.documents as StreamDocument[];
+  },
+
+  fetchStreamById: async (id: string) => {
+    const response = await databases.getDocument(
+      "isafe-guard-db",
+      "66f504260003d64837e5",
+      id
+    );
+    return response as StreamDocument;
   },
 
   startStream: async (streamDetails: StreamDocument) => {
@@ -150,6 +168,31 @@ export const eventService = {
       "isafe-guard-db",
       "670d337f001f9ab7ff34",
       [Query.orderDesc("timestamp"), Query.equal("stream_id", streamId)]
+    );
+
+    return response.documents;
+  },
+  fetchAllEvents: async (
+    query: EventFilters,
+    option: {
+      page: number;
+      limit: number;
+    }
+  ) => {
+    const q = [
+      Query.orderDesc("timestamp"),
+      Query.limit(option.limit),
+      Query.offset(option.page),
+    ];
+
+    if (query.stream) {
+      q.push(Query.equal("stream_id", query.stream));
+    }
+
+    const response = await databases.listDocuments(
+      "isafe-guard-db",
+      "670d337f001f9ab7ff34",
+      q
     );
 
     return response.documents;

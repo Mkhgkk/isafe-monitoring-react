@@ -1,6 +1,6 @@
 import PanelVideo from "@/components/panel-video";
 import { Icons } from "@/components/icons";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { scheduleService } from "@/api";
 import StreamInfo from "@/components/stream/stream-info";
@@ -67,8 +67,11 @@ export default function MainPage() {
                 key={index}
                 className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
                 onClick={() =>
-                  navigate(`/cameras/${item.stream_id}`, {
-                    state: { streamData: item },
+                  navigate({
+                    pathname: `/cameras/${item.stream_id}`,
+                    search: createSearchParams({
+                      scheduleId: item.$id,
+                    }).toString(),
                   })
                 }
               >
@@ -86,7 +89,7 @@ export default function MainPage() {
       </div>
       <div className="border p-4 rounded-md">
         <p className="mb-5 font-semibold text-lg">Upcoming</p>
-        {isFetching && !data?.upcomingSchedules.length === 0 && <Skeletons />}
+        {isFetching && data?.upcomingSchedules.length === 0 && <Skeletons />}
         {!isFetching && !data?.upcomingSchedules.length && (
           <p className="text-sm text-muted-foreground mb-4 text-center">
             No upcoming schedule.
@@ -95,7 +98,7 @@ export default function MainPage() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {data?.upcomingSchedules.map((item, index) => (
             <div className="relative" key={index}>
-              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center cursor-pointer aspect-[16/9]">
+              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
                 <Icons.offline className="opacity-30" size={50} />
               </div>
               <StreamInfo
