@@ -1,7 +1,5 @@
 import { Icons } from "@/components/icons";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -10,24 +8,12 @@ import {
 } from "@/components/ui/popover";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { eventService } from "@/api";
-import { getThumbnailUrl } from "@/utils";
-import { format } from "date-fns";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import ListFilter, { EventFilters } from "@/components/event/list-filter";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-function EventItemSkeleton() {
-  return (
-    <div>
-      <Skeleton className="w-full rounded-sm aspect-[16/9] mb-2 border" />
-      <div>
-        <Skeleton className="h-5 w-20 mb-2 rounded-sm" />
-        <Skeleton className="h-3 w-28 rounded-sm mb-0.5" />
-        <Skeleton className="h-3 w-28" />
-      </div>
-    </div>
-  );
-}
+import EventItem from "@/components/event/event-item";
+import { EventDocument } from "@/type";
+import { EventItemSkeleton } from "@/components/camera/schedule-event-list";
 
 const LIMIT = 20;
 
@@ -37,7 +23,6 @@ export default function EventList() {
     type: undefined,
     date: undefined,
   });
-  const navigate = useNavigate();
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -55,7 +40,7 @@ export default function EventList() {
     fetchNextPage,
   });
 
-  const flatted = data?.pages.flatMap((page) => page);
+  const flatted = data?.pages.flatMap((page) => page) as EventDocument[];
 
   return (
     <div className="h-[calc(100vh-50px)]">
@@ -89,24 +74,7 @@ export default function EventList() {
             [...Array(8)].map((_, i) => <EventItemSkeleton key={i} />)}
 
           {flatted?.map((item) => (
-            <div
-              className="gap-2"
-              onClick={() => navigate("/events/" + item.$id)}
-            >
-              <img
-                src={getThumbnailUrl(item.thumbnail)}
-                className="w-full rounded-sm aspect-[16/9]"
-              />
-              <div className="mt-1">
-                <p className="font-semibold mb-1">{item.title}</p>
-                <p className="text-xs text-zinc-500">
-                  {item.stream_id} - {item.description}
-                </p>
-                <p className="text-xs text-zinc-500">
-                  {format(item.$createdAt, "yyyy-MM-dd HH:mm:ss")}
-                </p>
-              </div>
-            </div>
+            <EventItem item={item} key={item.$id} />
           ))}
           {isFetchingNextPage && <EventItemSkeleton />}
 

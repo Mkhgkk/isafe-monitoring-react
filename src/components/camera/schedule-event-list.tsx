@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { eventService } from "@/api";
 import { useAppwrite } from "@/context/AppwriteContext";
 import { EventDocument } from "@/type";
+import { Skeleton } from "../ui/skeleton";
 
 function ScheduleEventList({ streamId }: { streamId: string }) {
   const { appwriteClient } = useAppwrite();
@@ -87,7 +88,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
         </Select>
       </div>
       <WeekCalendar />
-      <ScrollArea className="h-[81vh]">
+      <ScrollArea className="h-[80vh]">
         <div className="grid gap-y-3">
           {isFetching
             ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
@@ -107,3 +108,16 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
 }
 
 export default ScheduleEventList;
+
+export function EventItemSkeleton() {
+  return (
+    <div>
+      <Skeleton className="w-full rounded-sm aspect-[16/9] mb-2 border" />
+      <div>
+        <Skeleton className="h-5 w-20 mb-2 rounded-sm" />
+        <Skeleton className="h-3 w-28 rounded-sm mb-0.5" />
+        <Skeleton className="h-3 w-28" />
+      </div>
+    </div>
+  );
+}
