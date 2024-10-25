@@ -28,7 +28,7 @@ function EventCard({ item, className }: Props) {
   return (
     <div
       className={cn("flex gap-2", className)}
-      onClick={() => navigate("/events/" + item)}
+      onClick={() => navigate("/events/" + item.$id)}
     >
       <img
         src={getThumbnailUrl(item.thumbnail)}
