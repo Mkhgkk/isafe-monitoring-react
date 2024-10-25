@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
-import Image from "next/image"
-import {io} from "socket.io-client"
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { io } from "socket.io-client";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -12,64 +12,64 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-import { Card } from "./ui/card"
-import { ScrollArea } from "./ui/scroll-area"
+import { Card } from "./ui/card";
+import { ScrollArea } from "./ui/scroll-area";
 
 export default function Monitoring() {
-  const [loading, setLoading] = useState(false)
-  const [camera_id, setCameraId] = useState(1)
-  const [model, setModel] = useState("PPE")
+  const [loading, setLoading] = useState(false);
+  const [camera_id, setCameraId] = useState(1);
+  const [model, setModel] = useState("PPE");
   // http://localhost:5000/feed?camera_id=2&model=PPE
   // "http://127.0.0.1:5000/video_feed/6?model=Scaffolding"
   const [link, setLink] = useState(
     `http://${document.domain}:5000/feed?camera_id=2&model=PPE`
-  )
-  
-  const [url, setURL] = useState(
-    ""
-  )
+  );
+
+  const [url, setURL] = useState("");
   // const updateLink = () => {
   //   setLink(`http://127.0.0.1:5000/video_feed/6?model=${model}`)
   // }
 
   useEffect(() => {
-    console.log("This code should run only once!")
-    const socket = io(`http://${document.domain}:5000/video`)
+    console.log("This code should run only once!");
+    const socket = io(`http://${document.domain}:5000/video`);
 
-    socket.on('connect', function() {
-      console.log('WebSocket connected');
-  });
+    socket.on("connect", function () {
+      console.log("WebSocket connected");
+    });
 
-    socket.on('frame', function(data) {
+    socket.on("frame", function (data) {
       console.log("Frame received!");
-      const img = document.getElementById('video-stream');
-      
+      const img = document.getElementById("video-stream");
+
       // Create a Blob from the binary data
-      const blob = new Blob([new Uint8Array(data.image)], { type: 'image/jpeg' });
+      const blob = new Blob([new Uint8Array(data.image)], {
+        type: "image/jpeg",
+      });
       const url_ = URL.createObjectURL(blob);
-      setURL(url_)
-      
+      setURL(url_);
+
       // Clean up old URLs to avoid memory leaks
       // img.onload = function() {
       //     URL.revokeObjectURL(url);
       // };
     });
 
-    socket.on('disconnect', function() {
-      console.log('WebSocket disconnected');
+    socket.on("disconnect", function () {
+      console.log("WebSocket disconnected");
     });
 
-    socket.on('error', function(err) {
-        console.error('Socket error:', err);
+    socket.on("error", function (err) {
+      console.error("Socket error:", err);
     });
-  }, [])
+  }, []);
 
   const handleClick = () => {
     // setLoading(true)
-    setLink(`http://localhost:5000/feed?camera_id=${camera_id}&model=${model}`)
-  }
+    setLink(`http://localhost:5000/feed?camera_id=${camera_id}&model=${model}`);
+  };
 
   return (
     <div className="flex gap-4">
@@ -236,5 +236,5 @@ export default function Monitoring() {
         </div>
       </Card> */}
     </div>
-  )
+  );
 }

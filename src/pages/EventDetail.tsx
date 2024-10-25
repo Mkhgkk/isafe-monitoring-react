@@ -2,19 +2,42 @@ import React, { useEffect, useState } from "react";
 import video1 from "@/assets/1.mp4";
 import { Separator } from "@/components/ui/separator";
 import image from "@/assets/1.jpg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Icons } from "@/components/icons";
+import { useAppwrite } from "@/context/AppwriteContext";
+import config from "../config/default.config";
 
 function EventDetail() {
   const [loading, setLoading] = useState(true);
+  const [event, setEvent] = useState();
   const navigate = useNavigate();
+  const { eventId } = useParams();
+
+  const { databases } = useAppwrite();
+
+  const fetchEvent = async () => {
+    try {
+      const response = await databases.getDocument(
+        "isafe-guard-db",
+        "670d337f001f9ab7ff34",
+        eventId
+      );
+      setEvent(response);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log("EventId: ", eventId);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 2000);
+    fetchEvent();
   }, []);
 
   return (
@@ -39,7 +62,8 @@ function EventDetail() {
           <video
             // src={video1}
             src={
-              "http://localhost:5000/video/videos/video_PPE_20241024231328.mp4"
+              // "http://localhost:5000/video/videos/video_PPE_20241024231328.mp4"
+              `http://${config.BACKEND_URL}/video/videos/${event.video_filename}`
             }
             controls={true}
             autoPlay
