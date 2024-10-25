@@ -39,7 +39,7 @@ function EventDetail() {
           <video
             // src={video1}
             src={
-              "http://localhost:5000/static/videos/video_PPE_20241014211017.mp4"
+              "http://localhost:5000/video/videos/video_PPE_20241024231328.mp4"
             }
             controls={true}
             autoPlay

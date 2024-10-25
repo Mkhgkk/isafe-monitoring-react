@@ -133,7 +133,7 @@ function ScheduleList() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-xl font-semibold">Monitoring Schedules</h1>
+          <h1 className="text-xl font-semibold">Schedules</h1>
         </div>
         <ScheduleForm
           trigger={

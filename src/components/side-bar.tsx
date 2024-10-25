@@ -45,7 +45,7 @@ const links = [
     href: "/cameras",
   },
   {
-    title: "Monitoring Schedules",
+    title: "Schedules",
     icon: CalendarRange,
     href: "/schedules",
   },

@@ -96,22 +96,35 @@ export const streamService = {
   },
 
   updateStream: async (data: Stream & { $id: string }) => {
-    const response = await databases.updateDocument(
-      "isafe-guard-db",
-      "66f504260003d64837e5",
-      data.$id,
-      {
-        description: data.description,
-        cam_ip: data.cam_ip,
-        rtsp_link: data.rtsp_link,
-        stream_id: data.stream_id,
-        ptz_password: data.ptz_password,
-        ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
-        ptz_username: data.ptz_username,
-      }
-    );
+    // const response = await databases.updateDocument(
+    //   "isafe-guard-db",
+    //   "66f504260003d64837e5",
+    //   data.$id,
+    //   {
+    //     description: data.description,
+    //     cam_ip: data.cam_ip,
+    //     rtsp_link: data.rtsp_link,
+    //     stream_id: data.stream_id,
+    //     ptz_password: data.ptz_password,
+    //     ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
+    //     ptz_username: data.ptz_username,
+    //   }
+    // );
 
-    return response;
+    // return response;
+
+    const response = await apiClient.post("/api/stream/update_stream", {
+      $id: data.$id,
+      description: data.description,
+      cam_ip: data.cam_ip,
+      rtsp_link: data.rtsp_link,
+      stream_id: data.stream_id,
+      ptz_password: data.ptz_password,
+      ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
+      ptz_username: data.ptz_username,
+    });
+
+    return response.data;
   },
 
   createStream: async (data: Stream) => {
