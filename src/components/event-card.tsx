@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "./ui/skeleton";
 import config from "../config/default.config";
 import moment from "moment";
+import { getThumbnailUrl } from "@/utils";
 
 export function EventCardSkeleton({ className }: { className?: string }) {
   return (
@@ -31,7 +31,7 @@ function EventCard({ item, className }: Props) {
       onClick={() => navigate("/events/" + item)}
     >
       <img
-        src={`http://${config.BACKEND_URL}/static/thumbnails/${item.thumbnail}`}
+        src={getThumbnailUrl(item.thumbnail)}
         className="w-[100px] h-[70px] rounded-sm"
       />
       <div className="flex flex-col jusitfy-center">

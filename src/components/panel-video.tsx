@@ -5,9 +5,11 @@ import useRequest from "@/hooks/useRequest";
 
 import { Icons } from "@/components/icons";
 import { useConnectionContext } from "@/context/ConnectionContext";
+import { useQuery } from "@tanstack/react-query";
+import { streamService } from "@/api";
 
 interface PanelVideoProps {
-  streamId: string;
+  streamId?: string;
   camera: any;
   onClick?: () => void;
 }
@@ -32,26 +34,32 @@ export default function PanelVideo({
 }: PanelVideoProps) {
   const VIDEO_EVENT = `frame-${streamId}`;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isStreaming, setIsStreaming] = useState<boolean>(false);
+  const [isStreaming, setIsStreaming] = useState<boolean>(!!streamId);
+  const isFetching = false;
   const [hasStartedStreaming, setHasStartedStreaming] =
     useState<boolean>(false);
-  const {
-    data,
-    loading,
-    error,
-    request: startStreamRequest,
-  } = useRequest(startStream);
+
+  // const { data, isFetching } = useQuery({
+  //   queryKey: ["streamService.startStream", camera],
+  //   queryFn: () => streamService.startStream(camera),
+  // });
+  // const {
+  //   data,
+  //   loading,
+  //   error,
+  //   request: startStreamRequest,
+  // } = useRequest(startStream);
 
   const { isConnected } = useConnectionContext();
 
-  const handleStartStream = async () => {
-    await startStreamRequest(camera);
+  // const handleStartStream = async () => {
+  //   await startStreamRequest(camera);
 
-    if (data) {
-      setHasStartedStreaming(true);
-      setIsStreaming(true);
-    }
-  };
+  //   if (data) {
+  //     setHasStartedStreaming(true);
+  //     setIsStreaming(true);
+  //   }
+  // };
 
   const handleSetIsStreaming = () => {
     if (!isStreaming) setIsStreaming(true);
@@ -122,10 +130,10 @@ export default function PanelVideo({
       {!isStreaming && (
         <div className="absolute w-full h-full">
           <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-full flex justify-center items-center cursor-pointer">
-            {loading && (
+            {isFetching && (
               <Icons.loader className="animate-spin opacity-30" size={50} />
             )}
-            {!loading && <Icons.videoOff className="opacity-30" size={50} />}
+            {!isFetching && <Icons.videoOff className="opacity-30" size={50} />}
           </div>
         </div>
       )}

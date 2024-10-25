@@ -1,90 +1,53 @@
 import { Icons } from "@/components/icons";
-import { DatePickerWithRange } from "@/components/ui/date-picker-range";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import image from "@/assets/1.jpg";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { eventService } from "@/api";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import ListFilter, { EventFilters } from "@/components/event/list-filter";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import EventItem from "@/components/event/event-item";
+import { EventDocument } from "@/type";
+import { EventItemSkeleton } from "@/components/camera/schedule-event-list";
 
-function EventItemSkeleton() {
-  return (
-    <div>
-      <Skeleton className="w-full rounded-sm aspect-[16/9] mb-2 border" />
-      <div>
-        <Skeleton className="h-5 w-20 mb-2 rounded-sm" />
-        <Skeleton className="h-3 w-28 rounded-sm mb-0.5" />
-        <Skeleton className="h-3 w-28" />
-      </div>
-    </div>
-  );
-}
+const LIMIT = 20;
 
 export default function EventList() {
-  const [camera, setCamera] = React.useState("all");
-  const [type, setType] = React.useState("all");
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [filters, setFilters] = useState<EventFilters>({
+    stream: undefined,
+    type: undefined,
+    date: undefined,
+  });
 
-  const Filters = () => (
-    <>
-      <Select onValueChange={setCamera} value={camera}>
-        <SelectTrigger className="w-[250px] lg:w-[140px]">
-          <Icons.cctv className="h-4 w-4 opacity-70" />
-          <SelectValue placeholder="Camera" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="all">All</SelectItem>
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["eventService.fetchAllEvents", filters],
+      queryFn: ({ pageParam = 0 }) =>
+        eventService.fetchAllEvents(filters, { page: pageParam, limit: LIMIT }),
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length ? allPages.length * LIMIT : undefined;
+      },
+      initialPageParam: 0,
+    });
 
-            <SelectItem value="1">camera 1</SelectItem>
-            <SelectItem value="2">camera 2</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <Select onValueChange={setType} value={type}>
-        <SelectTrigger className="w-[250px] lg:w-[140px]">
-          <Icons.alert className="h-4 w-4 opacity-70" />
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage,
+  });
 
-          <SelectValue placeholder="Type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="all">All</SelectItem>
-
-            <SelectItem value="1">Security</SelectItem>
-            <SelectItem value="2">Something</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <DatePickerWithRange />
-    </>
-  );
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+  const flatted = data?.pages.flatMap((page) => page) as EventDocument[];
 
   return (
-    <div>
-      <div className="flex justify-between">
+    <div className="h-[calc(100vh-50px)]">
+      <div className="flex justify-between items-center pb-5">
         <h1 className="text-xl font-semibold">Events</h1>
         <div className="gap-2 hidden lg:flex">
-          <Filters />
+          <ListFilter filters={filters} setFilters={setFilters} />
         </div>
         <Popover>
           <PopoverTrigger className="lg:hidden">
@@ -94,27 +57,30 @@ export default function EventList() {
           </PopoverTrigger>
           <PopoverContent>
             <div className="grid gap-y-2">
-              <Filters />
+              <ListFilter filters={filters} setFilters={setFilters} />
             </div>
           </PopoverContent>
         </Popover>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-5 flex-wrap">
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) =>
-          loading ? (
-            <EventItemSkeleton key={item} />
-          ) : (
-            <div className="gap-2" onClick={() => navigate("/events/" + item)}>
-              <img src={image} className="w-full rounded-sm aspect-[16/9]" />
-              <div className="mt-1">
-                <p className="font-semibold mb-1">Security</p>
-                <p className="text-xs text-zinc-500">Whatever infor</p>
-                <p className="text-xs text-zinc-500">12:01:03 PM</p>
-              </div>
-            </div>
-          )
+      <ScrollArea className="h-[calc(100vh-80px)]">
+        {!isLoading && !flatted?.length && (
+          <p className="text-muted-foreground text-center mt-[200px]">
+            No events found.
+          </p>
         )}
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-5 flex-wrap">
+          {isLoading &&
+            !flatted?.length &&
+            [...Array(8)].map((_, i) => <EventItemSkeleton key={i} />)}
+
+          {flatted?.map((item) => (
+            <EventItem item={item} key={item.$id} />
+          ))}
+          {isFetchingNextPage && <EventItemSkeleton />}
+
+          <div ref={setTarget} className="h-[1rem]" />
+        </div>
+      </ScrollArea>
     </div>
   );
 }
