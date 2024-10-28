@@ -17,6 +17,7 @@ import { ImperativePanelHandle } from "react-resizable-panels";
 import SideBar from "@/components/side-bar";
 import { message } from "antd";
 import socket from "@/services/socketService";
+import { Icons } from "@/components/icons";
 
 export const MainLayout = () => {
   const { setIsConnected: setIsConnectedContext } = useConnectionContext();
@@ -83,7 +84,12 @@ export const MainLayout = () => {
   });
 
   if (isFetching) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-[100vh] flex justify-center items-center">
+        <Icons.loading className="animate-spin mr-2 w-4 h-4" />
+        Loading...
+      </div>
+    );
   }
 
   return user ? (

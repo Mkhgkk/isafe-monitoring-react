@@ -30,6 +30,8 @@ import {
   User,
   LogOut,
   Bell,
+  Expand,
+  Shrink,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -65,6 +67,8 @@ export const Icons = {
   logout: LogOut,
   loading: LoaderCircle,
   bell: Bell,
+  expand: Expand,
+  shrink: Shrink,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
