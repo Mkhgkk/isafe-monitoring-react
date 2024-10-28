@@ -35,19 +35,78 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+
+type Filter = {
+  label: string;
+  key: string;
+  type: "text" | "select";
+  options?: { label: string; value?: string }[];
+};
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  filterKey?: string;
+  filters?: Filter[];
   onRefresh?: () => void;
   loading: boolean;
 };
 
+function TableFilters({ filters, table }) {
+  return filters?.map((filter: Filter) => {
+    const filterValue =
+      (table.getColumn(filter.key)?.getFilterValue() as string) ?? "";
+    const setFilterValue = (value: string) =>
+      table.getColumn(filter.key)?.setFilterValue(value);
+
+    switch (filter.type) {
+      case "select":
+        return (
+          <Select
+            key={filter.key}
+            value={filterValue}
+            onValueChange={setFilterValue}
+          >
+            <SelectTrigger
+              className={cn("h-10 lg:w-[150px]", {
+                "border border-primary": filterValue,
+              })}
+            >
+              <SelectValue placeholder={filter.label} />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {filter.options?.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        );
+
+      case "text":
+        return (
+          <Input
+            key={filter.key}
+            placeholder={`Search by ${filter.label}`}
+            value={filterValue}
+            onChange={(event) => setFilterValue(event.target.value)}
+            className={cn("lg:w-[200px]", {
+              "border border-primary": filterValue,
+            })}
+          />
+        );
+
+      default:
+        return null;
+    }
+  });
+}
+
 export function DataTable<TData, TValue>({
   columns,
   data,
-  filterKey,
+  filters,
   onRefresh,
   loading,
 }: DataTableProps<TData, TValue>) {
@@ -75,26 +134,30 @@ export function DataTable<TData, TValue>({
   return (
     <div className="rounded-md border p-4">
       <div className="mb-4 flex justify-between items-center">
-        {filterKey && (
-          <Input
-            placeholder={`Search by ${filterKey}`}
-            value={
-              (table.getColumn(filterKey)?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn(filterKey)?.setFilterValue(event.target.value)
-            }
-            className="max-w-xs"
-          />
-        )}
+        <div className="hidden lg:flex items-center gap-2">
+          <TableFilters table={table} filters={filters} />
+        </div>
+        <Popover>
+          <PopoverTrigger className="lg:hidden">
+            <Button size="icon" className="w-9 h-9" variant="outline">
+              <Icons.filter className="w-4 h-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="grid gap-y-2">
+              <TableFilters table={table} filters={filters} />
+            </div>
+          </PopoverContent>
+        </Popover>
+
         {onRefresh && (
           <Button onClick={onRefresh} variant="outline" size="sm">
             <Icons.refresh
-              className={`w-4 h-4 mr-1.5 text-zinc-800 dark:text-white ${
+              className={`w-4 h-4 lg:mr-1.5 text-zinc-800 dark:text-white ${
                 loading ? "animate-spin" : ""
               }`}
             />
-            Refresh
+            <span className="lg:block hidden">Refresh</span>
           </Button>
         )}
       </div>

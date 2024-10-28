@@ -222,7 +222,13 @@ function StreamList() {
         columns={columns}
         data={data ?? []}
         loading={isFetching}
-        filterKey="name"
+        filters={[
+          {
+            label: "Name",
+            key: "name",
+            type: "text",
+          },
+        ]}
         onRefresh={() => refetch()}
       />
     </div>

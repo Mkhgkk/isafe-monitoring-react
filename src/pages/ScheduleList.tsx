@@ -17,6 +17,15 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { useMemo } from "react";
 
+const getStatus = (startUnixTime: number, endUnixTime: number) => {
+  const currentUnixTime = Math.floor(Date.now() / 1000);
+  return startUnixTime <= currentUnixTime && endUnixTime >= currentUnixTime
+    ? "Ongoing"
+    : startUnixTime > currentUnixTime
+    ? "Upcoming"
+    : "Ended";
+};
+
 function ScheduleList() {
   const {
     data = [],
@@ -55,15 +64,9 @@ function ScheduleList() {
         id: "status",
         header: "Status",
         cell: ({ getValue, row }) => {
-          const currentUnixTime = Math.floor(Date.now() / 1000);
           const startUnixTime = getValue();
           const endUnixTime = row.original.end_timestamp;
-          const status =
-            startUnixTime <= currentUnixTime && endUnixTime >= currentUnixTime
-              ? "Ongoing"
-              : startUnixTime > currentUnixTime
-              ? "Upcoming"
-              : "Ended";
+          const status = getStatus(startUnixTime, endUnixTime);
 
           return (
             <div className="flex items-center gap-2">
@@ -80,6 +83,14 @@ function ScheduleList() {
               <span className="capitalize">{status}</span>
             </div>
           );
+        },
+        filterFn: (row, columnId, filterValue) => {
+          const startUnixTime = row.getValue(columnId) as number;
+          const endUnixTime = row.original.end_timestamp;
+          const status = getStatus(startUnixTime, endUnixTime);
+
+          // Only include rows that match the selected filter value
+          return filterValue === "" || status === filterValue;
         },
       }),
       columnHelper.accessor("start_timestamp", {
@@ -149,7 +160,24 @@ function ScheduleList() {
         columns={columns}
         data={data}
         loading={isFetching}
-        filterKey="name"
+        filters={[
+          {
+            label: "Stream",
+            key: "stream_id",
+            type: "text",
+          },
+          {
+            label: "Status",
+            key: "status",
+            type: "select",
+            options: [
+              { label: "All", value: undefined },
+              { label: "Ongoing", value: "Ongoing" },
+              { label: "Upcoming", value: "Upcoming" },
+              { label: "Ended", value: "Ended" },
+            ],
+          },
+        ]}
         onRefresh={refetch}
       />
     </div>
