@@ -40,10 +40,7 @@ function StreamView({
         <PanelVideo streamId={streamId} />
         <div
           className={cn(
-            "absolute left-0 top-0 right-0 bottom-0 flex flex-col justify-between",
-            {
-              "p-10": handle.active,
-            }
+            "absolute left-0 top-0 right-0 bottom-0 flex flex-col justify-between"
           )}
         >
           {/* <div className="py-1 px-3 bg-zinc-200  bg-opacity-60 rounded-2xl flex items-center m-5 self-end space-x-1.5">
@@ -67,10 +64,10 @@ function StreamView({
                 className="static p-5"
               />
             )}
-            <div className="flex gap-3">
+            <div className={cn("flex gap-3 p-5")}>
               <Button
                 className={cn(
-                  "bg-opacity-60 bg-zinc-200 text-black rounded-full hover:text-white ",
+                  "bg-opacity-60 bg-zinc-200 text-black rounded-full hover:text-white",
                   ptz && "bg-primary text-white"
                 )}
                 size="sm"

@@ -210,4 +210,27 @@ export const eventService = {
 
     return response.documents;
   },
+  fetchEventById: async (id: string) => {
+    const event = await databases.getDocument(
+      "isafe-guard-db",
+      "670d337f001f9ab7ff34",
+      id
+    );
+
+    const related = await databases.listDocuments(
+      "isafe-guard-db",
+      "670d337f001f9ab7ff34",
+      [
+        Query.equal("stream_id", event.stream_id),
+        Query.between(
+          "timestamp",
+          event.timestamp - 60 * 60 * 1000,
+          event.timestamp + 60 * 60 * 1000
+        ),
+        Query.limit(4),
+      ]
+    );
+
+    return { event, related: related.documents };
+  },
 };
