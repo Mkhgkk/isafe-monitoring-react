@@ -1,14 +1,10 @@
+import moment from "moment";
 import config from "../config/default.config";
 
 export const getUnixTimestamp = (date: Date, time: string) => {
   const [hours, minutes] = time.split(":").map(Number);
 
-  date.setHours(hours);
-  date.setMinutes(minutes);
-
-  const unixTimestamp = Math.floor(date.getTime() / 1000);
-
-  return unixTimestamp;
+  return moment(date).set({ hours, minutes }).unix();
 };
 
 export const getDateFromUnixTimestamp = (unixTimestamp: number) => {

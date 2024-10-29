@@ -21,7 +21,7 @@ export default function EventList() {
   const [filters, setFilters] = useState<EventFilters>({
     stream: undefined,
     type: undefined,
-    date: undefined,
+    dateRange: { from: undefined, to: undefined },
   });
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =

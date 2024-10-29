@@ -3,6 +3,7 @@ import { Query } from "appwrite";
 import apiClient from "./apiClient";
 import { Schedule, ScheduleDocument, Stream, StreamDocument } from "@/type";
 import { EventFilters } from "@/components/event/list-filter";
+import moment from "moment";
 
 export const authService = {
   login: async ({ email, password }: { email: string; password: string }) => {
@@ -176,11 +177,34 @@ export const streamService = {
 };
 
 export const eventService = {
-  fetchEvents: async (streamId: string) => {
+  fetchEvents: async (
+    query: EventFilters,
+    option: {
+      page: number;
+      limit: number;
+    }
+  ) => {
+    const q = [
+      Query.orderDesc("timestamp"),
+      Query.limit(option.limit),
+      Query.offset(option.page),
+    ];
+
+    if (query.stream) {
+      q.push(Query.equal("stream_id", query.stream));
+    }
+
+    if (query.date) {
+      const startTime = moment(query.date).startOf("day").unix();
+      const endTime = moment(query.date).endOf("day").unix();
+
+      q.push(Query.between("timestamp", startTime, endTime));
+    }
+
     const response = await databases.listDocuments(
       "isafe-guard-db",
       "670d337f001f9ab7ff34",
-      [Query.orderDesc("timestamp"), Query.equal("stream_id", streamId)]
+      q
     );
 
     return response.documents;
@@ -200,6 +224,13 @@ export const eventService = {
 
     if (query.stream) {
       q.push(Query.equal("stream_id", query.stream));
+    }
+
+    if (query.dateRange && query.dateRange.from && query.dateRange.to) {
+      const startTime = moment(query.dateRange.from).startOf("day").unix();
+      const endTime = moment(query.dateRange.to).endOf("day").unix();
+
+      q.push(Query.between("timestamp", startTime, endTime));
     }
 
     const response = await databases.listDocuments(

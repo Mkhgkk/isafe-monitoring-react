@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EventCard, { EventCardSkeleton } from "../event-card";
-import { ScrollArea } from "../ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -10,64 +9,98 @@ import {
   SelectValue,
 } from "../ui/select";
 import WeekCalendar from "../week-calendar";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { eventService } from "@/api";
 import { useAppwrite } from "@/context/AppwriteContext";
 import { EventDocument } from "@/type";
 import { Skeleton } from "../ui/skeleton";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import moment from "moment";
 
+const LIMIT = 20;
 function ScheduleEventList({ streamId }: { streamId: string }) {
   const { appwriteClient } = useAppwrite();
   const queryClient = useQueryClient();
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState("all");
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
+  );
 
-  const { data: events, isFetching } = useQuery({
-    queryKey: ["eventService.fetchEvents", streamId],
-    queryFn: () => eventService.fetchEvents(streamId!),
-    enabled: !!streamId,
-  });
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: [
+        "eventService.fetchEvents",
+        { date: selectedDate, stream: streamId },
+      ],
+      queryFn: ({ pageParam = 0 }) =>
+        eventService.fetchEvents(
+          { date: selectedDate, stream: streamId },
+          { page: pageParam, limit: LIMIT }
+        ),
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length ? allPages.length * LIMIT : undefined;
+      },
+      initialPageParam: 0,
+      enabled: !!streamId,
+    });
+
+  const events = data?.pages.flatMap((page) => page) as EventDocument[];
 
   useEffect(() => {
     const unsubscribe = appwriteClient.subscribe(
       "databases.isafe-guard-db.collections.670d337f001f9ab7ff34.documents",
       (response) => {
         const payload = response.payload as EventDocument;
-
         if (payload.stream_id !== streamId) return;
 
-        if (
-          response.events.includes(
-            "databases.*.collections.*.documents.*.create"
-          )
-        ) {
-          queryClient.setQueryData(
-            ["eventService.fetchEvents", streamId],
-            (oldData) => {
-              return [payload, ...((oldData as EventDocument[]) || [])];
-            }
-          );
-          return;
-        }
+        queryClient.setQueryData(
+          ["eventService.fetchEvents", streamId],
+          (oldData: EventDocument) => {
+            if (!oldData) return oldData;
 
-        if (
-          response.events.includes(
-            "databases.*.collections.*.documents.*.delete"
-          )
-        ) {
-          queryClient.setQueryData(
-            ["eventService.fetchEvents", streamId],
-            (oldData) => {
-              return ((oldData as EventDocument[]) || []).filter(
-                (item) => item.$id !== payload.$id
-              );
-            }
-          );
-        }
+            return {
+              ...oldData,
+              pages: oldData.pages.map(
+                (page: EventDocument[], index: number) => {
+                  if (
+                    response.events.includes(
+                      "databases.*.collections.*.documents.*.create"
+                    )
+                  ) {
+                    // Insert new items on the first page
+                    return index === 0 ? [payload, ...page] : page;
+                  }
+
+                  if (
+                    response.events.includes(
+                      "databases.*.collections.*.documents.*.delete"
+                    )
+                  ) {
+                    // Filter out the deleted item from all pages
+                    return page.filter((item) => item.$id !== payload.$id);
+                  }
+                  return page;
+                }
+              ),
+            };
+          }
+        );
       }
     );
 
     return () => unsubscribe();
   }, []);
+
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage,
+  });
+
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+    scrollRef.current?.scrollTo(0, 0);
+  };
 
   return (
     <div>
@@ -87,22 +120,28 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
           </SelectContent>
         </Select>
       </div>
-      <WeekCalendar />
-      <ScrollArea className="h-[80vh]">
+      <WeekCalendar
+        selectedDate={selectedDate}
+        setSelectedDate={handleDateChange}
+      />
+      <div className="max-h-[80vh] overflow-scroll" ref={scrollRef}>
         <div className="grid gap-y-3">
-          {isFetching
+          {isLoading
             ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
                 <EventCardSkeleton key={item} />
               ))
             : events?.map((item) => <EventCard item={item} key={item.$id} />)}
 
-          {events?.length === 0 && !isFetching && (
+          {events?.length === 0 && !isLoading && (
             <p className="text-muted-foreground text-center mt-10 text-sm">
               No events found.
             </p>
           )}
+          {isFetchingNextPage && <EventCardSkeleton />}
         </div>
-      </ScrollArea>
+
+        <div ref={setTarget} className="h-[1rem]" />
+      </div>
     </div>
   );
 }

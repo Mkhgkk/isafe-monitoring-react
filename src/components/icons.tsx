@@ -32,6 +32,7 @@ import {
   Bell,
   Expand,
   Shrink,
+  CircleX,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -69,6 +70,7 @@ export const Icons = {
   bell: Bell,
   expand: Expand,
   shrink: Shrink,
+  circleX: CircleX,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>

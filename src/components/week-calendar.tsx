@@ -1,15 +1,16 @@
-import React, { useState } from "react";
 import moment from "moment";
 import { cn } from "@/lib/utils";
-import { isSameDay } from "date-fns";
 
 const today = moment();
 const start = today.clone().subtract(6, "days");
 const end = today.clone();
 
-function WeekCalendar() {
-  const [selectedDate, setSelectedDate] = useState(today.format("YYYY-MM-DD"));
+type Props = {
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+};
 
+function WeekCalendar({ selectedDate, setSelectedDate }: Props) {
   const days = [];
   let day = start.clone();
 

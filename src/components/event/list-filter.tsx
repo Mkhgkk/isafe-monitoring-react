@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import {
   Select,
   SelectContent,
@@ -11,11 +11,15 @@ import { Icons } from "../icons";
 import { DatePickerWithRange } from "../ui/date-picker-range";
 import { useQuery } from "@tanstack/react-query";
 import { streamService } from "@/api";
+import { DateRange } from "react-day-picker";
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 export type EventFilters = {
   stream?: string;
   type?: string;
   date?: string;
+  dateRange?: DateRange;
 };
 
 type ListFilterProps = {
@@ -41,24 +45,28 @@ function ListFilter({ filters, setFilters }: ListFilterProps) {
         onValueChange={(value) =>
           setFilters({
             ...filters,
-            stream: value === "all" ? undefined : value,
+            stream: value,
           })
         }
-        value={filters.stream}
+        value={filters.stream || ""}
       >
-        <SelectTrigger className="w-[250px] lg:w-[140px]">
-          <Icons.cctv className="h-4 w-4 opacity-70" />
-          <SelectValue placeholder="Camera" />
+        <SelectTrigger
+          className={cn("w-[250px] lg:w-[200px]", {
+            "border border-primary": filters.stream,
+          })}
+        >
+          <div className="flex flex-1 items-center gap-3">
+            <Icons.cctv className="h-4 w-4 opacity-70" />
+            <SelectValue placeholder="Camera" />
+          </div>
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup>
-            <SelectItem value="all">All</SelectItem>
-            {streams?.map((stream) => (
-              <SelectItem key={stream.value} value={stream.value}>
-                {stream.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
+          <SelectItem>All</SelectItem>
+          {streams?.map((stream) => (
+            <SelectItem key={stream.value} value={stream.value}>
+              {stream.label}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
 
@@ -68,10 +76,16 @@ function ListFilter({ filters, setFilters }: ListFilterProps) {
         }
         value={filters.type}
       >
-        <SelectTrigger className="w-[250px] lg:w-[140px]">
-          <Icons.alert className="h-4 w-4 opacity-70" />
+        <SelectTrigger
+          className={cn("w-[250px] lg:w-[140px]", {
+            "border border-primary": filters.type,
+          })}
+        >
+          <div className="flex flex-1 items-center gap-3">
+            <Icons.alert className="h-4 w-4 opacity-70" />
 
-          <SelectValue placeholder="Type" />
+            <SelectValue placeholder="Type" />
+          </div>
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -81,7 +95,15 @@ function ListFilter({ filters, setFilters }: ListFilterProps) {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <DatePickerWithRange />
+      <DatePickerWithRange
+        range={filters.dateRange}
+        setRange={(dateRange) => setFilters({ ...filters, dateRange })}
+        disabledDays={{ after: new Date() }}
+        inputClassName={cn({
+          "border border-primary":
+            filters.dateRange?.from && filters.dateRange?.to,
+        })}
+      />
     </>
   );
 }
