@@ -1,3 +1,4 @@
+import type Konva from "konva";
 import {
   useEffect,
   useRef,
@@ -7,9 +8,17 @@ import {
 } from "react";
 import { Image, Layer, Rect, Stage, Transformer } from "react-konva";
 
-const URLImage = ({ src, width, height }) => {
-  const imageRef = useRef(null);
-  const [image, setImage] = useState(null);
+const URLImage = ({
+  src,
+  width,
+  height,
+}: {
+  src: string;
+  width: number;
+  height: number;
+}) => {
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const [image, setImage] = useState<HTMLImageElement | null>(null);
 
   const loadImage = () => {
     const img = new window.Image();
@@ -36,6 +45,8 @@ const URLImage = ({ src, width, height }) => {
     loadImage();
   }, [src]);
 
+  if (!image) return null;
+
   return <Image image={image} width={width} height={height} />;
 };
 
@@ -44,15 +55,25 @@ const DraggableAndTransformableBox = ({
   onTransformEnd,
   onSelect,
   isSelected,
+}: {
+  box: { x: number; y: number; width: number; height: number; id: string };
+  onTransformEnd: (box: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }) => void;
+  onSelect: () => void;
+  isSelected: boolean;
 }) => {
-  const shapeRef = useRef();
-  const transformerRef = useRef();
+  const shapeRef = useRef<Konva.Rect>(null);
+  const transformerRef = useRef<Konva.Transformer>(null);
 
   useEffect(() => {
-    if (isSelected) {
+    if (isSelected && transformerRef.current && shapeRef.current) {
       // Attach transformer to the selected shape
       transformerRef.current.nodes([shapeRef.current]);
-      transformerRef.current.getLayer().batchDraw();
+      transformerRef.current.getLayer()?.batchDraw();
     }
   }, [isSelected]);
 
@@ -77,6 +98,7 @@ const DraggableAndTransformableBox = ({
         onTransformEnd={() => {
           // Handle resizing
           const node = shapeRef.current;
+          if (!node) return;
           const newWidth = Math.max(50, node.width() * node.scaleX());
           const newHeight = Math.max(50, node.height() * node.scaleY());
 
@@ -103,10 +125,18 @@ const DraggableAndTransformableBox = ({
   );
 };
 
-const SafeAreaCanvas = forwardRef(({ url }, ref) => {
-  const containerRef = useRef(null);
+type Box = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  id: string;
+};
+
+const SafeAreaCanvas = forwardRef(({ url }: { url: string }, ref) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [stageSize, setStageSize] = useState({ width: 0, height: 0 });
-  const [box, setBox] = useState({
+  const [box, setBox] = useState<Box>({
     x: 50,
     y: 50,
     width: 100,
@@ -117,7 +147,18 @@ const SafeAreaCanvas = forwardRef(({ url }, ref) => {
   useEffect(() => {
     const updateStageSize = () => {
       if (containerRef.current) {
-        const { width, height } = containerRef.current.getBoundingClientRect();
+        const size = containerRef.current.getBoundingClientRect();
+        console.log("Size: ", size);
+        //width, height of size not changing with resize
+        const aspectRatio = 1280 / 720; // Adjust this ratio as needed for your image
+        let width = size.width;
+        let height = size.width / aspectRatio;
+
+        // If the calculated height is greater than the container height, adjust the width
+        if (height > size.height) {
+          height = size.height;
+          width = size.height * aspectRatio;
+        }
         setStageSize({ width, height });
       }
     };
@@ -133,19 +174,8 @@ const SafeAreaCanvas = forwardRef(({ url }, ref) => {
     };
   }, []);
 
-  // Calculate scaling factor to maintain the image's aspect ratio
-  const aspectRatio = 1280 / 720; // Adjust this ratio as needed for your image
-  let width = stageSize.width;
-  let height = stageSize.width / aspectRatio;
-
-  // If the calculated height is greater than the container height, adjust the width
-  if (height > stageSize.height) {
-    height = stageSize.height;
-    width = stageSize.height * aspectRatio;
-  }
-
   // Function to update box position and size
-  const updateBox = (updatedBox) => {
+  const updateBox = (updatedBox: Box) => {
     setBox(updatedBox);
   };
 
@@ -178,27 +208,26 @@ const SafeAreaCanvas = forwardRef(({ url }, ref) => {
   }));
 
   return (
-    <div className="w-[100%] h-[100%]">
-      <div ref={containerRef} className="w-[100%] h-[100%]">
-        <Stage width={stageSize.width} height={stageSize.height}>
-          <Layer>
-            <URLImage
-              src={url}
-              width={stageSize.width}
-              height={stageSize.height}
+    <div ref={containerRef} className="w-[100%] h-[100%] overflow-hidden">
+      <Stage width={stageSize.width} height={stageSize.height}>
+        <Layer>
+          <URLImage
+            src={url}
+            width={stageSize.width}
+            height={stageSize.height}
+          />
+          {box && (
+            <DraggableAndTransformableBox
+              key={"box"}
+              box={box}
+              isSelected={true}
+              onSelect={() => {}}
+              //@ts-expect-error - onTransformEnd is required
+              onTransformEnd={updateBox}
             />
-            {box && (
-              <DraggableAndTransformableBox
-                key={"box"}
-                box={box}
-                isSelected={true}
-                onSelect={() => {}}
-                onTransformEnd={updateBox}
-              />
-            )}
-          </Layer>
-        </Stage>
-      </div>
+          )}
+        </Layer>
+      </Stage>
     </div>
   );
 });
