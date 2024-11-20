@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PanelVideo from "../panel-video";
 import PTZControl from "../ptz-control";
 import StreamInfo from "../stream/stream-info";
@@ -18,6 +18,8 @@ function StreamView({
 }) {
   const [ptz, setPtz] = useState(true);
   const handle = useFullScreenHandle();
+  const videoRef = useRef(null);
+  const [targetImage, setTargetImage] = useState<string>();
 
   // //need to get the stream detail
   // const { data: stream } = useQuery({
@@ -30,6 +32,13 @@ function StreamView({
   //   },
   // });
 
+  const handleTargetImage = () => {
+    if (!videoRef.current) return;
+
+    const url = videoRef.current.getCurrentFrame();
+    setTargetImage(url);
+  };
+
   return (
     <div>
       <FullScreen handle={handle}>
@@ -39,7 +48,7 @@ function StreamView({
             "h-full w-full": handle.active,
           })}
         >
-          <PanelVideo streamId={streamId} />
+          <PanelVideo streamId={streamId} ref={videoRef} />
           <div
             className={cn(
               "absolute left-0 top-0 right-0 bottom-0 flex flex-col justify-between"
@@ -94,7 +103,13 @@ function StreamView({
           </div>
         </div>
       </FullScreen>
-      <SafeAreaDialog url="https://www.autodesk.com/blogs/construction/wp-content/uploads/2024/07/5-construction-types.jpg" />
+      <Button onClick={handleTargetImage}>Hazard area</Button>
+      {targetImage && (
+        <SafeAreaDialog
+          url={targetImage}
+          onClose={() => setTargetImage(undefined)}
+        />
+      )}
     </div>
   );
 }

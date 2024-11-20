@@ -13,7 +13,7 @@ const URLImage = ({
   width,
   height,
 }: {
-  src: string;
+  src?: string;
   width: number;
   height: number;
 }) => {
@@ -21,6 +21,7 @@ const URLImage = ({
   const [image, setImage] = useState<HTMLImageElement | null>(null);
 
   const loadImage = () => {
+    if (!src) return;
     const img = new window.Image();
     img.src = src;
     img.crossOrigin = "Anonymous";
@@ -133,7 +134,7 @@ type Box = {
   id: string;
 };
 
-const SafeAreaCanvas = forwardRef(({ url }: { url: string }, ref) => {
+const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [stageSize, setStageSize] = useState({ width: 0, height: 0 });
   const [box, setBox] = useState<Box>({
@@ -148,7 +149,6 @@ const SafeAreaCanvas = forwardRef(({ url }: { url: string }, ref) => {
     const updateStageSize = () => {
       if (containerRef.current) {
         const size = containerRef.current.getBoundingClientRect();
-        console.log("Size: ", size);
         //width, height of size not changing with resize
         const aspectRatio = 1280 / 720; // Adjust this ratio as needed for your image
         let width = size.width;
