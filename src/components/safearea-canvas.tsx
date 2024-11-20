@@ -99,8 +99,8 @@ const DraggableAndTransformableBox = ({
           // Handle resizing
           const node = shapeRef.current;
           if (!node) return;
-          const newWidth = Math.max(50, node.width() * node.scaleX());
-          const newHeight = Math.max(50, node.height() * node.scaleY());
+          const newWidth = node.width() * node.scaleX();
+          const newHeight = node.height() * node.scaleY();
 
           // Reset the scale to 1 after resizing
           node.scaleX(1);
