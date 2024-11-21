@@ -131,9 +131,7 @@ const PanelVideo = forwardRef(
     useImperativeHandle(ref, () => ({
       getCurrentFrame: () => {
         const canvas = canvasRef.current;
-        console.log(canvas);
         if (!canvas) return null;
-        console.log(canvas.toDataURL("image/png"), "url");
         return canvas.toDataURL("image/png");
       },
     }));

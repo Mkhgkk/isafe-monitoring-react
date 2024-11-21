@@ -103,11 +103,14 @@ function StreamView({
           </div>
         </div>
       </FullScreen>
-      <Button onClick={handleTargetImage}>Hazard area</Button>
+      <Button onClick={handleTargetImage} className="mt-4">
+        Hazard area
+      </Button>
       {targetImage && (
         <SafeAreaDialog
           url={targetImage}
           onClose={() => setTargetImage(undefined)}
+          streamId={streamId}
         />
       )}
     </div>

@@ -265,3 +265,16 @@ export const eventService = {
     return { event, related: related.documents };
   },
 };
+
+type Coord = [number, number];
+
+export const configService = {
+  setDangerZone: async (data: {
+    image: string;
+    coords: [Coord, Coord, Coord, Coord];
+    streamId: string;
+  }) => {
+    const response = await apiClient.post("/api/stream/set_danger_zone", data);
+    return response.data;
+  },
+};
