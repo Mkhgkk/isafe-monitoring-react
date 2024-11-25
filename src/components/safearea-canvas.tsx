@@ -12,10 +12,14 @@ const URLImage = ({
   src,
   width,
   height,
+  x = 0,
+  y = 0,
 }: {
   src?: string;
   width: number;
   height: number;
+  x?: number;
+  y?: number;
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [image, setImage] = useState<HTMLImageElement | null>(null);
@@ -48,7 +52,7 @@ const URLImage = ({
 
   if (!image) return null;
 
-  return <Image image={image} width={width} height={height} />;
+  return <Image image={image} width={width} height={height} x={x} y={y} />;
 };
 
 const DraggableAndTransformableBox = ({
@@ -137,6 +141,7 @@ type Box = {
 const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [stageSize, setStageSize] = useState({ width: 0, height: 0 });
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [box, setBox] = useState<Box>({
     x: 50,
     y: 50,
@@ -159,7 +164,8 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
           height = size.height;
           width = size.height * aspectRatio;
         }
-        setStageSize({ width, height });
+        setStageSize({ width: size.width, height: size.height });
+        setImageSize({ width, height });
       }
     };
 
@@ -213,8 +219,10 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
         <Layer>
           <URLImage
             src={url}
-            width={stageSize.width}
-            height={stageSize.height}
+            width={imageSize.width}
+            height={imageSize.height}
+            x={(stageSize.width - imageSize.width) / 2}
+            y={(stageSize.height - imageSize.height) / 2}
           />
           {box && (
             <DraggableAndTransformableBox
