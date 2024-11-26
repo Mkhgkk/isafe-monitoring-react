@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { ScheduleDocument } from "@/type";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import SafeAreaDialog from "../safe-area-dialog";
+import config from "../../config/default.config";
 
 function StreamView({
   streamId,
@@ -32,11 +33,37 @@ function StreamView({
   //   },
   // });
 
-  const handleTargetImage = () => {
+  const handleTargetImage = async () => {
     if (!videoRef.current) return;
 
-    const url = videoRef.current.getCurrentFrame();
-    setTargetImage(url);
+    // const url = videoRef.current.getCurrentFrame();
+    // setTargetImage(url);
+
+    // make a get request to get image url
+    // set target url
+
+    fetch(`http://${config.BACKEND_URL}/api/stream/get_current_frame`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ stream_id: streamId }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((responseData) => {
+        console.log("Response data:", responseData);
+        setTargetImage(
+          `http://${config.BACKEND_URL}/static/frame_refs/${responseData.data}`
+        );
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+      });
   };
 
   return (
