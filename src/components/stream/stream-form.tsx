@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { streamService } from "@/api";
 import { useToast } from "@/hooks/use-toast";
+import SelectField from "../form/SelectField";
 
 const streamFormSchema = z.object({
   $id: z.string().optional(),
@@ -26,6 +27,8 @@ const streamFormSchema = z.object({
   ptz_port: z.number().optional().nullable(),
   ptz_password: z.string().optional().nullable(),
   ptz_username: z.string().optional().nullable(),
+  location: z.string(),
+  model_name: z.string(),
 });
 
 export type StreamFormData = z.infer<typeof streamFormSchema>;
@@ -129,6 +132,27 @@ function StreamForm({
               error={errors.stream_id?.message as string}
               requiredMark
             />
+            <SelectField
+              control={control}
+              id="model_name"
+              label="Model"
+              options={[
+                { value: "PPE", label: "PPE" },
+                { value: "Scaffolding", label: "Scaffolding" },
+                { value: "Ladder", label: "Ladder" },
+                { value: "MobileScaffolding", label: "Mobile Scaffolding" },
+                { value: "CuttingWelding", label: "Cutting Welding" },
+              ]}
+              error={errors.model_name?.message as string}
+              requiredMark
+            />
+            <FormField
+              control={control}
+              id="location"
+              label="Location"
+              error={errors.location?.message as string}
+              requiredMark
+            />
             <FormField
               control={control}
               id="description"
@@ -136,12 +160,6 @@ function StreamForm({
               error={errors.description?.message as string}
               requiredMark
             />
-            {/* <FormField
-              id="location"
-              label="Camera Location"
-              register={register}
-              error={errors.location?.message as string}
-            /> */}
             <Separator className="mt-2" />
             <FormField
               control={control}

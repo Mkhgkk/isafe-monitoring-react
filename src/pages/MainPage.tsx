@@ -2,32 +2,31 @@ import PanelVideo from "@/components/panel-video";
 import { Icons } from "@/components/icons";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { scheduleService } from "@/api";
+import { scheduleService, streamService } from "@/api";
 import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ScheduleDocument } from "@/type";
+import { ScheduleDocument, StreamDocument } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 
 export default function MainPage() {
   const navigate = useNavigate();
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ["scheduleService.fetchSchedules"],
-    queryFn: scheduleService.fetchSchedules,
+    queryKey: ["streamService.fetchStreams"],
+    queryFn: streamService.fetchStreams,
     select: (data) => {
-      const currentTime = Math.floor(Date.now() / 1000);
-      const ongoingSchedules: ScheduleDocument[] = [];
-      const upcomingSchedules: ScheduleDocument[] = [];
+      const activeStreams: StreamDocument[] = [];
+      const inactiveStreams: StreamDocument[] = [];
 
-      data.forEach((schedule) => {
-        if (schedule.start_timestamp < currentTime) {
-          ongoingSchedules.push(schedule as ScheduleDocument);
+      data.forEach((stream) => {
+        if (stream.is_active) {
+          activeStreams.push(stream as StreamDocument);
         } else {
-          upcomingSchedules.push(schedule as ScheduleDocument);
+          inactiveStreams.push(stream as StreamDocument);
         }
       });
 
-      return { ongoingSchedules, upcomingSchedules };
+      return { activeStreams, inactiveStreams };
     },
   });
 
@@ -39,9 +38,9 @@ export default function MainPage() {
             <h1 className="text-xl font-semibold">Monitoring</h1>
             <p className="text-sm text-muted-foreground">
               <span className="text-green-600">
-                {data?.ongoingSchedules.length}
+                {data?.activeStreams.length}
               </span>{" "}
-              Ongoing / {data?.upcomingSchedules.length} Upcoming
+              active / {data?.inactiveStreams.length} inactive
             </p>
           </div>
           <Button
@@ -54,24 +53,21 @@ export default function MainPage() {
           </Button>
         </div>
         <div className="border p-4 rounded-md">
-          <p className="mb-5 font-semibold text-lg">Ongoing</p>
-          {isFetching && data?.ongoingSchedules.length === 0 && <Skeletons />}
-          {!isFetching && !data?.ongoingSchedules?.length && (
+          <p className="mb-5 font-semibold text-lg">Active stream</p>
+          {isFetching && data?.activeStreams.length === 0 && <Skeletons />}
+          {!isFetching && !data?.activeStreams?.length && (
             <p className="text-sm text-muted-foreground mb-4 text-center">
-              No ongoing schedule.
+              {"No active stream(s)."}
             </p>
           )}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {data?.ongoingSchedules.map((item, index) => (
+            {data?.activeStreams.map((item, index) => (
               <div
                 key={index}
                 className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
                 onClick={() =>
                   navigate({
                     pathname: `/cameras/${item.stream_id}`,
-                    search: createSearchParams({
-                      scheduleId: item.$id,
-                    }).toString(),
                   })
                 }
               >
@@ -88,15 +84,15 @@ export default function MainPage() {
         </div>
       </div>
       <div className="border p-4 rounded-md">
-        <p className="mb-5 font-semibold text-lg">Upcoming</p>
-        {isFetching && data?.upcomingSchedules.length === 0 && <Skeletons />}
-        {!isFetching && !data?.upcomingSchedules.length && (
+        <p className="mb-5 font-semibold text-lg">Inactive stream</p>
+        {isFetching && data?.inactiveStreams.length === 0 && <Skeletons />}
+        {!isFetching && !data?.inactiveStreams.length && (
           <p className="text-sm text-muted-foreground mb-4 text-center">
-            No upcoming schedule.
+            {"No inactive stream(s)."}
           </p>
         )}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {data?.upcomingSchedules.map((item, index) => (
+          {data?.inactiveStreams.map((item, index) => (
             <div className="relative" key={index}>
               <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
                 <Icons.offline className="opacity-30" size={50} />

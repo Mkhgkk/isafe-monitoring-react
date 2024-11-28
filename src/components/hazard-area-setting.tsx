@@ -89,7 +89,9 @@ function HazardAreaSetting() {
             <Button variant="secondary" onClick={() => setUrl(undefined)}>
               Reset
             </Button>
-            <Button onClick={handleGetAreaPosition}>Save Hazard area</Button>
+            <Button onClick={handleGetAreaPosition} loading={isSaving}>
+              Save Hazard area
+            </Button>
           </div>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { streamService } from "@/api";
 import { Icons } from "@/components/icons";
+import ActivateDialog from "@/components/stream/activate-dialog";
 import AutoTrackDialog from "@/components/stream/autotrack-dialog";
 import DeleteDialog from "@/components/stream/delete-dialog";
 import PreviewDialog from "@/components/stream/preview-dialog";
@@ -13,18 +14,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { streamModels } from "@/constants";
 import { cn } from "@/lib/utils";
 import { StreamDocument } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PasswordCell = ({ value }: { value?: string }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -51,10 +55,29 @@ const PasswordCell = ({ value }: { value?: string }) => {
 
 function StreamList() {
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
 
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["streamService.fetchStreams"],
     queryFn: streamService.fetchStreams,
+    select: (data) => {
+      const activeStreams: StreamDocument[] = [];
+      const inactiveStreams: StreamDocument[] = [];
+
+      data.forEach((stream) => {
+        if (stream.is_active) {
+          activeStreams.push(stream as StreamDocument);
+        } else {
+          inactiveStreams.push(stream as StreamDocument);
+        }
+      });
+
+      return {
+        activeCount: activeStreams.length,
+        inactiveCount: inactiveStreams.length,
+        rows: data,
+      };
+    },
   });
 
   const columnHelper = createColumnHelper<StreamDocument>();
@@ -68,6 +91,16 @@ function StreamList() {
       columnHelper.accessor("stream_id", {
         id: "name",
         header: ({ column }) => <SortingHeader column={column} title="Name" />,
+      }),
+      columnHelper.accessor("model_name", {
+        id: "model_name",
+        header: ({ column }) => <SortingHeader column={column} title="Model" />,
+      }),
+      columnHelper.accessor("location", {
+        id: "location",
+        header: ({ column }) => (
+          <SortingHeader column={column} title="Location" />
+        ),
       }),
       columnHelper.accessor("description", {
         id: "description",
@@ -157,6 +190,7 @@ function StreamList() {
         header: "",
 
         cell: ({ row }) => {
+          const streamId = row.original.stream_id;
           return (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -166,16 +200,26 @@ function StreamList() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <PreviewDialog
-                  url={row.original.link}
-                  streamId={row.original.id}
-                  name={row.original.name}
+                <DropdownMenuItem
+                  onSelect={() => navigate("/cameras/" + streamId)}
+                  disabled={!row.original.is_active}
+                >
+                  <Icons.preview className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
+                  View
+                </DropdownMenuItem>
+                <ActivateDialog
+                  isActivated={!!row.original.is_active}
+                  streamId={streamId}
                 />
-                <AutoTrackDialog
-                  url={row.original.link}
-                  streamId={row.original.id}
-                  name={row.original.name}
-                />
+
+                <DropdownMenuItem
+                  onSelect={() => navigate("/streams/hazard-area/" + streamId)}
+                  disabled={!row.original.is_active}
+                >
+                  <Icons.hazard className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
+                  Set hazard area
+                </DropdownMenuItem>
+                <Separator className="my-2" />
                 <StreamForm
                   initialData={row.original}
                   trigger={
@@ -185,10 +229,7 @@ function StreamList() {
                     </DropdownMenuItem>
                   }
                 />
-                <DeleteDialog
-                  id={row.original.$id}
-                  stream_id={row.original.stream_id}
-                />
+                <DeleteDialog id={row.original.$id} stream_id={streamId} />
               </DropdownMenuContent>
             </DropdownMenu>
           );
@@ -205,8 +246,9 @@ function StreamList() {
         <div>
           <h1 className="text-xl font-semibold">Streams</h1>
           <p className="text-sm text-muted-foreground">
-            <span className="text-green-600">2</span> Active /{" "}
-            <span className="text-orange-600">6</span> Inactive
+            <span className="text-green-600">{data?.activeCount}</span> active /{" "}
+            <span className="text-orange-600">{data?.inactiveCount}</span>{" "}
+            inactive
           </p>
         </div>
         <StreamForm
@@ -220,13 +262,19 @@ function StreamList() {
       </div>
       <DataTable
         columns={columns}
-        data={data ?? []}
+        data={data.rows ?? []}
         loading={isFetching}
         filters={[
           {
             label: "Name",
             key: "name",
             type: "text",
+          },
+          {
+            label: "Model",
+            key: "model_name",
+            type: "select",
+            options: [{ label: "All", value: undefined }, ...streamModels],
           },
         ]}
         onRefresh={() => refetch()}

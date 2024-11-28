@@ -106,6 +106,16 @@ export const streamService = {
     return response as StreamDocument;
   },
 
+  fetchStreamByStreamId: async (streamId: string) => {
+    const response = await databases.listDocuments(
+      "isafe-guard-db",
+      "66f504260003d64837e5",
+      [Query.equal("stream_id", streamId)]
+    );
+
+    return response.documents[0] as StreamDocument;
+  },
+
   startStream: async (streamDetails: StreamDocument) => {
     const response = await apiClient.post(
       "/api/stream/start_stream",
@@ -115,23 +125,6 @@ export const streamService = {
   },
 
   updateStream: async (data: Stream & { $id: string }) => {
-    // const response = await databases.updateDocument(
-    //   "isafe-guard-db",
-    //   "66f504260003d64837e5",
-    //   data.$id,
-    //   {
-    //     description: data.description,
-    //     cam_ip: data.cam_ip,
-    //     rtsp_link: data.rtsp_link,
-    //     stream_id: data.stream_id,
-    //     ptz_password: data.ptz_password,
-    //     ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
-    //     ptz_username: data.ptz_username,
-    //   }
-    // );
-
-    // return response;
-
     const response = await apiClient.post("/api/stream/update_stream", {
       $id: data.$id,
       description: data.description,
@@ -141,6 +134,8 @@ export const streamService = {
       ptz_password: data.ptz_password,
       ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
       ptz_username: data.ptz_username,
+      location: data.location,
+      model_name: data.model_name,
     });
 
     return response.data;
@@ -159,6 +154,8 @@ export const streamService = {
         ptz_password: data.ptz_password,
         ptz_port: data.ptz_port ? Number(data.ptz_port) : null,
         ptz_username: data.ptz_username,
+        location: data.location,
+        model_name: data.model_name,
       }
     );
 

@@ -20,8 +20,6 @@ function StreamView({
   const [ptz, setPtz] = useState(true);
   const handle = useFullScreenHandle();
   const videoRef = useRef(null);
-  const [targetImage, setTargetImage] = useState<string>();
-  const navigate = useNavigate();
 
   // //need to get the stream detail
   // const { data: stream } = useQuery({
@@ -98,12 +96,6 @@ function StreamView({
           </div>
         </div>
       </FullScreen>
-      <Button
-        onClick={() => navigate("/streams/hazard-area/" + streamId)}
-        className="mt-4"
-      >
-        Hazard area
-      </Button>
     </div>
   );
 }

@@ -29,5 +29,7 @@ export type Stream = {
   ptz_username?: string;
   ptz_password?: string;
   is_active?: boolean;
+  location: string;
+  model_name: string;
 };
 export type StreamDocument = Models.Document & Stream;
