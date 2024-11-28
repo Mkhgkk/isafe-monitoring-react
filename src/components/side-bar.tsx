@@ -44,11 +44,11 @@ const links = [
     icon: LayoutDashboard,
     href: "/cameras",
   },
-  {
-    title: "Schedules",
-    icon: CalendarRange,
-    href: "/schedules",
-  },
+  // {
+  //   title: "Schedules",
+  //   icon: CalendarRange,
+  //   href: "/schedules",
+  // },
   {
     title: "Streams",
     icon: Cctv,

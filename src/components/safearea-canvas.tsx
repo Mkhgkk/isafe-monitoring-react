@@ -52,7 +52,7 @@ const URLImage = ({
 
   if (!image) return null;
 
-  return <Image image={image} width={width} height={height} x={x} y={y} />;
+  return <Image image={image} width={width} height={height} />;
 };
 
 const DraggableAndTransformableBox = ({
@@ -151,6 +151,7 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
   });
 
   useEffect(() => {
+    console.log("url", url);
     const updateStageSize = () => {
       if (containerRef.current) {
         const size = containerRef.current.getBoundingClientRect();
@@ -187,8 +188,8 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
 
   // Function to get the four corners of the box in actual pixel values
   const getAreaPosition = () => {
-    const scaleX = 1280 / stageSize.width;
-    const scaleY = 720 / stageSize.height;
+    const scaleX = 1280 / imageSize.width;
+    const scaleY = 720 / imageSize.height;
 
     const actualX = box.x * scaleX;
     const actualY = box.y * scaleY;
@@ -221,8 +222,8 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
             src={url}
             width={imageSize.width}
             height={imageSize.height}
-            x={(stageSize.width - imageSize.width) / 2}
-            y={(stageSize.height - imageSize.height) / 2}
+            // x={(stageSize.width - imageSize.width) / 2}
+            // y={(stageSize.height - imageSize.height) / 2}
           />
           {box && (
             <DraggableAndTransformableBox

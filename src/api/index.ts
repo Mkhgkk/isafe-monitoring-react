@@ -269,6 +269,13 @@ export const eventService = {
 type Coord = [number, number];
 
 export const configService = {
+  getHazardTargetImage: async (streamId: string) => {
+    const response = await apiClient.post("/api/stream/get_current_frame", {
+      stream_id: streamId,
+    });
+
+    return response.data;
+  },
   setDangerZone: async (data: {
     image: string;
     coords: [Coord, Coord, Coord, Coord];

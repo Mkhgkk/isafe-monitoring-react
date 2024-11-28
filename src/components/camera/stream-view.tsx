@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { ScheduleDocument } from "@/type";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import SafeAreaDialog from "../safe-area-dialog";
-import config from "../../config/default.config";
+import { useNavigate } from "react-router-dom";
 
 function StreamView({
   streamId,
@@ -21,6 +21,7 @@ function StreamView({
   const handle = useFullScreenHandle();
   const videoRef = useRef(null);
   const [targetImage, setTargetImage] = useState<string>();
+  const navigate = useNavigate();
 
   // //need to get the stream detail
   // const { data: stream } = useQuery({
@@ -32,39 +33,6 @@ function StreamView({
   //     return data;
   //   },
   // });
-
-  const handleTargetImage = async () => {
-    if (!videoRef.current) return;
-
-    // const url = videoRef.current.getCurrentFrame();
-    // setTargetImage(url);
-
-    // make a get request to get image url
-    // set target url
-
-    fetch(`http://${config.BACKEND_URL}/api/stream/get_current_frame`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ stream_id: streamId }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((responseData) => {
-        console.log("Response data:", responseData);
-        setTargetImage(
-          `http://${config.BACKEND_URL}/static/frame_refs/${responseData.data}`
-        );
-      })
-      .catch((error) => {
-        console.error("Error occurred:", error);
-      });
-  };
 
   return (
     <div>
@@ -130,16 +98,12 @@ function StreamView({
           </div>
         </div>
       </FullScreen>
-      <Button onClick={handleTargetImage} className="mt-4">
+      <Button
+        onClick={() => navigate("/streams/hazard-area/" + streamId)}
+        className="mt-4"
+      >
         Hazard area
       </Button>
-      {targetImage && (
-        <SafeAreaDialog
-          url={targetImage}
-          onClose={() => setTargetImage(undefined)}
-          streamId={streamId}
-        />
-      )}
     </div>
   );
 }
