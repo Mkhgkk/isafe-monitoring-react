@@ -1,5 +1,4 @@
 import { databases } from "@/services/appwrite";
-import { Query } from "appwrite";
 import apiClient from "./apiClient";
 import { Stream } from "@/type";
 import { EventFilters } from "@/components/event/list-filter";
