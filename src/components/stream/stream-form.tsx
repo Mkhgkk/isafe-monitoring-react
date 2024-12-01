@@ -17,16 +17,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { streamService } from "@/api";
 import { useToast } from "@/hooks/use-toast";
 import SelectField from "../form/SelectField";
+import { Stream } from "@/type";
 
 const streamFormSchema = z.object({
-  $id: z.string().optional(),
   stream_id: z.string(),
   description: z.string(),
   rtsp_link: z.string(),
-  cam_ip: z.string().optional().nullable(),
-  ptz_port: z.number().optional().nullable(),
-  ptz_password: z.string().optional().nullable(),
-  ptz_username: z.string().optional().nullable(),
+  cam_ip: z.string().optional(),
+  ptz_port: z.string().optional(),
+  ptz_password: z.string().optional(),
+  ptz_username: z.string().optional(),
   location: z.string(),
   model_name: z.string(),
 });
@@ -47,7 +47,12 @@ function StreamForm({
     reset,
   } = useForm({
     resolver: zodResolver(streamFormSchema),
-    defaultValues: initialData,
+    defaultValues: initialData
+      ? {
+          ...initialData,
+          ptz_port: initialData?.ptz_port?.toString(),
+        }
+      : undefined,
   });
 
   const { toast } = useToast();
@@ -100,8 +105,8 @@ function StreamForm({
 
   const onSubmit: SubmitHandler<StreamFormData> = async (data) => {
     if (initialData) {
-      updateStream(data);
-    } else createStream(data);
+      updateStream(data as Stream);
+    } else createStream(data as Stream);
   };
 
   const handleOpen = (value: boolean) => {
@@ -131,6 +136,7 @@ function StreamForm({
               label="Stream ID"
               error={errors.stream_id?.message as string}
               requiredMark
+              disabled={!!initialData}
             />
             <SelectField
               control={control}

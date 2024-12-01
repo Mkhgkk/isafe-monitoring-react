@@ -1,11 +1,11 @@
 import PanelVideo from "@/components/panel-video";
 import { Icons } from "@/components/icons";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { scheduleService, streamService } from "@/api";
+import { streamService } from "@/api";
 import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ScheduleDocument, StreamDocument } from "@/type";
+import { Stream } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 
 export default function MainPage() {
@@ -15,14 +15,14 @@ export default function MainPage() {
     queryKey: ["streamService.fetchStreams"],
     queryFn: streamService.fetchStreams,
     select: (data) => {
-      const activeStreams: StreamDocument[] = [];
-      const inactiveStreams: StreamDocument[] = [];
+      const activeStreams: Stream[] = [];
+      const inactiveStreams: Stream[] = [];
 
       data.forEach((stream) => {
         if (stream.is_active) {
-          activeStreams.push(stream as StreamDocument);
+          activeStreams.push(stream);
         } else {
-          inactiveStreams.push(stream as StreamDocument);
+          inactiveStreams.push(stream);
         }
       });
 
@@ -93,7 +93,15 @@ export default function MainPage() {
         )}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {data?.inactiveStreams.map((item, index) => (
-            <div className="relative" key={index}>
+            <div
+              className="relative cursor-pointer"
+              key={index}
+              onClick={() =>
+                navigate({
+                  pathname: `/cameras/${item.stream_id}`,
+                })
+              }
+            >
               <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
                 <Icons.offline className="opacity-30" size={50} />
               </div>

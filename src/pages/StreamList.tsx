@@ -1,9 +1,7 @@
 import { streamService } from "@/api";
 import { Icons } from "@/components/icons";
 import ActivateDialog from "@/components/stream/activate-dialog";
-import AutoTrackDialog from "@/components/stream/autotrack-dialog";
 import DeleteDialog from "@/components/stream/delete-dialog";
-import PreviewDialog from "@/components/stream/preview-dialog";
 import StreamForm from "@/components/stream/stream-form";
 import { Button } from "@/components/ui/button";
 import { DataTable, SortingHeader } from "@/components/ui/data-table";
@@ -23,7 +21,7 @@ import {
 } from "@/components/ui/tooltip";
 import { streamModels } from "@/constants";
 import { cn } from "@/lib/utils";
-import { StreamDocument } from "@/type";
+import { Stream } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
@@ -61,14 +59,14 @@ function StreamList() {
     queryKey: ["streamService.fetchStreams"],
     queryFn: streamService.fetchStreams,
     select: (data) => {
-      const activeStreams: StreamDocument[] = [];
-      const inactiveStreams: StreamDocument[] = [];
+      const activeStreams: Stream[] = [];
+      const inactiveStreams: Stream[] = [];
 
       data.forEach((stream) => {
         if (stream.is_active) {
-          activeStreams.push(stream as StreamDocument);
+          activeStreams.push(stream);
         } else {
-          inactiveStreams.push(stream as StreamDocument);
+          inactiveStreams.push(stream);
         }
       });
 
@@ -80,7 +78,7 @@ function StreamList() {
     },
   });
 
-  const columnHelper = createColumnHelper<StreamDocument>();
+  const columnHelper = createColumnHelper<Stream>();
   const columns = useMemo(
     () => [
       columnHelper.accessor("stream_id", {
@@ -261,8 +259,9 @@ function StreamList() {
         />
       </div>
       <DataTable
+        //@ts-expect-error
         columns={columns}
-        data={data.rows ?? []}
+        data={data?.rows ?? []}
         loading={isFetching}
         filters={[
           {

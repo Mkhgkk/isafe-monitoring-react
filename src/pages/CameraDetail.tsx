@@ -21,7 +21,7 @@ function CameraDetail() {
 
   const { data: stream } = useQuery({
     queryKey: ["streamService.fetchStreamById", streamId],
-    queryFn: () => streamService.fetchStreamByStreamId(streamId!),
+    queryFn: () => streamService.fetchStreamById(streamId!),
     enabled: !!streamId,
   });
 
@@ -40,7 +40,7 @@ function CameraDetail() {
             <div className="flex items-center mb-3">
               <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2" />
               <p className="text-sm text-muted-foreground">
-                {stream?.location}
+                {stream?.stream_id} - {stream?.model_name} ({stream?.location})
               </p>
             </div>
           </div>
@@ -68,7 +68,12 @@ function CameraDetail() {
           </DropdownMenu>
         </div>
 
-        {streamId && <StreamView streamId={streamId} />}
+        {streamId && stream?.is_active && <StreamView streamId={streamId} />}
+        {!stream?.is_active && (
+          <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
+            <Icons.offline className="opacity-30" size={50} />
+          </div>
+        )}
       </div>
 
       <div className="col-span-12 lg:col-span-3">

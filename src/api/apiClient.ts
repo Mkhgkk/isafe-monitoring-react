@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import config from "../config/default.config";
+import { toast } from "@/hooks/use-toast";
 
 const apiClient = axios.create({
-  // baseURL: "http://192.168.0.10:5000",
   baseURL: `http://${config.BACKEND_URL}`,
   headers: {
     "Content-Type": "application/json",
@@ -29,8 +29,19 @@ apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     const authorizationError = error.response && error.response.status === 401;
+    const serverError =
+      (error.response && error.response.status >= 500) || !error.response;
 
     const originalRequest = error.config;
+
+    if (serverError) {
+      console.error("Server Error:", error);
+      toast({
+        description: "Server Error",
+        variant: "destructive",
+      });
+      return Promise.reject(error);
+    }
 
     if (authorizationError && originalRequest?.url !== "/api/user/auth") {
       const refreshToken = localStorage.getItem("refresh_token");
@@ -43,7 +54,6 @@ apiClient.interceptors.response.use(
             headers: {
               RefreshToken: refreshToken,
               AccessToken: accessToken,
-              "Content-Type": "application/json",
             },
           });
           localStorage.setItem("access_token", response.data.new_access_token);
