@@ -7,13 +7,17 @@ import moment from "moment";
 
 export const authService = {
   login: async ({ email, password }: { email: string; password: string }) => {
-    const session = await account.createEmailPasswordSession(email, password);
-    return session;
+    const response = await apiClient.post("/api/user/login", {
+      email,
+      password,
+    });
+
+    return response.data;
   },
 
   getMe: async () => {
-    const me = await account.get();
-    return me;
+    const response = await apiClient.get("/api/user/");
+    return response.data;
   },
 
   createAccount: async ({
@@ -25,15 +29,18 @@ export const authService = {
     password: string;
     username: string;
   }) => {
-    const uniqueID = "iguard_" + Math.random().toString(36).substring(2);
-    const response = await account.create(uniqueID, email, password, username);
-    return response;
+    const response = await apiClient.post("/api/user/", {
+      email,
+      password,
+      username,
+    });
+
+    return response.data;
   },
 
   logout: async () => {
-    return await account.deleteSession(
-      "current" // sessionId
-    );
+    const response = await apiClient.get("/api/user/logout");
+    return response.data;
   },
 };
 

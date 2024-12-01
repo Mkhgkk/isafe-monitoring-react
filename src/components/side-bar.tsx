@@ -17,17 +17,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Settings,
-  LayoutDashboard,
-  TvMinimalPlay,
-  Cctv,
-  CalendarRange,
-} from "lucide-react";
+import { Settings, LayoutDashboard, TvMinimalPlay, Cctv } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ConnectionInfo from "./connection-info";
-import { Models } from "appwrite";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { authService } from "@/api";
 import NotificationPanel from "./notification-panel";
 
@@ -35,7 +28,6 @@ type SideBarProps = {
   isCollapsed: boolean;
   isConnected: boolean;
   systemStatus: { cpu: number; gpu: number };
-  user: Models.User<object>;
 };
 
 const links = [
@@ -66,20 +58,19 @@ const links = [
   },
 ];
 
-function SideBar({
-  isCollapsed,
-  isConnected,
-  systemStatus,
-  user,
-}: SideBarProps) {
+function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { data: user, isFetching } = useQuery({
+    queryKey: ["authService.getMe"],
+    queryFn: authService.getMe,
+  });
   const { mutate: logout } = useMutation({
     mutationFn: authService.logout,
     onSuccess: () => {
-      setTimeout(() => {
-        navigate("/login");
-      }, 500);
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      navigate("/login");
     },
     onError: (err) => {
       console.error(err);
@@ -196,7 +187,7 @@ function SideBar({
                 </AvatarFallback>
               </Avatar>
               <Label className={cn(isCollapsed && "hidden")}>
-                {user?.name}
+                {user?.username}
               </Label>
             </Button>
           </DropdownMenuTrigger>

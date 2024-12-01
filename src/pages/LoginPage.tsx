@@ -41,11 +41,13 @@ function LoginPage() {
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: authService.login,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
       navigate("/");
     },
     onError: (err) => {
-      setError(err.message || "Invalid credentials. Please try again.");
+      setError("Invalid credentials. Please try again.");
     },
   });
 

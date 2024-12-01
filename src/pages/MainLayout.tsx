@@ -77,29 +77,30 @@ export const MainLayout = () => {
     };
   }, []);
 
-  const { data: user, isFetching } = useQuery({
-    queryKey: ["authService.getMe"],
-    queryFn: authService.getMe,
-    retry: 0,
-  });
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
 
-  if (isFetching) {
-    return (
-      <div className="w-full h-[100vh] flex justify-center items-center">
-        <Icons.loading className="animate-spin mr-2 w-4 h-4" />
-        Loading...
-      </div>
-    );
-  }
+  // const { data: user, isFetching } = useQuery({
+  //   queryKey: ["authService.getMe"],
+  //   queryFn: authService.getMe,
+  //   retry: 0,
+  // });
 
-  return user ? (
+  // console.log(user);
+
+  // if (isFetching) {
+  //   return (
+  //     <div className="w-full h-[100vh] flex justify-center items-center">
+  //       <Icons.loading className="animate-spin mr-2 w-4 h-4" />
+  //       Loading...
+  //     </div>
+  //   );
+  // }
+
+  return token && refreshToken ? (
     <>
       {contextHolder}
-      <Layout
-        user={user}
-        isConnected={isConnected}
-        systemStatus={systemStatus}
-      />
+      <Layout isConnected={isConnected} systemStatus={systemStatus} />
     </>
   ) : (
     <Navigate to="/login" />
@@ -109,10 +110,9 @@ export const MainLayout = () => {
 interface LayoutProps {
   systemStatus: { cpu: number; gpu: number };
   isConnected: boolean;
-  user: Models.User<object>;
 }
 
-function Layout({ systemStatus, isConnected, user }: LayoutProps) {
+function Layout({ systemStatus, isConnected }: LayoutProps) {
   const panelRef = useRef<ImperativePanelHandle>(null);
   const defaultLayout = [265, 1000];
   const [isCollapsed, setIsCollapsed] = useState(
@@ -167,7 +167,6 @@ function Layout({ systemStatus, isConnected, user }: LayoutProps) {
             isCollapsed={isCollapsed}
             isConnected={isConnected}
             systemStatus={systemStatus}
-            user={user}
           />
         </ResizablePanel>
         <ResizableHandle withHandle />
