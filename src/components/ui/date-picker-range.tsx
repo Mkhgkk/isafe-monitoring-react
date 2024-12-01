@@ -13,6 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Input } from "./input";
 
 type Props = {
   range?: DateRange;
@@ -87,6 +88,7 @@ export function DatePickerWithRange({
             disabled={disabledDays}
             {...props}
           />
+
           <div className="p-3 pt-1 justify-between flex">
             <Button size={"sm"} variant="outline" onClick={clearRange}>
               Clear

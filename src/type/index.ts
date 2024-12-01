@@ -1,6 +1,5 @@
-import { Models } from "appwrite";
-
 export type Event = {
+  _id: { $oid: string };
   stream_id: string;
   title: string;
   description: string;
@@ -8,7 +7,6 @@ export type Event = {
   thumbnail: string;
   vedio_filename: string;
 };
-export type EventDocument = Models.Document & Event;
 
 export type Stream = {
   stream_id: string;

@@ -1,6 +1,5 @@
 import { Separator } from "@/components/ui/separator";
 import { useNavigate, useParams } from "react-router-dom";
-import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Icons } from "@/components/icons";
 
@@ -9,6 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 import { eventService } from "@/api";
 import { format } from "date-fns";
 import { getDateFromUnixTimestamp } from "@/utils";
+import EventCard, { EventCardSkeleton } from "@/components/event-card";
+import { Event } from "@/type";
 
 function EventDetail() {
   const navigate = useNavigate();
@@ -20,6 +21,32 @@ function EventDetail() {
     enabled: !!eventId,
   });
 
+  const { data: relatedEvents, isFetching: isFetchingRelated } = useQuery({
+    queryKey: [
+      "eventService.fetchEvents",
+      {
+        stream: data?.stream_id,
+        start_timestamp: data?.timestamp - 60 * 60 * 1000,
+        dateRange: {
+          from: getDateFromUnixTimestamp(data?.timestamp - 60 * 60 * 1000),
+          to: getDateFromUnixTimestamp(data?.timestamp + 60 * 60 * 1000),
+        },
+      },
+    ],
+    queryFn: () =>
+      eventService.fetchEvents(
+        {
+          stream: data?.stream_id,
+          dateRange: {
+            from: getDateFromUnixTimestamp(data?.timestamp - 60 * 60 * 1000),
+            to: getDateFromUnixTimestamp(data?.timestamp + 60 * 60 * 1000),
+          },
+        },
+        { page: 0, limit: 4 }
+      ),
+    enabled: !!data?.stream_id,
+  });
+
   return (
     <div className="pb-4">
       <div className=" mb-4">
@@ -29,15 +56,14 @@ function EventDetail() {
             className="cursor-pointer"
           />
           <h1 className="text-xl font-semibold">
-            {data?.event?.title} ({data?.event?.stream_id} -{" "}
-            {data?.event?.description})
+            {data?.title} ({data?.stream_id} - {data?.description})
           </h1>
         </div>
 
-        {data?.event?.timestamp && (
+        {data?.timestamp && (
           <p className="text-sm text-muted-foreground mt-1">
             Accured at{" "}
-            {format(getDateFromUnixTimestamp(data.event.timestamp), "PPpp")}
+            {format(getDateFromUnixTimestamp(data.timestamp), "PPpp")}
           </p>
         )}
       </div>
@@ -45,9 +71,9 @@ function EventDetail() {
         <Skeleton className="rounded-md w-full lg:max-w-5xl mb-5 aspect-[16/9]" />
       ) : (
         <div className="overflow-hidden rounded-md w-full lg:max-w-5xl mb-5">
-          {data?.event?.video_filename && (
+          {data?.video_filename && (
             <video
-              src={`http://${config.BACKEND_URL}/video/videos/${data.event.video_filename}`}
+              src={`http://${config.BACKEND_URL}/video/videos/${data.video_filename}`}
               controls={true}
               autoPlay
               muted
@@ -60,21 +86,21 @@ function EventDetail() {
       <Separator />
       <div className="mt-4">
         <h1 className="text-xl font-semibold mb-4">Related events</h1>
-        {data?.related.length === 0 && !isFetching && (
+        {relatedEvents?.data?.length === 0 && !isFetchingRelated && (
           <p className="text-center">No related event.</p>
         )}
         <div className="flex flex-wrap gap-2">
-          {isFetching &&
+          {isFetchingRelated &&
             [0, 1, 2, 3].map((item) => (
               <EventCardSkeleton
                 className="flex gap-2 w-[250px] border p-2 rounded-md"
                 key={item}
               />
             ))}
-          {data?.related.map((item) => (
+          {relatedEvents?.data?.map((item: Event) => (
             <EventCard
               className="flex gap-2 w-[250px] border p-2 rounded-md"
-              key={item.$id}
+              key={item._id.$oid}
               item={item}
             />
           ))}

@@ -12,7 +12,7 @@ import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import ListFilter, { EventFilters } from "@/components/event/list-filter";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import EventItem from "@/components/event/event-item";
-import { EventDocument } from "@/type";
+import { Event } from "@/type";
 import { EventItemSkeleton } from "@/components/camera/schedule-event-list";
 
 const LIMIT = 20;
@@ -20,17 +20,16 @@ const LIMIT = 20;
 export default function EventList() {
   const [filters, setFilters] = useState<EventFilters>({
     stream: undefined,
-    type: undefined,
     dateRange: { from: undefined, to: undefined },
   });
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["eventService.fetchAllEvents", filters],
+      queryKey: ["eventService.fetchEvents", filters],
       queryFn: ({ pageParam = 0 }) =>
-        eventService.fetchAllEvents(filters, { page: pageParam, limit: LIMIT }),
+        eventService.fetchEvents(filters, { page: pageParam, limit: LIMIT }),
       getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length ? allPages.length * LIMIT : undefined;
+        return lastPage.data.length ? allPages.length : undefined;
       },
       initialPageParam: 0,
     });
@@ -40,7 +39,7 @@ export default function EventList() {
     fetchNextPage,
   });
 
-  const flatted = data?.pages.flatMap((page) => page) as EventDocument[];
+  const flatted = data?.pages.flatMap((page) => page.data) as Event[];
 
   return (
     <div className="h-[calc(100vh-50px)]">
@@ -73,8 +72,8 @@ export default function EventList() {
             !flatted?.length &&
             [...Array(8)].map((_, i) => <EventItemSkeleton key={i} />)}
 
-          {flatted?.map((item) => (
-            <EventItem item={item} key={item.$id} />
+          {flatted?.map((item, index) => (
+            <EventItem item={item} key={index} />
           ))}
           {isFetchingNextPage && <EventItemSkeleton />}
 

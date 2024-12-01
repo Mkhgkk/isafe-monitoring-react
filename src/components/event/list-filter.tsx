@@ -13,11 +13,10 @@ import { useQuery } from "@tanstack/react-query";
 import { streamService } from "@/api";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 
 export type EventFilters = {
   stream?: string;
-  type?: string;
+  // type?: string;
   date?: string;
   dateRange?: DateRange;
 };
@@ -70,7 +69,7 @@ function ListFilter({ filters, setFilters }: ListFilterProps) {
         </SelectContent>
       </Select>
 
-      <Select
+      {/* <Select
         onValueChange={(value) =>
           setFilters({ ...filters, type: value === "all" ? undefined : value })
         }
@@ -94,7 +93,7 @@ function ListFilter({ filters, setFilters }: ListFilterProps) {
             <SelectItem value="2">Something</SelectItem>
           </SelectGroup>
         </SelectContent>
-      </Select>
+      </Select> */}
       <DatePickerWithRange
         range={filters.dateRange}
         setRange={(dateRange) => setFilters({ ...filters, dateRange })}

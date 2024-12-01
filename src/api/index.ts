@@ -120,85 +120,29 @@ export const eventService = {
       limit: number;
     }
   ) => {
-    const q = [
-      Query.orderDesc("timestamp"),
-      Query.limit(option.limit),
-      Query.offset(option.page),
-    ];
-
+    const searchParams = new URLSearchParams();
+    searchParams.append("limit", option.limit.toString());
+    searchParams.append("page", option.page.toString());
     if (query.stream) {
-      q.push(Query.equal("stream_id", query.stream));
+      searchParams.append("stream_id", query.stream);
     }
-
-    if (query.date) {
-      const startTime = moment(query.date).startOf("day").unix();
-      const endTime = moment(query.date).endOf("day").unix();
-
-      q.push(Query.between("timestamp", startTime, endTime));
-    }
-
-    const response = await databases.listDocuments(
-      "isafe-guard-db",
-      "670d337f001f9ab7ff34",
-      q
-    );
-
-    return response.documents;
-  },
-  fetchAllEvents: async (
-    query: EventFilters,
-    option: {
-      page: number;
-      limit: number;
-    }
-  ) => {
-    const q = [
-      Query.orderDesc("timestamp"),
-      Query.limit(option.limit),
-      Query.offset(option.page),
-    ];
-
-    if (query.stream) {
-      q.push(Query.equal("stream_id", query.stream));
-    }
-
-    if (query.dateRange && query.dateRange.from && query.dateRange.to) {
+    if (query.dateRange) {
       const startTime = moment(query.dateRange.from).startOf("day").unix();
       const endTime = moment(query.dateRange.to).endOf("day").unix();
 
-      q.push(Query.between("timestamp", startTime, endTime));
+      searchParams.append("start_timestamp", startTime.toString());
+      searchParams.append("end_timestamp", endTime.toString());
     }
 
-    const response = await databases.listDocuments(
-      "isafe-guard-db",
-      "670d337f001f9ab7ff34",
-      q
+    const response = await apiClient.get(
+      "/api/event?" + searchParams.toString()
     );
 
-    return response.documents;
+    return response.data;
   },
   fetchEventById: async (id: string) => {
-    const event = await databases.getDocument(
-      "isafe-guard-db",
-      "670d337f001f9ab7ff34",
-      id
-    );
-
-    const related = await databases.listDocuments(
-      "isafe-guard-db",
-      "670d337f001f9ab7ff34",
-      [
-        Query.equal("stream_id", event.stream_id),
-        Query.between(
-          "timestamp",
-          event.timestamp - 60 * 60 * 1000,
-          event.timestamp + 60 * 60 * 1000
-        ),
-        Query.limit(4),
-      ]
-    );
-
-    return { event, related: related.documents };
+    const response = await apiClient.get("/api/event/" + id);
+    return response.data;
   },
 };
 
