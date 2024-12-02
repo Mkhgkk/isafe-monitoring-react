@@ -25,10 +25,11 @@ type Props = {
 
 function EventCard({ item, className }: Props) {
   const navigate = useNavigate();
+
   return (
     <div
       className={cn("flex gap-2", className)}
-      onClick={() => navigate("/events/" + item.$id)}
+      onClick={() => navigate("/events/" + item._id.$oid)}
     >
       <img
         src={getThumbnailUrl(item.thumbnail)}
