@@ -75,7 +75,7 @@ function PTZControl({ streamId }: PTZControlProps) {
 
   const handleAutoPTZ = () => {
     //take streamId
-    if (streamId !== "stream1") return;
+    // if (streamId !== "stream1") return;
 
     // make request
     // const url = "http://192.168.0.10:5000/api/change_autotrack";

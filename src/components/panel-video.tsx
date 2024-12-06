@@ -13,6 +13,7 @@ import { Icons } from "@/components/icons";
 import { useConnectionContext } from "@/context/ConnectionContext";
 import { useQuery } from "@tanstack/react-query";
 import { streamService } from "@/api";
+import WebRTCPlayer from "./webrtc-player";
 
 interface PanelVideoProps {
   streamId?: string;
@@ -150,10 +151,11 @@ const PanelVideo = forwardRef(
             </div>
           </div>
         )}
-        <canvas
+        {/* <canvas
           ref={canvasRef}
           className="w-full h-full max-h-screen max-w-screen block"
-        />
+        /> */}
+        <WebRTCPlayer streamId={streamId} />
       </>
     );
   }
