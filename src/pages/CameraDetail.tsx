@@ -18,6 +18,8 @@ import ActivateDialog from "@/components/stream/activate-dialog";
 function CameraDetail() {
   const { streamId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { streamData } = location.state;
 
   const { data: stream } = useQuery({
     queryKey: ["streamService.fetchStreamById", streamId],
