@@ -76,7 +76,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
                 />
               ))}
 
-          {isFetchingNextPage && <EventCardSkeleton />}
+          {isFetchingNextPage && <EventCardSkeleton className="p-2" />}
         </div>
 
         {events?.length === 0 && !isLoading && (

@@ -6,8 +6,8 @@ import { getThumbnailUrl } from "@/utils";
 
 export function EventCardSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn("flex gap-2", className)}>
-      <Skeleton className="w-[100px] h-[70px] rounded-sm" />
+    <div className={cn("flex gap-2 flex-col", className)}>
+      <Skeleton className="w-full aspect-[16/9] rounded-sm" />
       <div className="pt-1">
         <Skeleton className="h-5 w-20 rounded-sm mb-2" />
         <Skeleton className="h-3 w-28 rounded-sm mb-1" />

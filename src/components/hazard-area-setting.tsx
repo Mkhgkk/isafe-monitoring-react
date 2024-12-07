@@ -96,7 +96,7 @@ function HazardAreaSetting() {
         )}
       </div>
       {!url && (
-        <div className="my-5 rounded-md overflow-hidden max-w-screen-lg relative">
+        <div className="my-5 rounded-md overflow-hidden max-w-screen-lg relative aspect-[16/9]">
           <PanelVideo streamId={streamId} />
           <div
             className={cn(

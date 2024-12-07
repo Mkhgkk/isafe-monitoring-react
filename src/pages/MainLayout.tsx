@@ -93,7 +93,7 @@ interface LayoutProps {
 
 function Layout({ systemStatus, isConnected }: LayoutProps) {
   const panelRef = useRef<ImperativePanelHandle>(null);
-  const defaultLayout = [265, 1000];
+  const defaultLayout = 100;
   const [isCollapsed, setIsCollapsed] = useState(
     Cookies.get("collapsed") === "true" || false
   );
@@ -126,12 +126,13 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
         className="h-full max-h-[100vh] items-stretch"
       >
         <ResizablePanel
-          defaultSize={defaultLayout[0]}
+          defaultSize={isCollapsed ? 4 : defaultLayout}
           collapsedSize={4}
           collapsible={true}
           minSize={15}
           maxSize={20}
           onCollapse={(collapsed) => {
+            console.log(collapsed, "collapsed");
             setIsCollapsed(collapsed);
             updateCollapsedCookie(collapsed);
           }}

@@ -61,7 +61,7 @@ const links = [
 function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { data: user, isFetching } = useQuery({
+  const { data: user } = useQuery({
     queryKey: ["authService.getMe"],
     queryFn: authService.getMe,
   });
