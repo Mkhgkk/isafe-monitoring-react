@@ -1,13 +1,5 @@
 import { useRef, useState } from "react";
 import EventCard, { EventCardSkeleton } from "../event-card";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectGroup,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "../ui/select";
 import WeekCalendar from "../week-calendar";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { eventService } from "@/api";
@@ -61,45 +53,37 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center pb-4">
+    <div className="my-5">
+      <div className="flex justify-between pb-2">
         <p className="text-xl font-semibold">Event</p>
-        {/* <Select onValueChange={setFilter} value={filter}>
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="Filter" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="all">All</SelectItem>
-
-              <SelectItem value="1">Security</SelectItem>
-              <SelectItem value="2">camera 2</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select> */}
+        <WeekCalendar
+          selectedDate={selectedDate}
+          setSelectedDate={handleDateChange}
+        />
       </div>
-      <WeekCalendar
-        selectedDate={selectedDate}
-        setSelectedDate={handleDateChange}
-      />
-      <div className="max-h-[80vh] overflow-scroll" ref={scrollRef}>
-        <div className="grid gap-y-3">
+
+      <div ref={scrollRef}>
+        <div className="grid gap-y-3 grid-cols-2 gap-2 md:grid-cols-4">
           {isLoading
             ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-                <EventCardSkeleton key={item} />
+                <EventCardSkeleton key={item} className="p-2" />
               ))
             : events?.map((item) => (
-                <EventCard item={item} key={item._id.$oid} />
+                <EventCard
+                  item={item}
+                  key={item._id.$oid}
+                  className="border rounded-md p-2"
+                />
               ))}
 
-          {events?.length === 0 && !isLoading && (
-            <p className="text-muted-foreground text-center mt-10 text-sm">
-              No events found.
-            </p>
-          )}
           {isFetchingNextPage && <EventCardSkeleton />}
         </div>
 
+        {events?.length === 0 && !isLoading && (
+          <p className="text-muted-foreground text-center mt-10 text-sm">
+            No events found.
+          </p>
+        )}
         <div ref={setTarget} className="h-[1rem]" />
       </div>
     </div>

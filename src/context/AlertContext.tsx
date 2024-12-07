@@ -20,10 +20,6 @@ export function AlertProvider({ children }: PropsWithChildren) {
   const [audio] = useState(new Audio(sound));
 
   useEffect(() => {
-    isPlaying ? audio.play() : audio.pause();
-  }, [isPlaying]);
-
-  useEffect(() => {
     audio.addEventListener("ended", () => setIsPlaying(false));
     return () => {
       audio.removeEventListener("ended", () => setIsPlaying(false));
@@ -33,6 +29,7 @@ export function AlertProvider({ children }: PropsWithChildren) {
   const playAlert = () => {
     if (!isPlaying) {
       setIsPlaying(true);
+      audio.play().catch(() => setIsPlaying(false));
     }
   };
 

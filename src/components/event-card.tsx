@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "./ui/skeleton";
-import config from "../config/default.config";
 import moment from "moment";
 import { getThumbnailUrl } from "@/utils";
 
@@ -28,12 +27,12 @@ function EventCard({ item, className }: Props) {
 
   return (
     <div
-      className={cn("flex gap-2", className)}
+      className={cn("flex gap-2 flex-col", className)}
       onClick={() => navigate("/events/" + item._id.$oid)}
     >
       <img
         src={getThumbnailUrl(item.thumbnail)}
-        className="w-[100px] h-[70px] rounded-sm"
+        className="w-full aspect-[16/9] rounded-sm object-cover"
       />
       <div className="flex flex-col jusitfy-center">
         <p className="text-sm font-semibold mb-1 ">{item.title}</p>

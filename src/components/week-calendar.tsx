@@ -12,7 +12,7 @@ type Props = {
 
 function WeekCalendar({ selectedDate, setSelectedDate }: Props) {
   const days = [];
-  let day = start.clone();
+  const day = start.clone();
 
   while (day.isBefore(end) || day.isSame(end)) {
     days.push(day.clone().format("YYYY-MM-DD"));
@@ -20,12 +20,12 @@ function WeekCalendar({ selectedDate, setSelectedDate }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-7 pb-4">
+    <div className="grid grid-cols-7 w-[260px] border rounded py-1 px-2">
       {days.map((day, index) => (
         <div
           key={index}
           className={cn(
-            "flex flex-col items-center p-1 rounded-md cursor-pointer",
+            "flex flex-col items-center p-0.5 rounded-md cursor-pointer",
             `${selectedDate === day && "bg-primary"}`
           )}
           onClick={() => setSelectedDate(day)}

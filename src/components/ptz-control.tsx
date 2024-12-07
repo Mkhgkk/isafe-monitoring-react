@@ -140,12 +140,7 @@ function PTZControl({ streamId }: PTZControlProps) {
             />
           </div>
           {/* <!-- Middle button here --> */}
-          <div
-            className="flex items-center justify-center"
-            // onMouseDown={() => onMouseDown("center")}
-            // onMouseUp={() => onMouseUp("center")}
-            // onClick={}
-          >
+          <div className="flex items-center justify-center">
             <button
               onClick={handleAutoPTZ}
               className="bg-gray-500 text-white rounded-full h-12 w-12 px-2  hover:bg-green-600"
