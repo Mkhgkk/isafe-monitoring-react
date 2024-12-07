@@ -22,6 +22,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ConnectionProvider } from "./context/ConnectionContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import HazardAreaSetting from "./components/hazard-area-setting";
+import { AlertProvider } from "./context/AlertContext";
 
 function App() {
   const queryClient = new QueryClient();
@@ -52,14 +53,16 @@ function App() {
 
   return (
     <ConnectionProvider>
-      <AppwriteProvider>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <RouterProvider router={router} />
-            <Toaster />
-          </ThemeProvider>
-        </QueryClientProvider>
-      </AppwriteProvider>
+      <AlertProvider>
+        <AppwriteProvider>
+          <QueryClientProvider client={queryClient}>
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+              <RouterProvider router={router} />
+              <Toaster />
+            </ThemeProvider>
+          </QueryClientProvider>
+        </AppwriteProvider>
+      </AlertProvider>
     </ConnectionProvider>
   );
 }

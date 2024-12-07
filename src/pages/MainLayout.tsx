@@ -9,15 +9,11 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navigate, Outlet } from "react-router-dom";
-import { Models } from "appwrite";
 import { useConnectionContext } from "@/context/ConnectionContext";
-import { authService } from "@/api";
-import { useQuery } from "@tanstack/react-query";
 import { ImperativePanelHandle } from "react-resizable-panels";
 import SideBar from "@/components/side-bar";
 import { message } from "antd";
 import socket from "@/services/socketService";
-import { Icons } from "@/components/icons";
 
 export const MainLayout = () => {
   const { setIsConnected: setIsConnectedContext } = useConnectionContext();
@@ -79,23 +75,6 @@ export const MainLayout = () => {
 
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
-
-  // const { data: user, isFetching } = useQuery({
-  //   queryKey: ["authService.getMe"],
-  //   queryFn: authService.getMe,
-  //   retry: 0,
-  // });
-
-  // console.log(user);
-
-  // if (isFetching) {
-  //   return (
-  //     <div className="w-full h-[100vh] flex justify-center items-center">
-  //       <Icons.loading className="animate-spin mr-2 w-4 h-4" />
-  //       Loading...
-  //     </div>
-  //   );
-  // }
 
   return token && refreshToken ? (
     <>

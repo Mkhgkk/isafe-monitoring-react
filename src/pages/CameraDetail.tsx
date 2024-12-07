@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import ActivateDialog from "@/components/stream/activate-dialog";
+import { cn } from "@/lib/utils";
 
 function CameraDetail() {
   const { streamId } = useParams();
@@ -38,7 +39,12 @@ function CameraDetail() {
               <h1 className="text-xl font-semibold">Monitoring</h1>
             </div>
             <div className="flex items-center mb-3">
-              <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2" />
+              <span
+                className={cn("flex h-2 w-2 rounded-full mr-2", {
+                  "bg-orange-600": !stream?.is_active,
+                  "bg-green-600": stream?.is_active,
+                })}
+              />
               <p className="text-sm text-muted-foreground">
                 {stream?.stream_id} - {stream?.model_name} ({stream?.location})
               </p>
