@@ -132,7 +132,6 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
           minSize={15}
           maxSize={20}
           onCollapse={(collapsed) => {
-            console.log(collapsed, "collapsed");
             setIsCollapsed(collapsed);
             updateCollapsedCookie(collapsed);
           }}
@@ -150,7 +149,7 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
           />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+        <ResizablePanel minSize={30}>
           <ScrollArea className="h-screen">
             <div className="p-4 gap-y-4 flex flex-col ">
               <Outlet />

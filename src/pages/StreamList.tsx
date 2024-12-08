@@ -155,7 +155,7 @@ function StreamList() {
         id: "rtsp_link",
         header: "RTSP Link",
         cell: ({ getValue }) => (
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger>
                 <Button

@@ -24,6 +24,7 @@ import { ConnectionProvider } from "./context/ConnectionContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import HazardAreaSetting from "./components/hazard-area-setting";
 import { AlertProvider } from "./context/AlertContext";
+import SettingPage from "./pages/SettingPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ function App() {
             path="/streams/hazard-area/:streamId"
             element={<HazardAreaSetting />}
           />
+          <Route path="/setting" element={<SettingPage />} />
         </Route>
         <Route path="/" element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
