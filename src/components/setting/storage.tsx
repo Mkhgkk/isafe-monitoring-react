@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -21,7 +20,7 @@ function Storage({ items, total }: Props) {
           43.53 GB of {total} GB used
         </p>
       </div>
-      <div className="flex gap-0.5 h-10 bg-slate-800 rounded overflow-hidden">
+      <div className="flex gap-0.5 h-10 dark:bg-slate-800 bg-slate-200 rounded overflow-hidden">
         {items.map((item) => (
           <div
             style={{

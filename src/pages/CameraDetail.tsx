@@ -107,7 +107,7 @@ function CameraDetail() {
         <div className="col-span-12 lg:col-span-3">
           <div className="grid gap-4">
             <p className="text-xl font-semibold ">Detail</p>
-            <div className="grid gap-3 bg-slate-900 bg-opacity-75 p-3 rounded-md border">
+            <div className="grid gap-3 bg-slate-100 dark:bg-slate-900 bg-opacity-75 p-3 rounded-md border">
               <Contents field={"Stream ID"} value={stream?.stream_id ?? "-"} />
               <Contents field={"Model"} value={stream?.model_name ?? "-"} />
               <Contents field={"Location"} value={stream?.location ?? "-"} />
@@ -117,11 +117,12 @@ function CameraDetail() {
               />
             </div>
 
-            <div className="grid gap-3 bg-slate-900 bg-opacity-75 p-3 rounded-md border">
+            <div className="grid gap-3 bg-slate-100 dark:bg-slate-900 bg-opacity-75 p-3 rounded-md border">
               <Contents field={"Saving Video"} value={<Switch />} />
               <Contents field={"Intrusion"} value={<Switch />} />
               <Contents field={"Inspect"} value={<Switch />} />
               <Contents field={"Alert"} value={<Switch />} />
+              <Contents field={"Watch notification"} value={<Switch />} />
             </div>
           </div>
         </div>

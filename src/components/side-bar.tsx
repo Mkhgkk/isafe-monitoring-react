@@ -54,7 +54,7 @@ const links = [
   {
     title: "Settings",
     icon: Settings,
-    href: "/setting",
+    href: "/settings",
   },
 ];
 
@@ -192,6 +192,10 @@ function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right">
+            <DropdownMenuItem onSelect={() => navigate("/profile")}>
+              <Icons.user className="w-4 h-4 mr-2" />
+              Profile
+            </DropdownMenuItem>
             <DropdownMenuItem onSelect={handleLogout}>
               <Icons.logout className="w-4 h-4 mr-2" />
               Logout

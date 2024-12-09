@@ -43,11 +43,7 @@ export default function MainPage() {
               active / {data?.inactiveStreams.length} inactive
             </p>
           </div>
-          <Button
-            onClick={() => refetch()}
-            variant="outline"
-            className="bg-muted hover:bg-muted-foreground"
-          >
+          <Button onClick={() => refetch()} variant="outline">
             <Icons.refresh className="mr-2 w-4 h-4 " />
             Refresh
           </Button>
@@ -56,7 +52,7 @@ export default function MainPage() {
           <p className="mb-5 font-semibold text-lg">Active stream</p>
           {isFetching && data?.activeStreams.length === 0 && <Skeletons />}
           {!isFetching && !data?.activeStreams?.length && (
-            <p className="text-sm text-muted-foreground mb-4 text-center">
+            <p className="text-sm dark:text-muted-foreground mb-4 text-center">
               {"No active stream(s)."}
             </p>
           )}
@@ -87,7 +83,7 @@ export default function MainPage() {
         <p className="mb-5 font-semibold text-lg">Inactive stream</p>
         {isFetching && data?.inactiveStreams.length === 0 && <Skeletons />}
         {!isFetching && !data?.inactiveStreams.length && (
-          <p className="text-sm text-muted-foreground mb-4 text-center">
+          <p className="text-sm dark:text-muted-foreground mb-4 text-center">
             {"No inactive stream(s)."}
           </p>
         )}

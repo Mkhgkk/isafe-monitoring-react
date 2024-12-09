@@ -129,7 +129,7 @@ function StreamForm({
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 px-1 max-h-[80vh] overflow-y-scroll">
             <FormField
               control={control}
               id="stream_id"

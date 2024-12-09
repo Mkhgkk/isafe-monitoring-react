@@ -65,7 +65,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
       <div ref={scrollRef}>
         <div className="grid gap-y-3 grid-cols-2 gap-2 md:grid-cols-4">
           {isLoading
-            ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+            ? [0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
                 <EventCardSkeleton key={item} className="p-2" />
               ))
             : events?.map((item) => (
@@ -80,7 +80,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
         </div>
 
         {events?.length === 0 && !isLoading && (
-          <p className="text-muted-foreground text-center mt-10 text-sm">
+          <p className="dark:text-muted-foreground text-center mt-10 text-sm">
             No events found.
           </p>
         )}
