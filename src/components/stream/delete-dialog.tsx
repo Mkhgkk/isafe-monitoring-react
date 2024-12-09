@@ -15,7 +15,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { streamService } from "@/api";
 import { useToast } from "@/hooks/use-toast";
 
-const DeleteDialog = ({ id, stream_id }: { id: string; stream_id: string }) => {
+const DeleteDialog = ({ stream_id }: { stream_id: string }) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -45,7 +45,7 @@ const DeleteDialog = ({ id, stream_id }: { id: string; stream_id: string }) => {
   });
 
   const handleDelete = () => {
-    deleteStream(id);
+    deleteStream(stream_id);
   };
   return (
     <Dialog open={open} onOpenChange={handleOpen}>

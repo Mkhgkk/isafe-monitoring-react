@@ -26,6 +26,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { message } from "antd";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const PasswordCell = ({ value }: { value?: string }) => {
@@ -52,6 +53,7 @@ const PasswordCell = ({ value }: { value?: string }) => {
 };
 
 function StreamList() {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
 
@@ -88,31 +90,37 @@ function StreamList() {
       }),
       columnHelper.accessor("stream_id", {
         id: "name",
-        header: ({ column }) => <SortingHeader column={column} title="Name" />,
+        header: ({ column }) => (
+          <SortingHeader column={column} title={t("stream.id")} />
+        ),
       }),
       columnHelper.accessor("model_name", {
         id: "model_name",
-        header: ({ column }) => <SortingHeader column={column} title="Model" />,
+        header: ({ column }) => (
+          <SortingHeader column={column} title={t("stream.model")} />
+        ),
       }),
       columnHelper.accessor("location", {
         id: "location",
         header: ({ column }) => (
-          <SortingHeader column={column} title="Location" />
+          <SortingHeader column={column} title={t("stream.location")} />
         ),
       }),
       columnHelper.accessor("description", {
         id: "description",
         header: ({ column }) => (
-          <SortingHeader column={column} title="Description" />
+          <SortingHeader column={column} title={t("stream.desc")} />
         ),
       }),
       columnHelper.accessor("is_active", {
         id: "status",
         header: ({ column }) => (
-          <SortingHeader column={column} title="Status" />
+          <SortingHeader column={column} title={t("stream.status")} />
         ),
         cell: ({ getValue }) => {
-          const status = getValue() ? "active" : "inactive";
+          const status = getValue()
+            ? t("monitoring.active")
+            : t("monitoring.inactive");
 
           return (
             <div className="flex items-center gap-2">
@@ -130,30 +138,30 @@ function StreamList() {
       columnHelper.accessor("ptz_username", {
         id: "ptz_username",
         header: ({ column }) => (
-          <SortingHeader column={column} title="PTZ username" />
+          <SortingHeader column={column} title={t("stream.ptzUsername")} />
         ),
       }),
       columnHelper.accessor("ptz_password", {
         id: "ptz_password",
-        header: "PTZ Password",
+        header: t("stream.ptzPassword"),
         cell: ({ getValue }) => <PasswordCell value={getValue()} />,
       }),
       columnHelper.accessor("cam_ip", {
         id: "cam_ip",
         header: ({ column }) => (
-          <SortingHeader column={column} title="Cam IP" />
+          <SortingHeader column={column} title={t("stream.camIp")} />
         ),
       }),
       columnHelper.accessor("ptz_port", {
         id: "ptz_port",
         header: ({ column }) => (
-          <SortingHeader column={column} title="PTZ Port" />
+          <SortingHeader column={column} title={t("stream.ptzPort")} />
         ),
       }),
 
       columnHelper.accessor("rtsp_link", {
         id: "rtsp_link",
-        header: "RTSP Link",
+        header: t("stream.rtspLink"),
         cell: ({ getValue }) => (
           <TooltipProvider delayDuration={0}>
             <Tooltip>
@@ -193,7 +201,7 @@ function StreamList() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
+                  <span className="sr-only"></span>
                   <Icons.dotsVerfical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -203,7 +211,7 @@ function StreamList() {
                   disabled={!row.original.is_active}
                 >
                   <Icons.preview className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
-                  View
+                  {t("common.view")}
                 </DropdownMenuItem>
                 <ActivateDialog
                   isActivated={!!row.original.is_active}
@@ -215,7 +223,7 @@ function StreamList() {
                   disabled={!row.original.is_active}
                 >
                   <Icons.hazard className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
-                  Set hazard area
+                  {t("hazardArea.title")}
                 </DropdownMenuItem>
                 <Separator className="my-2" />
                 <StreamForm
@@ -223,11 +231,11 @@ function StreamList() {
                   trigger={
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                       <Icons.edit className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
-                      Edit
+                      {t("common.edit")}
                     </DropdownMenuItem>
                   }
                 />
-                <DeleteDialog id={row.original.$id} stream_id={streamId} />
+                <DeleteDialog stream_id={streamId} />
               </DropdownMenuContent>
             </DropdownMenu>
           );
@@ -242,18 +250,19 @@ function StreamList() {
       {contextHolder}
       <div className="flex justify-between pb-4 items-center">
         <div>
-          <h1 className="text-xl font-semibold">Streams</h1>
+          <h1 className="text-xl font-semibold">{t("stream.title")}</h1>
           <p className="text-sm text-muted-foreground">
-            <span className="text-green-600">{data?.activeCount}</span> active /{" "}
+            <span className="text-green-600">{data?.activeCount}</span>{" "}
+            {t("monitoring.active")} /{" "}
             <span className="text-orange-600">{data?.inactiveCount}</span>{" "}
-            inactive
+            {t("monitoring.inactive")}
           </p>
         </div>
         <StreamForm
           trigger={
             <Button>
               <Icons.plus className="w-5 h-5 mr-2" />
-              New Stream
+              {t("stream.newStream")}
             </Button>
           }
         />
@@ -265,15 +274,18 @@ function StreamList() {
         loading={isFetching}
         filters={[
           {
-            label: "Name",
-            key: "name",
+            label: t("stream.id"),
+            key: t("stream.id").toLowerCase(),
             type: "text",
           },
           {
-            label: "Model",
-            key: "model_name",
+            label: t("stream.model"),
+            key: t("stream.model").toLowerCase(),
             type: "select",
-            options: [{ label: "All", value: undefined }, ...streamModels],
+            options: [
+              { label: t("common.all"), value: undefined },
+              ...streamModels,
+            ],
           },
         ]}
         onRefresh={() => refetch()}

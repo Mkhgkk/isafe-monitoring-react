@@ -73,17 +73,24 @@ export const MainLayout = () => {
     };
   }, []);
 
-  const token = localStorage.getItem("access_token");
-  const refreshToken = localStorage.getItem("refresh_token");
-
-  return token && refreshToken ? (
+  return (
     <>
       {contextHolder}
       <Layout isConnected={isConnected} systemStatus={systemStatus} />
     </>
-  ) : (
-    <Navigate to="/login" />
   );
+
+  // const token = localStorage.getItem("access_token");
+  // const refreshToken = localStorage.getItem("refresh_token");
+
+  // return token && refreshToken ? (
+  //   <>
+  //     {contextHolder}
+  //     <Layout isConnected={isConnected} systemStatus={systemStatus} />
+  //   </>
+  // ) : (
+  //   <Navigate to="/login" />
+  // );
 };
 
 interface LayoutProps {

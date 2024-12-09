@@ -26,6 +26,7 @@ import HazardAreaSetting from "./components/hazard-area-setting";
 import { AlertProvider } from "./context/AlertContext";
 import SettingPage from "./pages/SettingPage";
 import ProfilePage from "./pages/ProfilePage";
+import { LocaleProvider } from "./components/locale-provider";
 
 function App() {
   const queryClient = new QueryClient();
@@ -62,8 +63,10 @@ function App() {
         <AppwriteProvider>
           <QueryClientProvider client={queryClient}>
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-              <RouterProvider router={router} />
-              <Toaster />
+              <LocaleProvider defaultLocale="en" storageKey="isafe-locale">
+                <RouterProvider router={router} />
+                <Toaster />
+              </LocaleProvider>
             </ThemeProvider>
           </QueryClientProvider>
         </AppwriteProvider>

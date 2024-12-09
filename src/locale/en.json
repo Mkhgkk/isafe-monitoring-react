@@ -1,0 +1,57 @@
+{
+  "app": "iSafe Guard",
+  "menu": {
+    "monitoring": "Monitoring",
+    "streams": "Streams",
+    "events": "Saved Event",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+  "connection": {
+    "connected": "Server Connected",
+    "disconnected": "Server Disconnected",
+    "utilization": "System Utilization",
+    "cpu": "CPU",
+    "gpu": "GPU"
+  },
+  "monitoring": {
+    "title": "Monitoring",
+    "active": "active",
+    "inactive": "inactive",
+    "activeStream": "Active Streams",
+    "inactiveStream": "Inactive Streams",
+    "noActiveStream": "No active stream(s).",
+    "noInactiveStream": "No inactive stream(s)."
+  },
+  "stream": {
+    "title": "Streams",
+    "streamId": "Stream ID",
+    "id": "ID",
+    "model": "Model",
+    "location": "Location",
+    "desc": "Description",
+    "status": "Status",
+    "ptzUsername": "PTZ Username",
+    "ptzPassword": "PTZ Password",
+    "camIp": "Cam IP",
+    "ptzPort": "PTZ Port",
+    "rtspLink": "RTSP Link",
+
+    "newStream": "New Stream",
+    "addStream": "Add Stream"
+  },
+  "hazardArea": {
+    "title": "Set hazard area"
+  },
+  "common": {
+    "refresh": "Refresh",
+    "noResult": "No result.",
+    "searchBy": "Search by {{key}}",
+    "all": "All",
+    "view": "View",
+    "edit": "Edit",
+    "rowsPerPage": "Rows per page"
+  }
+}

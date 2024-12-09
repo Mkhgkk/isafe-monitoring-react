@@ -7,9 +7,11 @@ import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Stream } from "@/type";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export default function MainPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["streamService.fetchStreams"],
@@ -35,25 +37,28 @@ export default function MainPage() {
       <div className="pb-4">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-xl font-semibold">Monitoring</h1>
+            <h1 className="text-xl font-semibold">{t("monitoring.title")}</h1>
             <p className="text-sm text-muted-foreground">
               <span className="text-green-600">
                 {data?.activeStreams.length}
               </span>{" "}
-              active / {data?.inactiveStreams.length} inactive
+              {t("monitoring.active")} / {data?.inactiveStreams.length}{" "}
+              {t("monitoring.inactive")}
             </p>
           </div>
           <Button onClick={() => refetch()} variant="outline">
             <Icons.refresh className="mr-2 w-4 h-4 " />
-            Refresh
+            {t("common.refresh")}
           </Button>
         </div>
         <div className="border p-4 rounded-md">
-          <p className="mb-5 font-semibold text-lg">Active stream</p>
+          <p className="mb-5 font-semibold text-lg">
+            {t("monitoring.activeStream")}
+          </p>
           {isFetching && data?.activeStreams.length === 0 && <Skeletons />}
           {!isFetching && !data?.activeStreams?.length && (
             <p className="text-sm dark:text-muted-foreground mb-4 text-center">
-              {"No active stream(s)."}
+              {t("monitoring.noActiveStream")}
             </p>
           )}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -67,7 +72,7 @@ export default function MainPage() {
                   })
                 }
               >
-                <PanelVideo camera={item} streamId={item.stream_id} />
+                <PanelVideo streamId={item.stream_id} />
                 <StreamInfo
                   cameraName={item.stream_id}
                   modelName={item.model_name}
@@ -80,11 +85,13 @@ export default function MainPage() {
         </div>
       </div>
       <div className="border p-4 rounded-md">
-        <p className="mb-5 font-semibold text-lg">Inactive stream</p>
+        <p className="mb-5 font-semibold text-lg">
+          {t("monitoring.inactiveStream")}
+        </p>
         {isFetching && data?.inactiveStreams.length === 0 && <Skeletons />}
         {!isFetching && !data?.inactiveStreams.length && (
           <p className="text-sm dark:text-muted-foreground mb-4 text-center">
-            {"No inactive stream(s)."}
+            {t("monitoring.noInactiveStream")}
           </p>
         )}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">

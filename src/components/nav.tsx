@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface NavProps {
   isCollapsed: boolean;
@@ -22,6 +23,8 @@ interface NavProps {
 }
 
 export function Nav({ links, isCollapsed }: NavProps) {
+  const { t } = useTranslation();
+
   return (
     <div
       data-collapsed={isCollapsed}
@@ -42,11 +45,11 @@ export function Nav({ links, isCollapsed }: NavProps) {
                   )}
                 >
                   <link.icon className="h-4 w-4" />
-                  <span className="sr-only">{link.title}</span>
+                  <span className="sr-only">{t(link.title)}</span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right" className="flex items-center gap-4">
-                {link.title}
+                {t(link.title)}
                 {link.label && (
                   <span className="ml-auto text-muted-foreground">
                     {link.label}
@@ -66,7 +69,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
               )}
             >
               <link.icon className="mr-2 h-4 w-4" />
-              {link.title}
+              {t(link.title)}
               {link.label && (
                 <span
                   className={cn(

@@ -10,7 +10,7 @@ interface PanelVideoProps {
   onClick?: () => void;
 }
 
-const PanelVideo = forwardRef(({ streamId }: PanelVideoProps, ref) => {
+const PanelVideo = forwardRef(({ streamId }: PanelVideoProps) => {
   const ALERT_EVENT = `alert-${streamId}`;
 
   const [intrustion, setIntrustion] = useState(false);

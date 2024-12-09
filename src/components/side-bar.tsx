@@ -23,6 +23,7 @@ import ConnectionInfo from "./connection-info";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { authService } from "@/api";
 import NotificationPanel from "./notification-panel";
+import { useTranslation } from "react-i18next";
 
 type SideBarProps = {
   isCollapsed: boolean;
@@ -32,7 +33,7 @@ type SideBarProps = {
 
 const links = [
   {
-    title: "Monitoring",
+    title: "menu.monitoring",
     icon: LayoutDashboard,
     href: "/cameras",
   },
@@ -42,17 +43,17 @@ const links = [
   //   href: "/schedules",
   // },
   {
-    title: "Streams",
+    title: "menu.streams",
     icon: Cctv,
     href: "/streams",
   },
   {
-    title: "Saved Events",
+    title: "menu.events",
     icon: TvMinimalPlay,
     href: "/events",
   },
   {
-    title: "Settings",
+    title: "menu.settings",
     icon: Settings,
     href: "/settings",
   },
@@ -61,6 +62,7 @@ const links = [
 function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: user } = useQuery({
     queryKey: ["authService.getMe"],
     queryFn: authService.getMe,
@@ -102,7 +104,7 @@ function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
               isCollapsed && "hidden"
             )}
           >
-            iSafe Guard
+            {t("app")}
           </Label>
         </div>
         <Separator />
@@ -166,7 +168,9 @@ function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
                 <Icons.bell className="h-4 w-4" />
                 <div className="w-2 h-2 bg-red-500 absolute rounded-full -top-1 right-0" />
               </div>
-              <span className={cn(isCollapsed && "hidden")}>Notifications</span>
+              <span className={cn(isCollapsed && "hidden")}>
+                {t("menu.notifications")}
+              </span>
             </Button>
           }
         />
@@ -194,11 +198,11 @@ function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
           <DropdownMenuContent side="right">
             <DropdownMenuItem onSelect={() => navigate("/profile")}>
               <Icons.user className="w-4 h-4 mr-2" />
-              Profile
+              {t("menu.profile")}
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={handleLogout}>
               <Icons.logout className="w-4 h-4 mr-2" />
-              Logout
+              {t("menu.logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

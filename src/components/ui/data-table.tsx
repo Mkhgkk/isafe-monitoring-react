@@ -36,6 +36,7 @@ import {
 } from "@radix-ui/react-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { useTranslation } from "react-i18next";
 
 type Filter = {
   label: string;
@@ -53,6 +54,7 @@ type DataTableProps<TData, TValue> = {
 };
 
 function TableFilters({ filters, table }) {
+  const { t } = useTranslation();
   return filters?.map((filter: Filter) => {
     const filterValue =
       (table.getColumn(filter.key)?.getFilterValue() as string) ?? "";
@@ -88,7 +90,7 @@ function TableFilters({ filters, table }) {
         return (
           <Input
             key={filter.key}
-            placeholder={`Search by ${filter.label}`}
+            placeholder={t("common.searchBy", { key: filter.label })}
             value={filterValue}
             onChange={(event) => setFilterValue(event.target.value)}
             className={cn("lg:w-[200px]", {
@@ -110,6 +112,7 @@ export function DataTable<TData, TValue>({
   onRefresh,
   loading,
 }: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -157,7 +160,7 @@ export function DataTable<TData, TValue>({
                 loading ? "animate-spin" : ""
               }`}
             />
-            <span className="lg:block hidden">Refresh</span>
+            <span className="lg:block hidden">{t("common.refresh")}</span>
           </Button>
         )}
       </div>
@@ -208,7 +211,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("common.noResult")}
                 </TableCell>
               </TableRow>
             )}
@@ -229,10 +232,12 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center space-x-2">
-        <p className="text-sm font-medium">Rows per page</p>
+        <p className="text-sm font-medium">{t("common.rowsPerPage")}</p>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
@@ -259,7 +264,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
-          <span className="sr-only">Go to first page</span>
+          <span className="sr-only"></span>
           <DoubleArrowLeftIcon className="h-4 w-4" />
         </Button>
         <Button
@@ -268,7 +273,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          <span className="sr-only">Go to previous page</span>
+          <span className="sr-only"></span>
           <ChevronLeftIcon className="h-4 w-4" />
         </Button>
         <Button
@@ -277,7 +282,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          <span className="sr-only">Go to next page</span>
+          <span className="sr-only"></span>
           <ChevronRightIcon className="h-4 w-4" />
         </Button>
         <Button
@@ -286,7 +291,7 @@ export function DataTablePagination<TData>({
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >
-          <span className="sr-only">Go to last page</span>
+          <span className="sr-only"></span>
           <DoubleArrowRightIcon className="h-4 w-4" />
         </Button>
       </div>

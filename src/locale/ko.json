@@ -1,0 +1,56 @@
+{
+  "app": "iSafe Guard",
+  "menu": {
+    "monitoring": "모니터링",
+    "streams": "스트림",
+    "events": "저장된 이벤트",
+    "settings": "설정",
+    "notifications": "알림",
+    "logout": "로그아웃",
+    "profile": "프로필"
+  },
+  "connection": {
+    "connected": "서버에 연결되었습니다",
+    "disconnected": "서버 연결이 끊어졌습니다",
+    "utilization": "시스템 사용 현황",
+    "cpu": "CPU",
+    "gpu": "GPU"
+  },
+  "monitoring": {
+    "title": "모니터링",
+    "active": "활성",
+    "inactive": "비활성",
+    "activeStream": "활성 스트림",
+    "inactiveStream": "비활성 스트림",
+    "noActiveStream": "활성 스트림이 없습니다.",
+    "noInactiveStream": "비활성 스트림이 없습니다."
+  },
+  "stream": {
+    "title": "스트림",
+    "streamId": "스트림 ID",
+    "id": "ID",
+    "model": "모델",
+    "location": "위치",
+    "desc": "설명",
+    "status": "상태",
+    "ptzUsername": "PTZ 사용자 이름",
+    "ptzPassword": "PTZ 비밀번호",
+    "camIp": "카메라 IP",
+    "ptzPort": "PTZ 포트",
+    "rtspLink": "RTSP 링크",
+    "newStream": "새 스트림 추가",
+    "addStream": "스트림 추가"
+  },
+  "hazardArea": {
+    "title": "위험 구역 설정"
+  },
+  "common": {
+    "refresh": "새로고침",
+    "noResult": "결과가 없습니다.",
+    "searchBy": "{{key}}로 검색하기",
+    "all": "전체",
+    "view": "보기",
+    "edit": "편집",
+    "rowsPerPage": "페이지당 표시할 행 수"
+  }
+}
