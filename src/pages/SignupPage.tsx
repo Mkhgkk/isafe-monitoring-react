@@ -16,7 +16,9 @@ import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 
+//TODO: validation localization
 const signUpSchema = z
   .object({
     username: z.string().min(3, "Username must be at least 3 characters"),
@@ -37,6 +39,7 @@ const signUpSchema = z
 export type SignupFormData = z.infer<typeof signUpSchema>;
 
 function SignupPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     control,
@@ -58,7 +61,6 @@ function SignupPage() {
       toast({
         variant: "default",
         title: "Signup Successful",
-        description: "You can now login into your account!",
       });
       navigate("/login");
     },
@@ -68,7 +70,6 @@ function SignupPage() {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
       });
     },
   });
@@ -85,10 +86,8 @@ function SignupPage() {
       <Card className="min-w-[500px]">
         <CardHeader className="space-y-1">
           <img src={logo} width={30} height={30} className="mb-2" />
-          <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>
-            Enter your email below to create your account
-          </CardDescription>
+          <CardTitle className="text-2xl">{t("signUp.title")}</CardTitle>
+          <CardDescription>{t("signUp.desc")}</CardDescription>
         </CardHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -96,42 +95,42 @@ function SignupPage() {
             <FormField
               control={control}
               id="username"
-              label="Username"
+              label={t("profile.username")}
               error={errors.username?.message as string}
-              placeholder="John Doe"
+              placeholder={t("profile.username")}
             />
             <FormField
               control={control}
               id="email"
-              label="Email"
+              label={t("profile.email")}
               error={errors.email?.message as string}
-              placeholder="m@example.com"
+              placeholder="email@example.com"
             />
             <FormField
               control={control}
               id="password"
-              label="Password"
+              label={t("profile.password")}
               type="password"
               error={errors.password?.message as string}
             />
             <FormField
               control={control}
               id="passwordConfirm"
-              label="Password Confirmation"
+              label={t("profile.confirmPassword")}
               type="password"
               error={errors.passwordConfirm?.message as string}
             />
 
             <div>
               <Button loading={isPending} className="w-full mt-4">
-                Create account
+                {t("signUp.button")}
               </Button>
               <Button
                 className="w-full"
                 variant="link"
                 onClick={() => navigate("/login")}
               >
-                Or login
+                {t("signUp.orLogin")}
               </Button>
             </div>
           </CardContent>

@@ -15,15 +15,18 @@ import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/api";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  //TODO: validation localization
+  password: z.string().min(8, "login.alert.passwordLength"),
 });
 
 export type LoginFormData = z.infer<typeof loginFormSchema>;
 
 function LoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     control,
@@ -46,8 +49,9 @@ function LoginPage() {
       localStorage.setItem("refresh_token", data.refresh_token);
       navigate("/");
     },
-    onError: (err) => {
-      setError("Invalid credentials. Please try again.");
+    onError: () => {
+      //TODO: handle with code
+      setError(t("login.alert.error"));
     },
   });
 
@@ -61,24 +65,22 @@ function LoginPage() {
       <Card className="min-w-[400px] max-w-[400px]">
         <CardHeader className="space-y-1">
           <img src={logo} width={30} height={30} className="mb-2" />
-          <CardTitle className="text-2xl">Welcome to iSafe-guard</CardTitle>
-          <CardDescription>
-            Enter your email below to login your account
-          </CardDescription>
+          <CardTitle className="text-2xl">{t("login.title")}</CardTitle>
+          <CardDescription>{t("login.desc")}</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="grid gap-4">
             <FormField
               control={control}
               id="email"
-              label="Email"
+              label={t("profile.email")}
               error={errors.email?.message as string}
-              placeholder="m@example.com"
+              placeholder="email@example.com"
             />
             <FormField
               control={control}
               id="password"
-              label="Password"
+              label={t("profile.password")}
               type="password"
               error={errors.password?.message as string}
             />
@@ -88,14 +90,14 @@ function LoginPage() {
                 <p className="text-sm text-center text-destructive">{error}</p>
               )}
               <Button className="w-full mt-4" type="submit" loading={isPending}>
-                Login
+                {t("login.button")}
               </Button>
               <Button
                 className="w-full"
                 variant="link"
                 onClick={() => navigate("/sign-up")}
               >
-                Or Create account
+                {t("login.orCreate")}
               </Button>
             </div>
           </CardContent>

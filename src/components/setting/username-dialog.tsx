@@ -18,6 +18,7 @@ import FormField from "../form/FormField";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 
 const usernameFormSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -31,6 +32,7 @@ export default function UsernameDialog({
   trigger: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -98,9 +100,9 @@ export default function UsernameDialog({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update username</DialogTitle>
+          <DialogTitle>{t("profile.usernameUpdate")}</DialogTitle>
           <DialogDescription className="mt-4">
-            Enter new username
+            {t("profile.usernameUpdateDesc")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -108,7 +110,7 @@ export default function UsernameDialog({
             control={control}
             id="username"
             error={errors.username?.message as string}
-            placeholder="John Doe"
+            placeholder={t("profile.username")}
           />
         </form>
         <DialogFooter>
@@ -116,7 +118,7 @@ export default function UsernameDialog({
             type="submit"
             // loading={isPending || isStopping}
           >
-            Save
+            {t("common.save")}
           </Button>
         </DialogFooter>
       </DialogContent>

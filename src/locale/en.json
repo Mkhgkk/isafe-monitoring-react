@@ -23,9 +23,16 @@
     "activeStream": "Active Streams",
     "inactiveStream": "Inactive Streams",
     "noActiveStream": "No active stream(s).",
-    "noInactiveStream": "No inactive stream(s)."
+    "noInactiveStream": "No inactive stream(s).",
+
+    "savingVideo": "Saving Video",
+    "intrusion": "Intrusion",
+    "inspect": "Inspect",
+    "alert": "Alert",
+    "watchNotification": "Watch Notification"
   },
   "stream": {
+    "name": "Stream",
     "title": "Streams",
     "streamId": "Stream ID",
     "id": "ID",
@@ -40,10 +47,100 @@
     "rtspLink": "RTSP Link",
 
     "newStream": "New Stream",
-    "addStream": "Add Stream"
+    "addStream": "Add Stream",
+    "editStream": "Edit Stream",
+
+    "alert": {
+      "newSuccess": "New stream has been created successfully.",
+      "newError": "Failed to create new stream",
+      "updateSuccess": "Stream has been updated successfully.",
+      "updateError": "Failed to update stream",
+      "deleteSuccess": "Stream has been deleted successfully.",
+      "deleteError": "Failed to delete stream",
+      "deleteConfirm": "Are you sure you want to delete {{streamId}}? This action will permanently delete all events from this stream and cannot be undone."
+    }
+  },
+
+  "activateStream": {
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "activateStream": "Activate Stream",
+    "deactivateStream": "Deactivate Stream",
+    "alert": {
+      "confirmActivate": "Activate {{streamId}}?",
+      "confirmDeactivate": "Deactivate {{streamId}}?",
+      "successActivate": "Stream has been activated successfully.",
+      "successDeactivate": "Stream has been deactivated successfully.",
+      "errorActivate": "Failed to activate stream",
+      "errorDeactivate": "Failed to deactivate stream"
+    }
   },
   "hazardArea": {
-    "title": "Set hazard area"
+    "title": "Set hazard area",
+    "save": "Save hazard area",
+    "capture": "Capture",
+
+    "alert": {
+      "success": "Hazard area has been set successfully.",
+      "error": "Failed to set hazard area."
+    }
+  },
+  "event": {
+    "title": "Events",
+    "noResult": "No events found.",
+    "accuredAt": "Accured at {{time}}",
+    "relatedEvent": "Related Event",
+    "noRelated": "No related event."
+  },
+  "setting": {
+    "title": "Settings",
+    "apprerance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "language": "Language"
+    },
+    "storage": {
+      "title": "Storage",
+      "serverPc": "Server PC",
+      "usage": "{{used}} GB of {{total}} GB used",
+      "video": "Video",
+      "image": "Image",
+      "etc": "Etc",
+      "available": "Available",
+      "eventRetention": "Event Retention"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "password": "Password",
+    "username": "Username",
+    "usernameUpdate": "Update Username",
+    "usernameUpdateDesc": "Enter new username",
+    "passwordUpdate": "Update Password",
+    "passwordUpdateDesc": "Reset password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password"
+  },
+  "login": {
+    "title": "Welcome to iSafe-guard",
+    "desc": "Enter your email below to login your account",
+    "button": "Login",
+    "orCreate": "Or create account",
+    "alert": {
+      "error": "Invalid email or password"
+    }
+  },
+  "signUp": {
+    "title": "Create an account",
+    "desc": "Enter your email below to create your account",
+    "button": "Create Account",
+    "orLogin": "Or login",
+    "alert": {
+      "success": "Account has been created successfully.",
+      "error": "Failed to create account."
+    }
   },
   "common": {
     "refresh": "Refresh",
@@ -52,6 +149,27 @@
     "all": "All",
     "view": "View",
     "edit": "Edit",
-    "rowsPerPage": "Rows per page"
+    "rowsPerPage": "Rows per page",
+    "saveChanges": "Save Changes",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "clear": "Clear",
+    "setRange": "Set Range",
+    "dateRange": "Date Range",
+    "config": "Config",
+    "detail": "Detail",
+    "reset": "Reset",
+    "loading": "Loading...",
+    "save": "Save",
+    "selectPlaceholder": "Select {{key}}",
+    "unit": {
+      "day_one": "{{count}} day",
+      "day_other": "{{count}} days"
+    },
+    "error": {
+      "server": "Server error"
+    },
+    "connecting": "Connecting...",
+    "connected": "Connected!"
   }
 }

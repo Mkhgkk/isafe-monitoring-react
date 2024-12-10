@@ -14,9 +14,11 @@ import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { streamService } from "@/api";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const DeleteDialog = ({ stream_id }: { stream_id: string }) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const handleOpen = (value: boolean) => {
@@ -31,14 +33,14 @@ const DeleteDialog = ({ stream_id }: { stream_id: string }) => {
       });
       setOpen(false);
       toast({
-        description: "Stream has been deleted successfully",
+        description: t("stream.alert.deleteSuccess"),
         variant: "success",
       });
     },
     onError: (err) => {
       console.log("Error deleting stream: ", err);
       toast({
-        description: "Failed to delete stream",
+        description: t("stream.alert.deleteError"),
         variant: "destructive",
       });
     },
@@ -55,15 +57,15 @@ const DeleteDialog = ({ stream_id }: { stream_id: string }) => {
           className="text-destructive focus:text-destructive dark:text-red-500"
         >
           <Icons.delete className="w-4 h-4 text-destructive mr-2 dark:text-red-500" />
-          Delete
+          {t("common.delete")}
         </DropdownMenuItem>
       </DialogTrigger>
       <DialogContent className="sm:max-w-xs">
         <DialogHeader>
-          <DialogTitle>Confirm</DialogTitle>
+          <DialogTitle>{t("common.confirm")}</DialogTitle>
         </DialogHeader>
         <DialogDescription>
-          {`Are you sure you want to delete ${stream_id}?`}
+          {t("stream.alert.deleteConfirm", { streamId: stream_id })}
         </DialogDescription>
         <DialogFooter>
           <Button
@@ -71,7 +73,7 @@ const DeleteDialog = ({ stream_id }: { stream_id: string }) => {
             onClick={handleDelete}
             loading={isPending}
           >
-            Delete
+            {t("common.delete")}
           </Button>
         </DialogFooter>
       </DialogContent>

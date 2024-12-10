@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { streamService } from "@/api";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ActivateDialog({
   isActivated,
@@ -23,6 +24,7 @@ export default function ActivateDialog({
   streamId: string;
 }) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const { mutate: startStream, isPending } = useMutation({
@@ -38,12 +40,16 @@ export default function ActivateDialog({
       setOpen(false);
 
       toast({
-        description: "Stream has been started successfully",
+        description: t("activateStream.alert.successActivate"),
         variant: "success",
       });
     },
     onError: (err) => {
       console.error(err);
+      toast({
+        description: t("activateStream.alert.errorActivate"),
+        variant: "destructive",
+      });
     },
   });
 
@@ -60,12 +66,16 @@ export default function ActivateDialog({
       setOpen(false);
 
       toast({
-        description: "Stream has been stopped successfully",
+        description: t("activateStream.alert.successDeactivate"),
         variant: "success",
       });
     },
     onError: (err) => {
       console.error(err);
+      toast({
+        description: t("activateStream.alert.errorDeactivate"),
+        variant: "destructive",
+      });
     },
   });
 
@@ -80,16 +90,22 @@ export default function ActivateDialog({
       <DialogTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <Icons.power className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
-          {isActivated ? "Deactivate" : "Activate"}
+          {isActivated
+            ? t("activateStream.deactivate")
+            : t("activateStream.activate")}
         </DropdownMenuItem>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {isActivated ? "Deactivate" : "Activate"} stream
+            {isActivated
+              ? t("activateStream.deactivateStream")
+              : t("activateStream.activateStream")}
           </DialogTitle>
           <DialogDescription className="mt-4">
-            {isActivated ? "Deactivate" : "Activate"} {streamId}?
+            {isActivated
+              ? t("activateStream.alert.confirmDeactivate", { streamId })
+              : t("activateStream.alert.confirmActivate", { streamId })}
           </DialogDescription>
         </DialogHeader>
 
@@ -99,7 +115,9 @@ export default function ActivateDialog({
             onClick={onClick}
             loading={isPending || isStopping}
           >
-            {isActivated ? "Deactivate" : "Activate"}
+            {isActivated
+              ? t("activateStream.deactivate")
+              : t("activateStream.activate")}
           </Button>
         </DialogFooter>
       </DialogContent>

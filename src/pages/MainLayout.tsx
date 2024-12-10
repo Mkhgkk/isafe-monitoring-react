@@ -14,8 +14,10 @@ import { ImperativePanelHandle } from "react-resizable-panels";
 import SideBar from "@/components/side-bar";
 import { message } from "antd";
 import socket from "@/services/socketService";
+import { useTranslation } from "react-i18next";
 
 export const MainLayout = () => {
+  const { t } = useTranslation();
   const { setIsConnected: setIsConnectedContext } = useConnectionContext();
   const [messageApi, contextHolder] = message.useMessage();
   const [systemStatus, setSystemStatus] = useState({ cpu: 0.0, gpu: 0.0 });
@@ -26,7 +28,7 @@ export const MainLayout = () => {
       messageApi.open({
         key: "updatable",
         type: "loading",
-        content: "Connecting...",
+        content: t("common.connecting"),
         duration: 0,
       });
     }
@@ -35,7 +37,7 @@ export const MainLayout = () => {
       messageApi.open({
         key: "updatable",
         type: "success",
-        content: "Connected!",
+        content: t("common.connected"),
         duration: 2,
       });
     }
@@ -46,7 +48,7 @@ export const MainLayout = () => {
     messageApi.open({
       key: "updatable",
       type: "loading",
-      content: "Connecting...",
+      content: t("common.connecting"),
       duration: 0,
     });
 
@@ -73,24 +75,17 @@ export const MainLayout = () => {
     };
   }, []);
 
-  return (
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
+
+  return token && refreshToken ? (
     <>
       {contextHolder}
       <Layout isConnected={isConnected} systemStatus={systemStatus} />
     </>
+  ) : (
+    <Navigate to="/login" />
   );
-
-  // const token = localStorage.getItem("access_token");
-  // const refreshToken = localStorage.getItem("refresh_token");
-
-  // return token && refreshToken ? (
-  //   <>
-  //     {contextHolder}
-  //     <Layout isConnected={isConnected} systemStatus={systemStatus} />
-  //   </>
-  // ) : (
-  //   <Navigate to="/login" />
-  // );
 };
 
 interface LayoutProps {

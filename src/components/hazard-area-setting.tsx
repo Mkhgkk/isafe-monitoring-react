@@ -10,8 +10,10 @@ import { configService } from "@/api";
 import { toast } from "@/hooks/use-toast";
 import config from "@/config/default.config";
 import SafeAreaCanvas from "./safearea-canvas";
+import { useTranslation } from "react-i18next";
 
 function HazardAreaSetting() {
+  const { t } = useTranslation();
   const { streamId } = useParams();
   const navigate = useNavigate();
   const canvasRef = useRef(null);
@@ -23,9 +25,9 @@ function HazardAreaSetting() {
     onSuccess: ({ data }) => {
       setUrl(`http://${config.BACKEND_URL}/static/frame_refs/${data}`);
     },
-    onError: (err) => {
+    onError: () => {
       toast({
-        description: "Failed to connect to server",
+        description: t("common.error.server"),
         variant: "destructive",
       });
     },
@@ -35,22 +37,22 @@ function HazardAreaSetting() {
     mutationFn: configService.setDangerZone,
     onSuccess: () => {
       toast({
-        description: "Hazard area has been set successfully",
+        description: t("hazardArea.alert.success"),
         variant: "success",
       });
       setUrl(undefined);
     },
 
-    onError: (err) => {
+    onError: () => {
       toast({
-        description: "Failed to set hazard area",
+        description: t("hazardArea.alert.error"),
         variant: "destructive",
       });
     },
   });
 
   if (!streamId) {
-    return <div>Stream ID not found</div>;
+    return null;
   }
 
   const handleGetAreaPosition = () => {
@@ -80,17 +82,19 @@ function HazardAreaSetting() {
               onClick={() => navigate(-1)}
               className="cursor-pointer"
             />
-            <h1 className="text-xl font-semibold">Setting Hazard Area</h1>
+            <h1 className="text-xl font-semibold">{t("hazardArea.title")}</h1>
           </div>
-          <p className="text-sm text-muted-foreground">Stream ID: {streamId}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("stream.streamId")}: {streamId}
+          </p>
         </div>
         {url && (
           <div className="flex gap-3">
             <Button variant="secondary" onClick={() => setUrl(undefined)}>
-              Reset
+              {t("common.reset")}
             </Button>
             <Button onClick={handleGetAreaPosition} loading={isSaving}>
-              Save Hazard area
+              {t("hazardArea.save")}
             </Button>
           </div>
         )}
@@ -106,7 +110,9 @@ function HazardAreaSetting() {
             <div />
             <PTZControl streamId={streamId} />
             <div className="flex justify-end items-end px-5">
-              <Button onClick={() => getTargetImage(streamId)}>Capture</Button>
+              <Button onClick={() => getTargetImage(streamId)}>
+                {t("hazardArea.capture")}
+              </Button>
             </div>
           </div>
           {isPending && (
@@ -114,7 +120,7 @@ function HazardAreaSetting() {
               <div className="flex justify-center items-center h-full">
                 <div className="flex items-center">
                   <Icons.loading className="animate-spin mr-2 w-4 h-4" />
-                  <p className="text-white">Loading...</p>
+                  <p className="text-white">{t("common.loading")}</p>
                 </div>
               </div>
             </div>

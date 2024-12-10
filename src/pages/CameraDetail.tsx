@@ -18,8 +18,10 @@ import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import Contents from "@/components/contents";
 import { Switch } from "@/components/ui/switch";
+import { useTranslation } from "react-i18next";
 
 function CameraDetail() {
+  const { t } = useTranslation();
   const { streamId } = useParams();
   const navigate = useNavigate();
 
@@ -40,7 +42,9 @@ function CameraDetail() {
                   onClick={() => navigate(-1)}
                   className="cursor-pointer"
                 />
-                <h1 className="text-xl font-semibold">Monitoring</h1>
+                <h1 className="text-xl font-semibold">
+                  {t("monitoring.title")}
+                </h1>
               </div>
               <div className="flex items-center mb-3">
                 <span
@@ -59,7 +63,7 @@ function CameraDetail() {
               <DropdownMenuTrigger asChild>
                 <Button size="sm" variant="outline">
                   <Icons.settings className="w-4 h-4 mr-2" />
-                  Config
+                  {t("common.config")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -73,7 +77,7 @@ function CameraDetail() {
                   disabled={!stream?.is_active}
                 >
                   <Icons.hazard className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
-                  Set hazard area
+                  {t("hazardArea.title")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -106,23 +110,38 @@ function CameraDetail() {
 
         <div className="col-span-12 lg:col-span-3">
           <div className="grid gap-4">
-            <p className="text-xl font-semibold ">Detail</p>
+            <p className="text-xl font-semibold ">{t("common.detail")}</p>
             <div className="grid gap-3 bg-slate-100 dark:bg-slate-900 bg-opacity-75 p-3 rounded-md border">
-              <Contents field={"Stream ID"} value={stream?.stream_id ?? "-"} />
-              <Contents field={"Model"} value={stream?.model_name ?? "-"} />
-              <Contents field={"Location"} value={stream?.location ?? "-"} />
               <Contents
-                field={"Description"}
+                field={t("stream.streamId")}
+                value={stream?.stream_id ?? "-"}
+              />
+              <Contents
+                field={t("stream.model")}
+                value={stream?.model_name ?? "-"}
+              />
+              <Contents
+                field={t("stream.location")}
+                value={stream?.location ?? "-"}
+              />
+              <Contents
+                field={t("stream.desc")}
                 value={stream?.description ?? "-"}
               />
             </div>
 
             <div className="grid gap-3 bg-slate-100 dark:bg-slate-900 bg-opacity-75 p-3 rounded-md border">
-              <Contents field={"Saving Video"} value={<Switch />} />
-              <Contents field={"Intrusion"} value={<Switch />} />
-              <Contents field={"Inspect"} value={<Switch />} />
-              <Contents field={"Alert"} value={<Switch />} />
-              <Contents field={"Watch notification"} value={<Switch />} />
+              <Contents
+                field={t("monitoring.savingVideo")}
+                value={<Switch />}
+              />
+              <Contents field={t("monitoring.intrusion")} value={<Switch />} />
+              <Contents field={t("monitoring.inspect")} value={<Switch />} />
+              <Contents field={t("monitoring.alert")} value={<Switch />} />
+              <Contents
+                field={t("monitoring.watchNotification")}
+                value={<Switch />}
+              />
             </div>
           </div>
         </div>

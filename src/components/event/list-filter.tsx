@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from "react";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -13,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { streamService } from "@/api";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export type EventFilters = {
   stream?: string;
@@ -27,6 +27,7 @@ type ListFilterProps = {
 };
 
 function ListFilter({ filters, setFilters }: ListFilterProps) {
+  const { t } = useTranslation();
   const { data: streams } = useQuery({
     queryKey: ["streamService.fetchStreams"],
     queryFn: streamService.fetchStreams,
@@ -56,11 +57,11 @@ function ListFilter({ filters, setFilters }: ListFilterProps) {
         >
           <div className="flex flex-1 items-center gap-3">
             <Icons.cctv className="h-4 w-4 opacity-70" />
-            <SelectValue placeholder="Camera" />
+            <SelectValue placeholder={t("stream.name")} />
           </div>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem>All</SelectItem>
+          <SelectItem>{t("common.all")}</SelectItem>
           {streams?.map((stream) => (
             <SelectItem key={stream.value} value={stream.value}>
               {stream.label}
@@ -69,31 +70,6 @@ function ListFilter({ filters, setFilters }: ListFilterProps) {
         </SelectContent>
       </Select>
 
-      {/* <Select
-        onValueChange={(value) =>
-          setFilters({ ...filters, type: value === "all" ? undefined : value })
-        }
-        value={filters.type}
-      >
-        <SelectTrigger
-          className={cn("w-[250px] lg:w-[140px]", {
-            "border border-primary": filters.type,
-          })}
-        >
-          <div className="flex flex-1 items-center gap-3">
-            <Icons.alert className="h-4 w-4 opacity-70" />
-
-            <SelectValue placeholder="Type" />
-          </div>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="1">Security</SelectItem>
-            <SelectItem value="2">Something</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select> */}
       <DatePickerWithRange
         range={filters.dateRange}
         setRange={(dateRange) => setFilters({ ...filters, dateRange })}

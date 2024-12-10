@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import i18n from "@/locale/i18n";
 
+import moment from "moment";
+
 type Locale = "en" | "ko";
 
 type LocaleProviderProps = {
@@ -33,6 +35,8 @@ export function LocaleProvider({
 
   useEffect(() => {
     i18n.changeLanguage(locale);
+    //TODO: why not working?
+    moment().locale(locale);
   }, [locale]);
 
   const value = {

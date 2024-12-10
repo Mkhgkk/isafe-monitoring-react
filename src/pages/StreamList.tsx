@@ -191,8 +191,8 @@ function StreamList() {
         ),
       }),
 
-      columnHelper.accessor("", {
-        id: "id",
+      columnHelper.accessor("stream_id", {
+        id: "action",
         header: "",
 
         cell: ({ row }) => {
@@ -275,12 +275,12 @@ function StreamList() {
         filters={[
           {
             label: t("stream.id"),
-            key: t("stream.id").toLowerCase(),
+            key: "stream_id",
             type: "text",
           },
           {
             label: t("stream.model"),
-            key: t("stream.model").toLowerCase(),
+            key: "model_name",
             type: "select",
             options: [
               { label: t("common.all"), value: undefined },

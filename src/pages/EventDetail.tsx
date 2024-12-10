@@ -10,8 +10,10 @@ import { format } from "date-fns";
 import { getDateFromUnixTimestamp } from "@/utils";
 import EventCard, { EventCardSkeleton } from "@/components/event-card";
 import { Event } from "@/type";
+import { useTranslation } from "react-i18next";
 
 function EventDetail() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { eventId } = useParams();
 
@@ -62,8 +64,9 @@ function EventDetail() {
 
         {data?.timestamp && (
           <p className="text-sm text-muted-foreground mt-1">
-            Accured at{" "}
-            {format(getDateFromUnixTimestamp(data.timestamp), "PPpp")}
+            {t("event.accuredAt", {
+              time: format(getDateFromUnixTimestamp(data.timestamp), "PPpp"),
+            })}
           </p>
         )}
       </div>
@@ -85,9 +88,11 @@ function EventDetail() {
       )}
       <Separator />
       <div className="mt-4">
-        <h1 className="text-xl font-semibold mb-4">Related events</h1>
+        <h1 className="text-xl font-semibold mb-4">
+          {t("event.relatedEvent")}
+        </h1>
         {relatedEvents?.data?.length === 0 && !isFetchingRelated && (
-          <p className="text-center">No related event.</p>
+          <p className="text-center">{t("event.noRelated")}</p>
         )}
         <div className="flex flex-wrap gap-2">
           {isFetchingRelated &&

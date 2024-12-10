@@ -9,6 +9,7 @@ import {
   SelectGroup,
   SelectItem,
 } from "../ui/select";
+import { useTranslation } from "react-i18next";
 
 const SelectField = <TFormData extends Record<string, any>>({
   id,
@@ -26,35 +27,41 @@ const SelectField = <TFormData extends Record<string, any>>({
   error?: string;
   requiredMark?: boolean;
   className?: string;
-}) => (
-  <div className={cn("grid gap-1", className)}>
-    <Label className="text-xs">
-      {label}
-      {requiredMark && <span className="text-destructive"> *</span>}
-    </Label>
+}) => {
+  const { t } = useTranslation();
 
-    <Controller
-      name={id}
-      control={control}
-      render={({ field }) => (
-        <Select onValueChange={field.onChange} {...field}>
-          <SelectTrigger>
-            <SelectValue placeholder={`Select ${label}`} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {options.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      )}
-    />
-    {error && <span className="text-red-500 text-xs">{error}</span>}
-  </div>
-);
+  return (
+    <div className={cn("grid gap-1", className)}>
+      <Label className="text-xs">
+        {label}
+        {requiredMark && <span className="text-destructive"> *</span>}
+      </Label>
+
+      <Controller
+        name={id}
+        control={control}
+        render={({ field }) => (
+          <Select onValueChange={field.onChange} {...field}>
+            <SelectTrigger>
+              <SelectValue
+                placeholder={t("common.selectPlaceholder", { key: label })}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
+      />
+      {error && <span className="text-red-500 text-xs">{error}</span>}
+    </div>
+  );
+};
 
 export default SelectField;

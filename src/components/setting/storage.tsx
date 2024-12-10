@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Tooltip,
   TooltipContent,
@@ -12,12 +13,16 @@ type Props = {
 };
 
 function Storage({ items, total }: Props) {
+  const { t } = useTranslation();
   return (
     <div className="py-3 px-4 grid gap-2">
       <div className="flex justify-between items-center mb-1">
-        <p className="text-sm">Server PC</p>
+        <p className="text-sm">{t("setting.storage.serverPc")}</p>
         <p className="text-sm text-muted-foreground">
-          43.53 GB of {total} GB used
+          {t("setting.storage.usage", {
+            used: 43.53,
+            total,
+          })}
         </p>
       </div>
       <div className="flex gap-0.5 h-10 dark:bg-slate-800 bg-slate-200 rounded overflow-hidden">
@@ -48,7 +53,7 @@ function Storage({ items, total }: Props) {
                 <div className={cn("w-full h-full")} />
               </TooltipTrigger>
               <TooltipContent>
-                <p>Available : something GB</p>
+                <p>{t("setting.storage.available")} : something GB</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -56,7 +61,7 @@ function Storage({ items, total }: Props) {
       </div>
       <div className="flex gap-5 items-center">
         {items.map((item) => (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" key={item.name}>
             <span className={cn("w-3 h-3 rounded-full", item.color)} />
             <p className="text-sm text-muted-foreground">{item.name}</p>
           </div>

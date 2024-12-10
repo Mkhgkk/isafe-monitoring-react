@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Input } from "./input";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   range?: DateRange;
@@ -30,6 +30,7 @@ export function DatePickerWithRange({
   inputClassName,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & Props) {
+  const { t } = useTranslation();
   const [date, setDate] = useState<DateRange | undefined>(range);
   const [open, setOpen] = useState(false);
 
@@ -73,7 +74,7 @@ export function DatePickerWithRange({
                 format(range.from, "LLL dd, y")
               )
             ) : (
-              <span>Date range</span>
+              <span>{t("common.dateRange")}</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -91,10 +92,10 @@ export function DatePickerWithRange({
 
           <div className="p-3 pt-1 justify-between flex">
             <Button size={"sm"} variant="outline" onClick={clearRange}>
-              Clear
+              {t("common.reset")}
             </Button>
             <Button size={"sm"} onClick={handleDateSelect}>
-              Set range
+              {t("common.setRange")}
             </Button>
           </div>
         </PopoverContent>

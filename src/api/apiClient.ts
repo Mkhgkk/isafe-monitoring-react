@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from "axios";
 import config from "../config/default.config";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const apiClient = axios.create({
   baseURL: `http://${config.BACKEND_URL}`,
@@ -28,6 +29,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
+    const { t } = useTranslation();
     const authorizationError = error.response && error.response.status === 401;
     const serverError =
       (error.response && error.response.status >= 500) || !error.response;
@@ -37,7 +39,7 @@ apiClient.interceptors.response.use(
     if (serverError) {
       console.error("Server Error:", error);
       toast({
-        description: "Server Error",
+        description: t("common.error.server"),
         variant: "destructive",
       });
       return Promise.reject(error);

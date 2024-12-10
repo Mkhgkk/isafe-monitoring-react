@@ -18,6 +18,7 @@ import FormField from "../form/FormField";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 
 const passwordFormSchema = z
   .object({
@@ -37,12 +38,9 @@ const passwordFormSchema = z
 
 type PasswordFormData = z.infer<typeof passwordFormSchema>;
 
-export default function PasswordDialog({
-  trigger,
-}: {
-  trigger: React.ReactNode;
-}) {
+export default function PasswordDialog() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -116,8 +114,10 @@ export default function PasswordDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Update password</DialogTitle>
-          <DialogDescription className="mt-4">Reset password</DialogDescription>
+          <DialogTitle>{t("profile.passwordUpdate")}</DialogTitle>
+          <DialogDescription className="mt-4">
+            {t("profile.passwordUpdateDesc")}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-2">
@@ -125,21 +125,21 @@ export default function PasswordDialog({
               control={control}
               id="password"
               error={errors.password?.message as string}
-              placeholder="Current password"
+              placeholder={t("profile.currentPassword")}
               type="password"
             />
             <FormField
               control={control}
               id="newPassword"
               error={errors.newPassword?.message as string}
-              placeholder="New password"
+              placeholder={t("profile.newPassword")}
               type="password"
             />
             <FormField
               control={control}
               id="comfirmPassword"
               error={errors.confirmPassword?.message as string}
-              placeholder="Confirm password"
+              placeholder={t("profile.confirmPassword")}
               type="password"
             />
           </div>
@@ -149,7 +149,7 @@ export default function PasswordDialog({
             type="submit"
             // loading={isPending || isStopping}
           >
-            Save
+            {t("common.save")}
           </Button>
         </DialogFooter>
       </DialogContent>

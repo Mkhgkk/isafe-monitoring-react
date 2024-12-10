@@ -7,9 +7,11 @@ import { Event } from "@/type";
 import { Skeleton } from "../ui/skeleton";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const LIMIT = 20;
 function ScheduleEventList({ streamId }: { streamId: string }) {
+  const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   // const [filter, setFilter] = useState("all");
   const [selectedDate, setSelectedDate] = useState(
@@ -55,7 +57,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
   return (
     <div className="my-5">
       <div className="flex justify-between pb-2">
-        <p className="text-xl font-semibold">Event</p>
+        <p className="text-xl font-semibold">{t("event.title")}</p>
         <WeekCalendar
           selectedDate={selectedDate}
           setSelectedDate={handleDateChange}
@@ -81,7 +83,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
 
         {events?.length === 0 && !isLoading && (
           <p className="dark:text-muted-foreground text-center mt-10 text-sm">
-            No events found.
+            {t("event.noResult")}
           </p>
         )}
         <div ref={setTarget} className="h-[1rem]" />

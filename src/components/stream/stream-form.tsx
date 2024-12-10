@@ -18,6 +18,8 @@ import { streamService } from "@/api";
 import { useToast } from "@/hooks/use-toast";
 import SelectField from "../form/SelectField";
 import { Stream } from "@/type";
+import { useTranslation } from "react-i18next";
+import { streamModels } from "@/constants";
 
 const streamFormSchema = z.object({
   stream_id: z.string(),
@@ -55,6 +57,7 @@ function StreamForm({
       : undefined,
   });
 
+  const { t } = useTranslation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -68,14 +71,14 @@ function StreamForm({
       setOpen(false);
       reset();
       toast({
-        description: "New stream has been created successfully",
+        description: t("stream.alert.newSuccess"),
         variant: "success",
       });
     },
     onError: (err) => {
       console.log("Error creating stream: ", err);
       toast({
-        description: "Failed to create new stream",
+        description: t("stream.alert.newError"),
         variant: "destructive",
       });
     },
@@ -90,14 +93,14 @@ function StreamForm({
       setOpen(false);
       reset();
       toast({
-        description: "Stream has been updated successfully",
+        description: t("stream.alert.updateSuccess"),
         variant: "success",
       });
     },
     onError: (err) => {
       console.log("Error updating stream: ", err);
       toast({
-        description: "Failed to update stream",
+        description: t("stream.alert.updateError"),
         variant: "destructive",
       });
     },
@@ -125,7 +128,7 @@ function StreamForm({
       >
         <DialogHeader>
           <DialogTitle>
-            {initialData ? "Edit stream" : "New stream"}
+            {initialData ? t("stream.editStream") : t("stream.newStream")}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -133,7 +136,7 @@ function StreamForm({
             <FormField
               control={control}
               id="stream_id"
-              label="Stream ID"
+              label={t("stream.streamId")}
               error={errors.stream_id?.message as string}
               requiredMark
               disabled={!!initialData}
@@ -141,28 +144,22 @@ function StreamForm({
             <SelectField
               control={control}
               id="model_name"
-              label="Model"
-              options={[
-                { value: "PPE", label: "PPE" },
-                { value: "Scaffolding", label: "Scaffolding" },
-                { value: "Ladder", label: "Ladder" },
-                { value: "MobileScaffolding", label: "Mobile Scaffolding" },
-                { value: "CuttingWelding", label: "Cutting Welding" },
-              ]}
+              label={t("stream.model")}
+              options={streamModels}
               error={errors.model_name?.message as string}
               requiredMark
             />
             <FormField
               control={control}
               id="location"
-              label="Location"
+              label={t("stream.location")}
               error={errors.location?.message as string}
               requiredMark
             />
             <FormField
               control={control}
               id="description"
-              label="Description"
+              label={t("stream.desc")}
               error={errors.description?.message as string}
               requiredMark
             />
@@ -170,7 +167,7 @@ function StreamForm({
             <FormField
               control={control}
               id="rtsp_link"
-              label="RTSP Link"
+              label={t("stream.rtspLink")}
               error={errors.rtsp_link?.message as string}
               requiredMark
             />
@@ -178,7 +175,7 @@ function StreamForm({
               <FormField
                 control={control}
                 id="cam_ip"
-                label="Cam IP"
+                label={t("stream.camIp")}
                 error={errors.cam_ip?.message as string}
                 type="text"
                 className="col-span-3"
@@ -186,7 +183,7 @@ function StreamForm({
               <FormField
                 control={control}
                 id="ptz_port"
-                label="PTZ Port"
+                label={t("stream.ptzPort")}
                 error={errors.ptz_port?.message as string}
                 type="number"
                 className="col-span-1"
@@ -196,13 +193,13 @@ function StreamForm({
               <FormField
                 control={control}
                 id="ptz_username"
-                label="PTZ username"
+                label={t("stream.ptzUsername")}
                 error={errors.ptz_username?.message as string}
               />
               <FormField
                 control={control}
                 id="ptz_password"
-                label="PTZ Password"
+                label={t("stream.ptzPassword")}
                 error={errors.ptz_password?.message as string}
                 type="text"
               />
@@ -210,7 +207,7 @@ function StreamForm({
           </div>
           <DialogFooter>
             <Button loading={isPending || isUpdating} type="submit">
-              {initialData ? "Save Changes" : "Add Stream"}
+              {initialData ? t("common.saveChanges") : t("stream.addStream")}
             </Button>
           </DialogFooter>
         </form>

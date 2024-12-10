@@ -14,10 +14,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import EventItem from "@/components/event/event-item";
 import { Event } from "@/type";
 import { EventItemSkeleton } from "@/components/camera/schedule-event-list";
+import { useTranslation } from "react-i18next";
 
 const LIMIT = 20;
 
 export default function EventList() {
+  const { t } = useTranslation();
   const [filters, setFilters] = useState<EventFilters>({
     stream: undefined,
     dateRange: { from: undefined, to: undefined },
@@ -44,7 +46,7 @@ export default function EventList() {
   return (
     <div className="h-[calc(100vh-50px)]">
       <div className="flex justify-between items-center pb-5">
-        <h1 className="text-xl font-semibold">Events</h1>
+        <h1 className="text-xl font-semibold">{t("event.title")}</h1>
         <div className="gap-2 hidden lg:flex">
           <ListFilter filters={filters} setFilters={setFilters} />
         </div>
@@ -64,7 +66,7 @@ export default function EventList() {
       <ScrollArea className="h-[calc(100vh-80px)]">
         {!isLoading && !flatted?.length && (
           <p className="text-muted-foreground text-center mt-[200px]">
-            No events found.
+            {t("event.noResult")}
           </p>
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-5 flex-wrap">
