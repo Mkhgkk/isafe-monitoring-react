@@ -33,29 +33,28 @@ export default function MainPage() {
   });
 
   return (
-    <div className="">
-      <div className="pb-4">
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h1 className="text-xl font-semibold">{t("monitoring.title")}</h1>
-            <p className="text-sm text-muted-foreground">
-              <span className="text-green-600">
-                {data?.activeStreams.length}
-              </span>{" "}
-              {t("monitoring.active")} / {data?.inactiveStreams.length}{" "}
-              {t("monitoring.inactive")}
-            </p>
-          </div>
-          <Button onClick={() => refetch()} variant="outline">
-            <Icons.refresh className="mr-2 w-4 h-4 " />
-            {t("common.refresh")}
-          </Button>
+    <div className="grid gap-y-4">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-xl font-semibold">{t("monitoring.title")}</h1>
+          <p className="text-sm text-muted-foreground">
+            <span className="text-green-600">{data?.activeStreams.length}</span>{" "}
+            {t("monitoring.active")} / {data?.inactiveStreams.length}{" "}
+            {t("monitoring.inactive")}
+          </p>
         </div>
+        <Button onClick={() => refetch()} variant="outline">
+          <Icons.refresh className="mr-2 w-4 h-4 " />
+          {t("common.refresh")}
+        </Button>
+      </div>
+
+      <div className="overflow-y-scroll max-h-[calc(100vh-100px)] grid gap-y-4">
         <div className="border p-4 rounded-md">
           <p className="mb-5 font-semibold text-lg">
             {t("monitoring.activeStream")}
           </p>
-          {isFetching && data?.activeStreams.length === 0 && <Skeletons />}
+          {isFetching && !data?.activeStreams.length && <Skeletons />}
           {!isFetching && !data?.activeStreams?.length && (
             <p className="text-sm dark:text-muted-foreground mb-4 text-center">
               {t("monitoring.noActiveStream")}
@@ -83,39 +82,39 @@ export default function MainPage() {
             ))}
           </div>
         </div>
-      </div>
-      <div className="border p-4 rounded-md">
-        <p className="mb-5 font-semibold text-lg">
-          {t("monitoring.inactiveStream")}
-        </p>
-        {isFetching && data?.inactiveStreams.length === 0 && <Skeletons />}
-        {!isFetching && !data?.inactiveStreams.length && (
-          <p className="text-sm dark:text-muted-foreground mb-4 text-center">
-            {t("monitoring.noInactiveStream")}
+        <div className="border p-4 rounded-md">
+          <p className="mb-5 font-semibold text-lg">
+            {t("monitoring.inactiveStream")}
           </p>
-        )}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {data?.inactiveStreams.map((item, index) => (
-            <div
-              className="relative cursor-pointer"
-              key={index}
-              onClick={() =>
-                navigate({
-                  pathname: `/cameras/${item.stream_id}`,
-                })
-              }
-            >
-              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
-                <Icons.offline className="opacity-30" size={50} />
+          {isFetching && !data?.inactiveStreams.length && <Skeletons />}
+          {!isFetching && !data?.inactiveStreams.length && (
+            <p className="text-sm dark:text-muted-foreground mb-4 text-center">
+              {t("monitoring.noInactiveStream")}
+            </p>
+          )}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {data?.inactiveStreams.map((item, index) => (
+              <div
+                className="relative cursor-pointer"
+                key={index}
+                onClick={() =>
+                  navigate({
+                    pathname: `/cameras/${item.stream_id}`,
+                  })
+                }
+              >
+                <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
+                  <Icons.offline className="opacity-30" size={50} />
+                </div>
+                <StreamInfo
+                  cameraName={item.stream_id}
+                  modelName={item.model_name}
+                  location={item.location}
+                  bg
+                />
               </div>
-              <StreamInfo
-                cameraName={item.stream_id}
-                modelName={item.model_name}
-                location={item.location}
-                bg
-              />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

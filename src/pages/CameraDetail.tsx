@@ -34,7 +34,7 @@ function CameraDetail() {
   return (
     <>
       <div className=" grid grid-cols-12 gap-4">
-        <div className="col-span-12 pr-4 lg:col-span-9 lg:border-r lg:h-[calc(100vh-32px)] overflow-y-scroll">
+        <div className="col-span-12 pr-4 lg:col-span-9 lg:border-r">
           <div className="flex justify-between items-center">
             <div>
               <div className="flex items-center gap-2">
@@ -83,28 +83,30 @@ function CameraDetail() {
             </DropdownMenu>
           </div>
 
-          {streamId && stream?.is_active && (
-            <StreamView
-              streamId={streamId}
-              ptzActivated={
-                !!(
-                  stream.ptz_port &&
-                  stream.ptz_password &&
-                  stream.ptz_username &&
-                  stream.cam_ip
-                )
-              }
-            />
-          )}
-          {!stream?.is_active && (
-            <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
-              <Icons.offline className="opacity-30" size={50} />
-            </div>
-          )}
-          <Separator className="my-5" />
+          <div className="lg:h-[calc(100vh-92px)] overflow-y-scroll">
+            {streamId && stream?.is_active && (
+              <StreamView
+                streamId={streamId}
+                ptzActivated={
+                  !!(
+                    stream.ptz_port &&
+                    stream.ptz_password &&
+                    stream.ptz_username &&
+                    stream.cam_ip
+                  )
+                }
+              />
+            )}
+            {!stream?.is_active && (
+              <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
+                <Icons.offline className="opacity-30" size={50} />
+              </div>
+            )}
+            <Separator className="my-5" />
 
-          <div className="hidden lg:block">
-            {streamId && <ScheduleEventList streamId={streamId} />}
+            <div className="hidden lg:block">
+              {streamId && <ScheduleEventList streamId={streamId} />}
+            </div>
           </div>
         </div>
 

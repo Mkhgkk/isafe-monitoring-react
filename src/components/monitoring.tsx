@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { io } from "socket.io-client";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -15,7 +13,6 @@ import {
 } from "@/components/ui/select";
 
 import { Card } from "./ui/card";
-import { ScrollArea } from "./ui/scroll-area";
 
 export default function Monitoring() {
   const [loading, setLoading] = useState(false);
