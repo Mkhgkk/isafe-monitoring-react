@@ -118,19 +118,19 @@ function StreamList() {
           <SortingHeader column={column} title={t("stream.status")} />
         ),
         cell: ({ getValue }) => {
-          const status = getValue()
-            ? t("monitoring.active")
-            : t("monitoring.inactive");
+          const isActive = getValue();
 
           return (
             <div className="flex items-center gap-2">
               <span
                 className={cn(
                   "relative inline-flex rounded-full h-2 w-2",
-                  status === "active" ? "bg-green-600" : "bg-orange-600"
+                  isActive ? "bg-green-600" : "bg-orange-600"
                 )}
               />
-              <span className="capitalize">{status}</span>
+              <span className="capitalize">
+                {isActive ? t("monitoring.active") : t("monitoring.inactive")}
+              </span>
             </div>
           );
         },

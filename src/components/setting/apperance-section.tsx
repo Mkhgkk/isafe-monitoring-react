@@ -1,11 +1,9 @@
-import React from "react";
 import SettingItem from "./setting-item";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { Icons } from "../icons";
 import { Separator } from "../ui/separator";
 import { useTheme } from "../theme-provider";
 import { useLocale } from "../locale-provider";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 function ApperanceSection() {

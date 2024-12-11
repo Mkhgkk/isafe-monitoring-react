@@ -57,7 +57,7 @@
       "updateError": "스트림 업데이트에 실패하였습니다.",
       "deleteSuccess": "스트림이 성공적으로 삭제되었습니다.",
       "deleteError": "스트림 삭제에 실패하였습니다.",
-      "deleteConfirm": "{{streamId}}를 삭제하시겠습니까? 이 작업은 이 스트림의 모든 이벤트를 영구적으로 삭제하며 복원할 수 없습니다."
+      "deleteConfirm": "{{streamId}}을/를 삭제하시겠습니까? 이 작업은 이 스트림의 모든 이벤트를 영구적으로 삭제하며 복원할 수 없습니다."
     }
   },
   "activateStream": {
@@ -66,12 +66,15 @@
     "activateStream": "스트림 활성화",
     "deactivateStream": "스트림 비활성화",
     "alert": {
-      "confirmActivate": "{{streamId}}를 활성화하시겠습니까?",
-      "confirmDeactivate": "{{streamId}}를 비활성화하시겠습니까?",
+      "confirmActivate": "{{streamId}}을/를 활성화하시겠습니까?",
+      "confirmDeactivate": "{{streamId}}을/를 비활성화하시겠습니까?",
       "successActivate": "스트림이 성공적으로 활성화되었습니다.",
       "successDeactivate": "스트림이 성공적으로 비활성화되었습니다.",
       "errorActivate": "스트림 활성화에 실패하였습니다.",
-      "errorDeactivate": "스트림 비활성화에 실패하였습니다."
+      "errorDeactivate": "스트림 비활성화에 실패하였습니다.",
+      "autoTrackActivate": "자동 트래킹이 활성화되었습니다.",
+      "autoTrackDeactivate": "자동 트래킹이 비활성화되었습니다.",
+      "autoTrackError": "자동 트래킹을 활성화/비활성화에 실패하였습니다."
     }
   },
   "hazardArea": {

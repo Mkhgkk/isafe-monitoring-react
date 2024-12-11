@@ -57,7 +57,10 @@
       "updateError": "Failed to update stream",
       "deleteSuccess": "Stream has been deleted successfully.",
       "deleteError": "Failed to delete stream",
-      "deleteConfirm": "Are you sure you want to delete {{streamId}}? This action will permanently delete all events from this stream and cannot be undone."
+      "deleteConfirm": "Are you sure you want to delete {{streamId}}? This action will permanently delete all events from this stream and cannot be undone.",
+      "autoTrackActivate": "Autotrack activated.",
+      "autoTrackDeactivate": "Autotrack deactivated.",
+      "autoTrackError": "Failed to activate/deactivate autotrack"
     }
   },
 

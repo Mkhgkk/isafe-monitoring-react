@@ -109,6 +109,13 @@ export const streamService = {
 
     return result;
   },
+  changeAutoTrack: async (streamId: string) => {
+    const response = await apiClient.post("/api/stream/change_autotrack", {
+      stream_id: streamId,
+    });
+
+    return response.data;
+  },
 };
 
 export const eventService = {
