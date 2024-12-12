@@ -39,7 +39,10 @@ export default function MainPage() {
           <h1 className="text-xl font-semibold">{t("monitoring.title")}</h1>
           <p className="text-sm text-muted-foreground">
             <span className="text-green-600">{data?.activeStreams.length}</span>{" "}
-            {t("monitoring.active")} / {data?.inactiveStreams.length}{" "}
+            {t("monitoring.active")} /{" "}
+            <span className="text-orange-600">
+              {data?.inactiveStreams.length}{" "}
+            </span>
             {t("monitoring.inactive")}
           </p>
         </div>
