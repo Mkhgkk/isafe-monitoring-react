@@ -22,15 +22,15 @@ import { useTranslation } from "react-i18next";
 
 const passwordFormSchema = z
   .object({
-    password: z.string(),
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    password: z.string().min(6, "validation.password"),
+    newPassword: z.string().min(6, "validation.password"),
     confirmPassword: z.string(),
   })
   .superRefine(({ newPassword, confirmPassword }, ctx) => {
     if (newPassword !== confirmPassword) {
       ctx.addIssue({
         path: ["confirmPassword"],
-        message: "Passwords do not match",
+        message: "validation.passwordNotMatch",
         code: "custom",
       });
     }
@@ -44,6 +44,7 @@ export default function PasswordDialog() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(passwordFormSchema),
@@ -100,13 +101,20 @@ export default function PasswordDialog() {
   //   });
 
   const onSubmit = (values: PasswordFormData) => {
+    console.log(values);
     // if (isActivated) {
     //   stopStream(streamId);
     // } else startStream(streamId);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+        reset();
+      }}
+    >
       <DialogTrigger asChild>
         <div className="cursor-pointer py-2 pl-4">
           <Icons.right className="text-muted-foreground w-4 h-4" />
@@ -119,39 +127,38 @@ export default function PasswordDialog() {
             {t("profile.passwordUpdateDesc")}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <FormField
-              control={control}
-              id="password"
-              error={errors.password?.message as string}
-              placeholder={t("profile.currentPassword")}
-              type="password"
-            />
-            <FormField
-              control={control}
-              id="newPassword"
-              error={errors.newPassword?.message as string}
-              placeholder={t("profile.newPassword")}
-              type="password"
-            />
-            <FormField
-              control={control}
-              id="comfirmPassword"
-              error={errors.confirmPassword?.message as string}
-              placeholder={t("profile.confirmPassword")}
-              type="password"
-            />
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
+          <FormField
+            control={control}
+            id="password"
+            error={t(errors.password?.message as string)}
+            placeholder={t("profile.currentPassword")}
+            type="password"
+          />
+          <FormField
+            control={control}
+            id="newPassword"
+            error={t(errors.newPassword?.message as string)}
+            placeholder={t("profile.newPassword")}
+            type="password"
+          />
+          <FormField
+            control={control}
+            id="confirmPassword"
+            error={t(errors.confirmPassword?.message as string)}
+            placeholder={t("profile.confirmPassword")}
+            type="password"
+          />
+          <DialogFooter>
+            <Button
+              type="submit"
+              className="mt-2"
+              // loading={isPending || isStopping}
+            >
+              {t("common.save")}
+            </Button>
+          </DialogFooter>
         </form>
-        <DialogFooter>
-          <Button
-            type="submit"
-            // loading={isPending || isStopping}
-          >
-            {t("common.save")}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

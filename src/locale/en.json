@@ -132,6 +132,7 @@
     "button": "Login",
     "orCreate": "Or create account",
     "alert": {
+      "success": "Login successful",
       "error": "Invalid email or password"
     }
   },
@@ -174,5 +175,12 @@
     },
     "connecting": "Connecting...",
     "connected": "Connected!"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email",
+    "password": "Password must be at least 6 characters",
+    "username": "Username must be at least 3 characters",
+    "passwordNotMatch": "Password does not match"
   }
 }

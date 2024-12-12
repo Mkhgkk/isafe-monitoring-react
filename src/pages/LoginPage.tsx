@@ -18,9 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 
 const loginFormSchema = z.object({
-  email: z.string().email(),
-  //TODO: validation localization
-  password: z.string().min(8, "login.alert.passwordLength"),
+  email: z.string().email("validation.email"),
+  password: z.string().min(6, "validation.password"),
 });
 
 export type LoginFormData = z.infer<typeof loginFormSchema>;
@@ -74,7 +73,7 @@ function LoginPage() {
               control={control}
               id="email"
               label={t("profile.email")}
-              error={errors.email?.message as string}
+              error={t(errors.email?.message as string)}
               placeholder="email@example.com"
             />
             <FormField
@@ -82,7 +81,7 @@ function LoginPage() {
               id="password"
               label={t("profile.password")}
               type="password"
-              error={errors.password?.message as string}
+              error={t(errors.password?.message as string)}
             />
 
             <div>

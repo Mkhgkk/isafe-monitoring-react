@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 
 const usernameFormSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
+  username: z.string().min(3, "validation.username"),
 });
 
 type UsernameFormData = z.infer<typeof usernameFormSchema>;
@@ -105,22 +105,22 @@ export default function UsernameDialog({
             {t("profile.usernameUpdateDesc")}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-y-4">
           <FormField
             control={control}
             id="username"
-            error={errors.username?.message as string}
+            error={t(errors.username?.message as string)}
             placeholder={t("profile.username")}
           />
+          <DialogFooter>
+            <Button
+              type="submit"
+              // loading={isPending || isStopping}
+            >
+              {t("common.save")}
+            </Button>
+          </DialogFooter>
         </form>
-        <DialogFooter>
-          <Button
-            type="submit"
-            // loading={isPending || isStopping}
-          >
-            {t("common.save")}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

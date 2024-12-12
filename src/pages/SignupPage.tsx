@@ -21,16 +21,16 @@ import { useTranslation } from "react-i18next";
 //TODO: validation localization
 const signUpSchema = z
   .object({
-    username: z.string().min(3, "Username must be at least 3 characters"),
-    email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    username: z.string().min(3, "validation.username"),
+    email: z.string().email("validation.email"),
+    password: z.string().min(6, "validation.password"),
     passwordConfirm: z.string(),
   })
   .superRefine(({ password, passwordConfirm }, ctx) => {
     if (password !== passwordConfirm) {
       ctx.addIssue({
         path: ["passwordConfirm"],
-        message: "Passwords do not match",
+        message: "validation.passwordNotMatch",
         code: "custom",
       });
     }
@@ -60,7 +60,7 @@ function SignupPage() {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Signup Successful",
+        title: t("signUp.alert.success"),
       });
       navigate("/login");
     },
@@ -69,7 +69,7 @@ function SignupPage() {
       //handle case where user already exists
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
+        title: t("signUp.alert.error"),
       });
     },
   });
@@ -96,14 +96,14 @@ function SignupPage() {
               control={control}
               id="username"
               label={t("profile.username")}
-              error={errors.username?.message as string}
+              error={t(errors.username?.message as string)}
               placeholder={t("profile.username")}
             />
             <FormField
               control={control}
               id="email"
               label={t("profile.email")}
-              error={errors.email?.message as string}
+              error={t(errors.email?.message as string)}
               placeholder="email@example.com"
             />
             <FormField
@@ -111,14 +111,14 @@ function SignupPage() {
               id="password"
               label={t("profile.password")}
               type="password"
-              error={errors.password?.message as string}
+              error={t(errors.password?.message as string)}
             />
             <FormField
               control={control}
               id="passwordConfirm"
               label={t("profile.confirmPassword")}
               type="password"
-              error={errors.passwordConfirm?.message as string}
+              error={t(errors.passwordConfirm?.message as string)}
             />
 
             <div>

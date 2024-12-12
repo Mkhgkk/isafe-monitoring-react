@@ -22,15 +22,15 @@ import { useTranslation } from "react-i18next";
 import { streamModels } from "@/constants";
 
 const streamFormSchema = z.object({
-  stream_id: z.string(),
-  description: z.string(),
-  rtsp_link: z.string(),
+  stream_id: z.string({ message: "validation.required" }),
+  description: z.string({ message: "validation.required" }),
+  rtsp_link: z.string({ message: "validation.required" }),
   cam_ip: z.string().optional(),
   ptz_port: z.string().optional(),
   ptz_password: z.string().optional(),
   ptz_username: z.string().optional(),
-  location: z.string(),
-  model_name: z.string(),
+  location: z.string({ message: "validation.required" }),
+  model_name: z.string({ message: "validation.required" }),
 });
 
 export type StreamFormData = z.infer<typeof streamFormSchema>;
@@ -137,7 +137,7 @@ function StreamForm({
               control={control}
               id="stream_id"
               label={t("stream.streamId")}
-              error={errors.stream_id?.message as string}
+              error={t(errors.stream_id?.message as string)}
               requiredMark
               disabled={!!initialData}
             />
@@ -146,21 +146,21 @@ function StreamForm({
               id="model_name"
               label={t("stream.model")}
               options={streamModels}
-              error={errors.model_name?.message as string}
+              error={t(errors.model_name?.message as string)}
               requiredMark
             />
             <FormField
               control={control}
               id="location"
               label={t("stream.location")}
-              error={errors.location?.message as string}
+              error={t(errors.location?.message as string)}
               requiredMark
             />
             <FormField
               control={control}
               id="description"
               label={t("stream.desc")}
-              error={errors.description?.message as string}
+              error={t(errors.description?.message as string)}
               requiredMark
             />
             <Separator className="mt-2" />
@@ -168,7 +168,7 @@ function StreamForm({
               control={control}
               id="rtsp_link"
               label={t("stream.rtspLink")}
-              error={errors.rtsp_link?.message as string}
+              error={t(errors.rtsp_link?.message as string)}
               requiredMark
             />
             <div className="grid grid-cols-4 gap-3">
