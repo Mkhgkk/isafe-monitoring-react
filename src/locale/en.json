@@ -127,7 +127,7 @@
     "confirmPassword": "Confirm Password"
   },
   "login": {
-    "title": "Welcome to iSafe-guard",
+    "title": "Welcome to iSafe Guard",
     "desc": "Enter your email below to login your account",
     "button": "Login",
     "orCreate": "Or create account",

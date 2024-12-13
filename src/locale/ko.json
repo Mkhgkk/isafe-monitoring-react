@@ -126,7 +126,7 @@
     "confirmPassword": "비밀번호 확인"
   },
   "login": {
-    "title": "iSafe-guard에 오신 것을 환영합니다",
+    "title": "iSafe Guard에 오신 것을 환영합니다",
     "desc": "아래에 이메일을 입력하여 로그인하세요.",
     "button": "로그인",
     "orCreate": "또는 계정 생성",
