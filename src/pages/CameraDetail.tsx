@@ -24,6 +24,8 @@ function CameraDetail() {
   const { t } = useTranslation();
   const { streamId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { streamData } = location.state;
 
   const { data: stream } = useQuery({
     queryKey: ["streamService.fetchStreamById", streamId],
