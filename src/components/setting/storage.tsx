@@ -31,6 +31,7 @@ function Storage({ items, total }: Props) {
             style={{
               width: `${(item.size / total) * 100}%`,
             }}
+            key={item.name}
           >
             <TooltipProvider delayDuration={0}>
               <Tooltip>
