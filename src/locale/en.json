@@ -82,6 +82,7 @@
     "title": "Set hazard area",
     "save": "Save hazard area",
     "capture": "Capture",
+    "recapture": "Recapture",
 
     "alert": {
       "success": "Hazard area has been set successfully.",

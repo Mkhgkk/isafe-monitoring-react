@@ -164,7 +164,7 @@ export const configService = {
   },
   setDangerZone: async (data: {
     image: string;
-    coords: [Coord, Coord, Coord, Coord];
+    coords: Coord[];
     streamId: string;
   }) => {
     const response = await apiClient.post("/api/stream/set_danger_zone", data);

@@ -57,17 +57,13 @@ function HazardAreaSetting() {
 
   const handleGetAreaPosition = () => {
     if (canvasRef.current) {
-      const areaPosition = canvasRef.current.getAreaPosition();
+      const coords = canvasRef.current?.getAreaPosition();
 
-      if (!url || !areaPosition) return;
+      if (!url || !coords) return;
+
       setDangerZone({
         image: url,
-        coords: [
-          areaPosition.topLeft,
-          areaPosition.topRight,
-          areaPosition.bottomRight,
-          areaPosition.bottomLeft,
-        ],
+        coords,
         streamId,
       });
     }
@@ -91,7 +87,7 @@ function HazardAreaSetting() {
         {url && (
           <div className="flex gap-3">
             <Button variant="secondary" onClick={() => setUrl(undefined)}>
-              {t("common.reset")}
+              {t("hazardArea.recapture")}
             </Button>
             <Button onClick={handleGetAreaPosition} loading={isSaving}>
               {t("hazardArea.save")}
