@@ -1,6 +1,6 @@
 import { Icons } from "@/components/icons";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { streamService } from "@/api";
 
 import { useQuery } from "@tanstack/react-query";
@@ -24,8 +24,6 @@ function CameraDetail() {
   const { t } = useTranslation();
   const { streamId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { streamData } = location.state;
 
   const { data: stream } = useQuery({
     queryKey: ["streamService.fetchStreamById", streamId],
