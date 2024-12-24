@@ -12,4 +12,4 @@ export const getDateFromUnixTimestamp = (unixTimestamp: number) => {
 };
 
 export const getThumbnailUrl = (thumbnail: string) =>
-  `http://${config.BACKEND_URL}/static/thumbnails/${thumbnail}`;
+  `${config.PROTOCOL}//${config.BACKEND_URL}/static/thumbnails/${thumbnail}`;

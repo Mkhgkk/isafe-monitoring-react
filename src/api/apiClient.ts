@@ -4,7 +4,7 @@ import { toast } from "@/hooks/use-toast";
 import i18n from "i18next";
 
 const apiClient = axios.create({
-  baseURL: `http://${config.BACKEND_URL}`,
+  baseURL: `${config.PROTOCOL}//${config.BACKEND_URL}`,
   headers: {
     "Content-Type": "application/json",
   },

@@ -6,7 +6,7 @@ interface WebRTCPlayerProps {
 }
 
 const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
-  const iframeSrc = `http://${config.WEBRTC_STREAM_URL}/live/${streamId}/`;
+  const iframeSrc = `${config.PROTOCOL}//${config.WEBRTC_STREAM_URL}/live/${streamId}/`;
 
   return (
     <div style={{ width: "100%", height: "100%" }}>

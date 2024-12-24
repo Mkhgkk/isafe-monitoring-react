@@ -76,7 +76,7 @@ function EventDetail() {
         <div className="overflow-hidden rounded-md w-full lg:max-w-5xl mb-5">
           {data?.video_filename && (
             <video
-              src={`http://${config.BACKEND_URL}/video/videos/${data.video_filename}`}
+              src={`${config.PROTOCOL}//${config.BACKEND_URL}/video/videos/${data.video_filename}`}
               controls={true}
               autoPlay
               muted

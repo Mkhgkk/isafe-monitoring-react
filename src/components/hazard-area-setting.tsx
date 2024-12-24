@@ -23,7 +23,9 @@ function HazardAreaSetting() {
   const { mutate: getTargetImage, isPending } = useMutation({
     mutationFn: configService.getHazardTargetImage,
     onSuccess: ({ data }) => {
-      setUrl(`http://${config.BACKEND_URL}/static/frame_refs/${data}`);
+      setUrl(
+        `${config.PROTOCOL}//${config.BACKEND_URL}/static/frame_refs/${data}`
+      );
     },
     onError: () => {
       toast({
