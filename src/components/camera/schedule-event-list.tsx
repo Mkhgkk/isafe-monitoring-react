@@ -55,17 +55,17 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
   };
 
   return (
-    <div className="my-5">
-      <div className="flex justify-between pb-2">
-        <p className="text-xl font-semibold">{t("event.title")}</p>
-        <WeekCalendar
-          selectedDate={selectedDate}
-          setSelectedDate={handleDateChange}
-        />
-      </div>
+    <div className="grid gap-y-4">
+      {/* <div className="flex justify-between pb-2"> */}
+      <p className="text-xl font-semibold">{t("event.title")}</p>
+      <WeekCalendar
+        selectedDate={selectedDate}
+        setSelectedDate={handleDateChange}
+      />
+      {/* </div> */}
 
-      <div ref={scrollRef}>
-        <div className="grid gap-y-3 grid-cols-2 gap-2 md:grid-cols-4">
+      <div ref={scrollRef} className="h-[calc(100vh-135px)] overflow-y-scroll">
+        <div className="grid gap-y-3 grid-cols-2 gap-2 ">
           {isLoading
             ? [0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
                 <EventCardSkeleton key={item} className="p-2" />

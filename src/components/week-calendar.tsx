@@ -20,12 +20,12 @@ function WeekCalendar({ selectedDate, setSelectedDate }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-7 w-[260px] border rounded py-1 px-2">
+    <div className="grid grid-cols-7 rounded">
       {days.map((day, index) => (
         <div
           key={index}
           className={cn(
-            "flex flex-col items-center p-0.5 rounded-md cursor-pointer",
+            "flex flex-col items-center p-1 rounded-md cursor-pointer",
             `${selectedDate === day && "bg-primary"}`
           )}
           onClick={() => setSelectedDate(day)}

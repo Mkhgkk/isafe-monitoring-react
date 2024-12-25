@@ -33,7 +33,7 @@ function CameraDetail() {
 
   return (
     <>
-      <div className=" grid grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-4">
         <div className="col-span-12 pr-4 lg:col-span-9 lg:border-r">
           <div className="flex justify-between items-center">
             <div>
@@ -102,16 +102,16 @@ function CameraDetail() {
                 <Icons.offline className="opacity-30" size={50} />
               </div>
             )}
-            <Separator className="my-5" />
+            {/* <Separator className="my-5" />
 
             <div className="hidden lg:block">
               {streamId && <ScheduleEventList streamId={streamId} />}
-            </div>
+            </div> */}
           </div>
         </div>
 
         <div className="col-span-12 lg:col-span-3">
-          <div className="grid gap-4">
+          {/* <div className="grid gap-4">
             <p className="text-xl font-semibold ">{t("common.detail")}</p>
             <div className="grid gap-3 bg-slate-100 dark:bg-slate-900 bg-opacity-75 p-3 rounded-md border">
               <Contents
@@ -145,13 +145,14 @@ function CameraDetail() {
                 value={<Switch />}
               />
             </div>
-          </div>
+          </div> */}
+          <ScheduleEventList streamId={streamId} />
         </div>
       </div>
-      <div className="block lg:hidden">
+      {/* <div className="block lg:hidden">
         <Separator className="my-5" />
         {streamId && <ScheduleEventList streamId={streamId} />}
-      </div>
+      </div> */}
     </>
   );
 }
