@@ -13,22 +13,15 @@ export default function MainPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const { data, isFetching, refetch } = useQuery({
+  const {
+    data = [],
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["streamService.fetchStreams"],
     queryFn: streamService.fetchStreams,
     select: (data) => {
-      const activeStreams: Stream[] = [];
-      const inactiveStreams: Stream[] = [];
-
-      data.forEach((stream) => {
-        if (stream.is_active) {
-          activeStreams.push(stream);
-        } else {
-          inactiveStreams.push(stream);
-        }
-      });
-
-      return { activeStreams, inactiveStreams };
+      return data.filter((stream) => stream.is_active);
     },
   });
 
@@ -38,12 +31,8 @@ export default function MainPage() {
         <div>
           <h1 className="text-xl font-semibold">{t("monitoring.title")}</h1>
           <p className="text-sm text-muted-foreground">
-            <span className="text-green-600">{data?.activeStreams.length}</span>{" "}
-            {t("monitoring.active")} /{" "}
-            <span className="text-orange-600">
-              {data?.inactiveStreams.length}{" "}
-            </span>
-            {t("monitoring.inactive")}
+            <span className="text-green-600">{data?.length}</span>{" "}
+            {t("monitoring.active")}
           </p>
         </div>
         <Button onClick={() => refetch()} variant="outline">
@@ -53,71 +42,32 @@ export default function MainPage() {
       </div>
 
       <div className="overflow-y-scroll max-h-[calc(100vh-100px)] grid gap-y-4">
-        <div className="border p-4 rounded-md">
-          <p className="mb-5 font-semibold text-lg">
-            {t("monitoring.activeStream")}
+        {isFetching && !data?.length && <Skeletons />}
+        {!isFetching && !data?.length && (
+          <p className="text-sm dark:text-muted-foreground mb-4 text-center">
+            {t("monitoring.noActiveStream")}
           </p>
-          {isFetching && !data?.activeStreams.length && <Skeletons />}
-          {!isFetching && !data?.activeStreams?.length && (
-            <p className="text-sm dark:text-muted-foreground mb-4 text-center">
-              {t("monitoring.noActiveStream")}
-            </p>
-          )}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {data?.activeStreams.map((item, index) => (
-              <div
-                key={index}
-                className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
-                onClick={() =>
-                  navigate({
-                    pathname: `/cameras/${item.stream_id}`,
-                  })
-                }
-              >
-                <PanelVideo streamId={item.stream_id} />
-                <StreamInfo
-                  cameraName={item.stream_id}
-                  modelName={item.model_name}
-                  location={item.location}
-                  bg
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="border p-4 rounded-md">
-          <p className="mb-5 font-semibold text-lg">
-            {t("monitoring.inactiveStream")}
-          </p>
-          {isFetching && !data?.inactiveStreams.length && <Skeletons />}
-          {!isFetching && !data?.inactiveStreams.length && (
-            <p className="text-sm dark:text-muted-foreground mb-4 text-center">
-              {t("monitoring.noInactiveStream")}
-            </p>
-          )}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {data?.inactiveStreams.map((item, index) => (
-              <div
-                className="relative cursor-pointer"
-                key={index}
-                onClick={() =>
-                  navigate({
-                    pathname: `/cameras/${item.stream_id}`,
-                  })
-                }
-              >
-                <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 flex justify-center items-center  aspect-[16/9]">
-                  <Icons.offline className="opacity-30" size={50} />
-                </div>
-                <StreamInfo
-                  cameraName={item.stream_id}
-                  modelName={item.model_name}
-                  location={item.location}
-                  bg
-                />
-              </div>
-            ))}
-          </div>
+        )}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {data?.map((item, index) => (
+            <div
+              key={index}
+              className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
+              onClick={() =>
+                navigate({
+                  pathname: `/cameras/${item.stream_id}`,
+                })
+              }
+            >
+              <PanelVideo streamId={item.stream_id} />
+              <StreamInfo
+                cameraName={item.stream_id}
+                modelName={item.model_name}
+                location={item.location}
+                bg
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
