@@ -4,8 +4,9 @@ import {
   useState,
   forwardRef,
   useImperativeHandle,
+  Fragment,
 } from "react";
-import { Layer, Stage } from "react-konva";
+import { Circle, Layer, Line, Stage, Text } from "react-konva";
 import { Button } from "./ui/button";
 import URLImage from "./canvas/url-image";
 import PolygonConstructor, { Point } from "./canvas/polygon-constructor";
@@ -14,8 +15,7 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [stageSize, setStageSize] = useState({ width: 0, height: 0 });
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-  const [points, setPoints] = useState<Point[]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const [areas, setAreas] = useState<Point[][]>([]);
   const constructorRef = useRef(null);
 
   useEffect(() => {
@@ -53,12 +53,20 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
     const scaleX = 1280 / imageSize.width;
     const scaleY = 720 / imageSize.height;
 
-    return points.map((point) => [point.x * scaleX, point.y * scaleY]);
+    return areas.map((points) =>
+      points.map((point) => ({
+        x: point.x * scaleX,
+        y: point.y * scaleY,
+      }))
+    );
   };
 
   const restartDrawing = () => {
-    constructorRef.current?.reset();
-    setPoints([]);
+    setAreas([]);
+  };
+
+  const deleteArea = (index: number) => {
+    setAreas(areas.filter((_, i) => i !== index));
   };
 
   // Expose the getAreaPosition function to the parent component
@@ -84,17 +92,50 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
             height={imageSize.height}
             ref={constructorRef}
             onComplete={(points) => {
-              setPoints(points);
-            }}
-            onChange={(points) => {
-              setIsDrawing(points.length > 0);
+              setAreas([...areas, points]);
+              setTimeout(() => {
+                constructorRef.current?.reset();
+              }, 100);
             }}
           />
+          {areas.map((points, index) => (
+            <Fragment key={index}>
+              <Line
+                key={index}
+                strokeWidth={3}
+                fill={"yellow"}
+                stroke="white"
+                opacity={0.5}
+                lineJoin="round"
+                closed={true}
+                points={points.flatMap((point) => [point.x, point.y])}
+              />
+              <Circle
+                x={points[0].x}
+                y={points[0].y}
+                radius={10}
+                stroke={"black"}
+                fill="white"
+                opacity={0.8}
+                onClick={() => deleteArea(index)}
+              />
+              <Text
+                text="+"
+                fontSize={20}
+                fill="black"
+                opacity={0.8}
+                x={points[0].x + 2}
+                y={points[0].y - 10}
+                rotation={45}
+                onClick={() => deleteArea(index)}
+              />
+            </Fragment>
+          ))}
         </Layer>
       </Stage>
-      {isDrawing && (
+      {areas.length && (
         <Button onClick={restartDrawing} className="absolute top-4 left-4">
-          Reset
+          Remove All
         </Button>
       )}
     </div>

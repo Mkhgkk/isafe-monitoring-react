@@ -115,7 +115,7 @@ const PolygonConstructor = forwardRef((props: PolygonConstructorProps, ref) => {
     <>
       <Line
         strokeWidth={3}
-        stroke="white"
+        stroke="yellow"
         opacity={0.7}
         lineJoin="round"
         closed={isComplete}
