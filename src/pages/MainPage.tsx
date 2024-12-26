@@ -74,7 +74,7 @@ export default function MainPage() {
   );
 }
 
-const Skeletons = () => (
+export const Skeletons = () => (
   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     {[0, 1, 2].map((_, index) => (
       <Skeleton className="aspect-[16/9] rounded-md" key={index} />

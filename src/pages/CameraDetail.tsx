@@ -15,10 +15,10 @@ import {
 import { Button } from "@/components/ui/button";
 import ActivateDialog from "@/components/stream/activate-dialog";
 import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import Contents from "@/components/contents";
-import { Switch } from "@/components/ui/switch";
 import { useTranslation } from "react-i18next";
+import PanelVideo from "@/components/panel-video";
+import StreamInfo from "@/components/stream/stream-info";
+import { Skeletons } from "./MainPage";
 
 function CameraDetail() {
   const { t } = useTranslation();
@@ -29,6 +29,16 @@ function CameraDetail() {
     queryKey: ["streamService.fetchStreamById", streamId],
     queryFn: () => streamService.fetchStreamById(streamId!),
     enabled: !!streamId,
+  });
+
+  const { data: others = [], isFetching } = useQuery({
+    queryKey: ["streamService.fetchStreams"],
+    queryFn: streamService.fetchStreams,
+    select: (data) => {
+      return data.filter(
+        (stream) => stream.is_active && stream.stream_id !== streamId
+      );
+    },
   });
 
   return (
@@ -102,11 +112,28 @@ function CameraDetail() {
                 <Icons.offline className="opacity-30" size={50} />
               </div>
             )}
-            {/* <Separator className="my-5" />
-
-            <div className="hidden lg:block">
-              {streamId && <ScheduleEventList streamId={streamId} />}
-            </div> */}
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 mt-5">
+              {isFetching && !others?.length && <Skeletons />}
+              {others?.map((item, index) => (
+                <div
+                  key={index}
+                  className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
+                  onClick={() =>
+                    navigate({
+                      pathname: `/cameras/${item.stream_id}`,
+                    })
+                  }
+                >
+                  <PanelVideo streamId={item.stream_id} />
+                  <StreamInfo
+                    cameraName={item.stream_id}
+                    modelName={item.model_name}
+                    location={item.location}
+                    bg
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
