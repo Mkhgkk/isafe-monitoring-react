@@ -41,7 +41,7 @@ export default function MainPage() {
         </Button>
       </div>
 
-      <div className="overflow-y-scroll max-h-[calc(100vh-100px)] grid gap-y-4">
+      <div className="overflow-y-scroll max-h-[calc(100vh-110px)] pb-10 grid gap-y-4">
         {isFetching && !data?.length && <Skeletons />}
         {!isFetching && !data?.length && (
           <p className="text-sm dark:text-muted-foreground mb-4 text-center">

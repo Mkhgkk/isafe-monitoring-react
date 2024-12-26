@@ -64,7 +64,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
       />
       {/* </div> */}
 
-      <div ref={scrollRef} className="h-[calc(100vh-135px)] overflow-y-scroll">
+      <div ref={scrollRef} className="h-[calc(100vh-145px)] overflow-y-scroll">
         <div className="grid gap-y-3 grid-cols-2 gap-2 ">
           {isLoading
             ? [0, 1, 2, 3, 4, 5, 6, 7].map((item) => (

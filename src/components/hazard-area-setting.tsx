@@ -72,7 +72,7 @@ function HazardAreaSetting() {
   };
 
   return (
-    <div className="h-[calc(100vh-50px)] flex flex-col">
+    <div className="h-[calc(100vh-80px)] flex flex-col">
       <div className="flex justify-between">
         <div>
           <div className="flex items-center gap-2">

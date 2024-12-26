@@ -76,7 +76,7 @@ function CameraDetail() {
             {streamId && <ConfigDropdown stream={stream} streamId={streamId} />}
           </div>
 
-          <div className="lg:h-[calc(100vh-92px)] overflow-y-scroll">
+          <div className="lg:h-[calc(100vh-104px)] overflow-y-scroll pb-10">
             {streamId && stream?.is_active && (
               <StreamView
                 streamId={streamId}
@@ -121,41 +121,6 @@ function CameraDetail() {
         </div>
 
         <div className="col-span-12 lg:col-span-3">
-          {/* <div className="grid gap-4">
-            <p className="text-xl font-semibold ">{t("common.detail")}</p>
-            <div className="grid gap-3 bg-slate-100 dark:bg-slate-900 bg-opacity-75 p-3 rounded-md border">
-              <Contents
-                field={t("stream.streamId")}
-                value={stream?.stream_id ?? "-"}
-              />
-              <Contents
-                field={t("stream.model")}
-                value={stream?.model_name ?? "-"}
-              />
-              <Contents
-                field={t("stream.location")}
-                value={stream?.location ?? "-"}
-              />
-              <Contents
-                field={t("stream.desc")}
-                value={stream?.description ?? "-"}
-              />
-            </div>
-
-            <div className="grid gap-3 bg-slate-100 dark:bg-slate-900 bg-opacity-75 p-3 rounded-md border">
-              <Contents
-                field={t("monitoring.savingVideo")}
-                value={<Switch />}
-              />
-              <Contents field={t("monitoring.intrusion")} value={<Switch />} />
-              <Contents field={t("monitoring.inspect")} value={<Switch />} />
-              <Contents field={t("monitoring.alert")} value={<Switch />} />
-              <Contents
-                field={t("monitoring.watchNotification")}
-                value={<Switch />}
-              />
-            </div>
-          </div> */}
           <ScheduleEventList streamId={streamId} />
         </div>
       </div>
