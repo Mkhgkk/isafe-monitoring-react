@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "@/assets/logo.png";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +11,7 @@ import { authService } from "@/api";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
+import { buttonClassName, inputClassName } from "./LoginPage";
 
 //TODO: validation localization
 const signUpSchema = z
@@ -83,50 +78,55 @@ function SignupPage() {
 
   return (
     <div className="flex h-screen w-screen justify-center items-center">
-      <Card className="min-w-[500px]">
+      <Card className="min-w-[400px] bg-transparent border-0">
         <CardHeader className="space-y-1">
-          <img src={logo} width={30} height={30} className="mb-2" />
-          <CardTitle className="text-2xl">{t("signUp.title")}</CardTitle>
-          <CardDescription>{t("signUp.desc")}</CardDescription>
+          <div className="flex gap-3 justify-center">
+            <img src={logo} width={30} height={30} />
+            <CardTitle className="text-2xl dark:text-white text-white">
+              {t("app")}
+            </CardTitle>
+          </div>
         </CardHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent className="grid gap-4">
+          <CardContent className="grid gap-3">
             <FormField
               control={control}
               id="username"
-              label={t("profile.username")}
-              error={t(errors.username?.message as string)}
               placeholder={t("profile.username")}
+              error={t(errors.username?.message as string)}
+              inputClassName={inputClassName}
             />
             <FormField
               control={control}
               id="email"
-              label={t("profile.email")}
+              placeholder={t("profile.email")}
               error={t(errors.email?.message as string)}
-              placeholder="email@example.com"
+              inputClassName={inputClassName}
             />
             <FormField
               control={control}
               id="password"
-              label={t("profile.password")}
+              placeholder={t("profile.password")}
               type="password"
               error={t(errors.password?.message as string)}
+              inputClassName={inputClassName}
             />
             <FormField
               control={control}
               id="passwordConfirm"
-              label={t("profile.confirmPassword")}
+              placeholder={t("profile.confirmPassword")}
               type="password"
               error={t(errors.passwordConfirm?.message as string)}
+              inputClassName={inputClassName}
             />
 
             <div>
-              <Button loading={isPending} className="w-full mt-4">
+              <Button loading={isPending} className={buttonClassName}>
                 {t("signUp.button")}
               </Button>
               <Button
-                className="w-full"
+                className="w-full text-white"
                 variant="link"
                 onClick={() => navigate("/login")}
               >

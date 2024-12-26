@@ -1,14 +1,22 @@
+import { cn } from "@/lib/utils";
 import { Navigate, Outlet } from "react-router-dom";
 
 function AuthLayout() {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+  const bgs = [
+    'bg-[url("@/assets/bg3.jpg")]',
+    'bg-[url("@/assets/bg4.jpg")]',
+    'bg-[url("@/assets/bg6.jpg")]',
+    'bg-[url("@/assets/bg7.jpg")]',
+  ];
+  const bg = bgs[Math.floor(Math.random() * bgs.length)];
 
   return token && refreshToken ? (
     <Navigate to="/" />
   ) : (
     <div className="w-screen h-screen relative">
-      <div className="absolute inset-0 bg-[url('@/assets/bg2.jpg')] bg-cover bg-center blur-lg"></div>
+      <div className={cn("absolute inset-0 bg-cover bg-center ", bg)}></div>
       <div className="relative z-10">
         <Outlet />
       </div>

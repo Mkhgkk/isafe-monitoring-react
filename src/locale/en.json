@@ -129,7 +129,7 @@
   },
   "login": {
     "title": "Welcome to iSafe Guard",
-    "desc": "Enter your email below to login your account",
+    "desc": "Login",
     "button": "Login",
     "orCreate": "Or create account",
     "alert": {

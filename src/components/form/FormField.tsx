@@ -12,6 +12,7 @@ const FormField = <TFormData extends Record<string, any>>({
   mask,
   requiredMark,
   control,
+  inputClassName,
   ...props
 }: InputProps & {
   control: Control<TFormData>;
@@ -22,6 +23,7 @@ const FormField = <TFormData extends Record<string, any>>({
   className?: string;
   mask?: string;
   requiredMark?: boolean;
+  inputClassName?: string;
 }) => {
   return (
     <div className={cn("grid gap-1", className)}>
@@ -44,7 +46,7 @@ const FormField = <TFormData extends Record<string, any>>({
               {(inputProps) => <Input {...field} {...inputProps} {...props} />}
             </MaskedInput>
           ) : (
-            <Input {...field} {...props} />
+            <Input {...field} {...props} className={inputClassName} />
           )
         }
       />
