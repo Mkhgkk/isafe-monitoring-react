@@ -65,10 +65,16 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "pulse-intense": {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0 },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-intense":
+          "pulse-intense 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       fontFamily: {
         barlow: ["Barlow", "sans-serif"],

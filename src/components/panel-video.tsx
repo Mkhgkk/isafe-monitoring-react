@@ -58,8 +58,10 @@ const PanelVideo = forwardRef(({ streamId }: PanelVideoProps) => {
       )} */}
 
       <WebRTCPlayer streamId={streamId!} />
+
+      {/* bg-[radial-gradient(circle_at_50%_50%,transparent,#ef4444CC)] */}
       {intrustion && (
-        <div className="absolute h-full left-0 top-0 right-0 bottom-0 flex flex-col justify-between bg-[radial-gradient(circle_at_50%_50%,transparent,#ef4444CC)] animate-pulse" />
+        <div className="absolute h-full left-0 top-0 right-0 bottom-0 flex flex-col justify-between bg-red-500 bg-opacity-50 animate-pulse-intense" />
       )}
     </>
   );
