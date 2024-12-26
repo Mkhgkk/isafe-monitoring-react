@@ -19,6 +19,10 @@ import { useTranslation } from "react-i18next";
 import PanelVideo from "@/components/panel-video";
 import StreamInfo from "@/components/stream/stream-info";
 import { Skeletons } from "./MainPage";
+import Contents from "@/components/contents";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import ConfigDropdown from "@/components/camera/config-dropdown";
 
 function CameraDetail() {
   const { t } = useTranslation();
@@ -69,28 +73,7 @@ function CameraDetail() {
                 </p>
               </div>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="outline">
-                  <Icons.settings className="w-4 h-4 mr-2" />
-                  {t("common.config")}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <ActivateDialog
-                  isActivated={!!stream?.is_active}
-                  streamId={streamId!}
-                />
-
-                <DropdownMenuItem
-                  onSelect={() => navigate("/streams/hazard-area/" + streamId)}
-                  disabled={!stream?.is_active}
-                >
-                  <Icons.hazard className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
-                  {t("hazardArea.title")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {streamId && <ConfigDropdown stream={stream} streamId={streamId} />}
           </div>
 
           <div className="lg:h-[calc(100vh-92px)] overflow-y-scroll">
@@ -176,10 +159,6 @@ function CameraDetail() {
           <ScheduleEventList streamId={streamId} />
         </div>
       </div>
-      {/* <div className="block lg:hidden">
-        <Separator className="my-5" />
-        {streamId && <ScheduleEventList streamId={streamId} />}
-      </div> */}
     </>
   );
 }

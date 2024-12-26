@@ -8,8 +8,8 @@ function Contents({
   value: string | JSX.Element;
 }) {
   return (
-    <div className="flex justify-between">
-      <p className="text-sm dark:text-muted-foreground mr-4">{field}</p>
+    <div className="flex justify-between w-full">
+      <p className="text-sm  mr-4">{field}</p>
       <p className="text-sm">{value}</p>
     </div>
   );
