@@ -3,7 +3,7 @@ import i18n from "@/locale/i18n";
 
 import moment from "moment";
 
-type Locale = "en" | "ko";
+export type Locale = "en" | "ko";
 
 type LocaleProviderProps = {
   children: React.ReactNode;

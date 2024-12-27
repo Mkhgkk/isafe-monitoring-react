@@ -35,6 +35,7 @@ import {
   CircleX,
   Construction,
   Settings,
+  Globe,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -75,6 +76,7 @@ export const Icons = {
   circleX: CircleX,
   hazard: Construction,
   settings: Settings,
+  globe: Globe,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>

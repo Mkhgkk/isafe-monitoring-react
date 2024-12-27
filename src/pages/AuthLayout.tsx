@@ -1,3 +1,4 @@
+import LanguageDropdown from "@/components/language-dropdown";
 import { cn } from "@/lib/utils";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -18,6 +19,8 @@ function AuthLayout() {
     <div className="w-screen h-screen relative">
       <div className={cn("absolute inset-0 bg-cover bg-center ", bg)}></div>
       <div className="relative z-10">
+        <LanguageDropdown className="absolute bottom-4 left-4" />
+
         <Outlet />
       </div>
     </div>
