@@ -22,11 +22,12 @@ import { AppwriteProvider } from "./context/AppwriteContext";
 import { Toaster } from "@/components/ui/toaster";
 import { ConnectionProvider } from "./context/ConnectionContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import HazardAreaSetting from "./components/hazard-area-setting";
+
 import { AlertProvider } from "./context/AlertContext";
 import SettingPage from "./pages/SettingPage";
 import ProfilePage from "./pages/ProfilePage";
 import { LocaleProvider } from "./components/locale-provider";
+import HazardSettingPage from "./pages/HazardSettingPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -44,7 +45,7 @@ function App() {
           <Route path="/events/:eventId" element={<EventDetail />} />
           <Route
             path="/streams/hazard-area/:streamId"
-            element={<HazardAreaSetting />}
+            element={<HazardSettingPage />}
           />
           <Route path="/settings" element={<SettingPage />} />
           <Route path="/profile" element={<ProfilePage />} />

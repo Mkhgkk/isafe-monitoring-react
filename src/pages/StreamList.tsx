@@ -246,7 +246,7 @@ function StreamList() {
   );
 
   return (
-    <div>
+    <div className="p-4">
       {contextHolder}
       <div className="flex justify-between pb-4 items-center">
         <div>

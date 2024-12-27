@@ -1,18 +1,18 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Icons } from "./icons";
-import PanelVideo from "./panel-video";
-import PTZControl from "./ptz-control";
+import { Icons } from "@/components/icons";
+import PanelVideo from "@/components/panel-video";
+import PTZControl from "@/components/ptz-control";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { configService } from "@/api";
 import { toast } from "@/hooks/use-toast";
 import config from "@/config/default.config";
-import SafeAreaCanvas from "./safearea-canvas";
+import SafeAreaCanvas from "@/components/safearea-canvas";
 import { useTranslation } from "react-i18next";
 
-function HazardAreaSetting() {
+function HazardSettingPage() {
   const { t } = useTranslation();
   const { streamId } = useParams();
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ function HazardAreaSetting() {
   };
 
   return (
-    <div className="h-[calc(100vh-80px)] flex flex-col">
+    <div className="h-[calc(100vh-80px)] flex flex-col p-4">
       <div className="flex justify-between">
         <div>
           <div className="flex items-center gap-2">
@@ -134,4 +134,4 @@ function HazardAreaSetting() {
   );
 }
 
-export default HazardAreaSetting;
+export default HazardSettingPage;

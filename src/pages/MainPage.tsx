@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { streamService } from "@/api";
 import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Stream } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
@@ -26,7 +25,7 @@ export default function MainPage() {
   });
 
   return (
-    <div className="grid gap-y-4">
+    <div className="grid gap-y-4 p-4">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-xl font-semibold">{t("monitoring.title")}</h1>

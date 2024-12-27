@@ -132,9 +132,18 @@ export const eventService = {
     if (query.stream) {
       searchParams.append("stream_id", query.stream);
     }
-    if (query.dateRange) {
-      const startTime = moment(query.dateRange.from).startOf("day").unix();
-      const endTime = moment(query.dateRange.to).endOf("day").unix();
+    if (query.dateRange?.from || query.dateRange?.to) {
+      let from = query.dateRange?.from;
+      let to = query.dateRange?.to;
+
+      if (query.dateRange.from && !query.dateRange.to) {
+        to = query.dateRange.from;
+      }
+      if (query.dateRange.to && !query.dateRange.from) {
+        from = query.dateRange.to;
+      }
+      const startTime = moment(from).startOf("day").unix();
+      const endTime = moment(to).endOf("day").unix();
 
       searchParams.append("start_timestamp", startTime.toString());
       searchParams.append("end_timestamp", endTime.toString());

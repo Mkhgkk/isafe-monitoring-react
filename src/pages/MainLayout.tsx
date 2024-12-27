@@ -161,7 +161,7 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
           />
           <ResizablePanel minSize={30}>
             <ScrollArea className="h-screen">
-              <div className="p-4 gap-y-4 flex flex-col ">
+              <div className="gap-y-4 flex flex-col">
                 <Outlet />
               </div>
             </ScrollArea>

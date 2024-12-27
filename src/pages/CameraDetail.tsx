@@ -65,7 +65,7 @@ function CameraDetail() {
   return (
     <>
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-12 pr-4 lg:col-span-9 lg:border-r">
+        <div className="col-span-12 pr-4 lg:col-span-9 lg:border-r p-4">
           <div className="flex justify-between items-center">
             <div>
               <div className="flex items-center gap-2">
@@ -116,7 +116,7 @@ function CameraDetail() {
           </div>
         </div>
 
-        <div className="col-span-12 lg:col-span-3">
+        <div className="col-span-12 lg:col-span-3 p-4 pl-0">
           {streamId && <ScheduleEventList streamId={streamId} />}
         </div>
       </div>

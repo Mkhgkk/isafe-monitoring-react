@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 function ProfilePage() {
   const { t } = useTranslation();
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-5 p-4">
       <div className="mx-auto md:w-[500px] container grid gap-10">
         <h1 className="text-xl font-semibold">{t("profile.title")}</h1>
 

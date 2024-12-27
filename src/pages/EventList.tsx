@@ -44,7 +44,7 @@ export default function EventList() {
   const flatted = data?.pages.flatMap((page) => page.data) as Event[];
 
   return (
-    <div className="h-[calc(100vh-85px)]">
+    <div className="h-[calc(100vh-85px)] p-4">
       <div className="flex justify-between items-center pb-5">
         <h1 className="text-xl font-semibold">{t("event.title")}</h1>
         <div className="gap-2 hidden lg:flex">

@@ -50,44 +50,46 @@ function EventDetail() {
   });
 
   return (
-    <div className="pb-4">
-      <div className=" mb-4">
-        <div className="flex items-center gap-2">
-          <Icons.arrowLeft
-            onClick={() => navigate(-1)}
-            className="cursor-pointer"
-          />
-          <h1 className="text-xl font-semibold">
-            {data?.title} ({data?.stream_id} - {data?.description})
-          </h1>
-        </div>
-
-        {data?.timestamp && (
-          <p className="text-sm text-muted-foreground mt-1">
-            {t("event.accuredAt", {
-              time: format(getDateFromUnixTimestamp(data.timestamp), "PPpp"),
-            })}
-          </p>
-        )}
-      </div>
-      {isFetching ? (
-        <Skeleton className="rounded-md w-full lg:max-w-5xl mb-5 aspect-[16/9]" />
-      ) : (
-        <div className="overflow-hidden rounded-md w-full lg:max-w-5xl mb-5">
-          {data?.video_filename && (
-            <video
-              src={`${config.PROTOCOL}//${config.BACKEND_URL}/video/videos/${data.video_filename}`}
-              controls={true}
-              autoPlay
-              muted
-              loop
-              className="w-full"
+    <div className="max-h-[calc(100vh-30px)] overflow-y-scroll">
+      <div className="p-4">
+        <div className="mb-4">
+          <div className="flex items-center gap-2">
+            <Icons.arrowLeft
+              onClick={() => navigate(-1)}
+              className="cursor-pointer"
             />
+            <h1 className="text-xl font-semibold">
+              {data?.title} ({data?.stream_id} - {data?.description})
+            </h1>
+          </div>
+
+          {data?.timestamp && (
+            <p className="text-sm text-muted-foreground mt-1">
+              {t("event.accuredAt", {
+                time: format(getDateFromUnixTimestamp(data.timestamp), "PPpp"),
+              })}
+            </p>
           )}
         </div>
-      )}
+        {isFetching ? (
+          <Skeleton className="rounded-md w-full lg:max-w-5xl aspect-[16/9]" />
+        ) : (
+          <div className="overflow-hidden rounded-md w-full lg:max-w-5xl">
+            {data?.video_filename && (
+              <video
+                src={`${config.PROTOCOL}//${config.BACKEND_URL}/video/videos/${data.video_filename}`}
+                controls={true}
+                autoPlay
+                muted
+                loop
+                className="w-full"
+              />
+            )}
+          </div>
+        )}
+      </div>
       <Separator />
-      <div className="mt-4">
+      <div className=" p-4">
         <h1 className="text-xl font-semibold mb-4">
           {t("event.relatedEvent")}
         </h1>
