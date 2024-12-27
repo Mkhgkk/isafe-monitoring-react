@@ -54,10 +54,7 @@ const SafeAreaCanvas = forwardRef(({ url }: { url?: string }, ref) => {
     const scaleY = 720 / imageSize.height;
 
     return areas.map((points) =>
-      points.map((point) => ({
-        x: point.x * scaleX,
-        y: point.y * scaleY,
-      }))
+      points.map((point) => [point.x * scaleX, point.y * scaleY])
     );
   };
 
