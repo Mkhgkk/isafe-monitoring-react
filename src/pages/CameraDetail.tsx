@@ -1,28 +1,55 @@
 import { Icons } from "@/components/icons";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { streamService } from "@/api";
 
 import { useQuery } from "@tanstack/react-query";
 import StreamView from "@/components/camera/stream-view";
 import ScheduleEventList from "@/components/camera/schedule-event-list";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import ActivateDialog from "@/components/stream/activate-dialog";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import PanelVideo from "@/components/panel-video";
 import StreamInfo from "@/components/stream/stream-info";
 import { Skeletons } from "./MainPage";
-import Contents from "@/components/contents";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
+
 import ConfigDropdown from "@/components/camera/config-dropdown";
+
+function OtherCameras({ streamId }: { streamId: string }) {
+  const navigate = useNavigate();
+  const { data: others = [], isFetching } = useQuery({
+    queryKey: ["streamService.fetchStreams"],
+    queryFn: streamService.fetchStreams,
+    select: (data) => {
+      return data.filter(
+        (stream) => stream.is_active && stream.stream_id !== streamId
+      );
+    },
+  });
+  return (
+    <div className="grid-cols-2 gap-4 lg:grid-cols-3 mt-5 hidden lg:grid">
+      {isFetching && !others?.length && <Skeletons />}
+      {others?.map((item, index) => (
+        <div
+          key={index}
+          className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
+          onClick={() =>
+            navigate({
+              pathname: `/cameras/${item.stream_id}`,
+            })
+          }
+        >
+          <PanelVideo streamId={item.stream_id} />
+          <StreamInfo
+            cameraName={item.stream_id}
+            modelName={item.model_name}
+            location={item.location}
+            bg
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function CameraDetail() {
   const { t } = useTranslation();
@@ -33,16 +60,6 @@ function CameraDetail() {
     queryKey: ["streamService.fetchStreamById", streamId],
     queryFn: () => streamService.fetchStreamById(streamId!),
     enabled: !!streamId,
-  });
-
-  const { data: others = [], isFetching } = useQuery({
-    queryKey: ["streamService.fetchStreams"],
-    queryFn: streamService.fetchStreams,
-    select: (data) => {
-      return data.filter(
-        (stream) => stream.is_active && stream.stream_id !== streamId
-      );
-    },
   });
 
   return (
@@ -95,33 +112,12 @@ function CameraDetail() {
                 <Icons.offline className="opacity-30" size={50} />
               </div>
             )}
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 mt-5">
-              {isFetching && !others?.length && <Skeletons />}
-              {others?.map((item, index) => (
-                <div
-                  key={index}
-                  className="relative rounded-md overflow-hidden w-full aspect-[16/9]"
-                  onClick={() =>
-                    navigate({
-                      pathname: `/cameras/${item.stream_id}`,
-                    })
-                  }
-                >
-                  <PanelVideo streamId={item.stream_id} />
-                  <StreamInfo
-                    cameraName={item.stream_id}
-                    modelName={item.model_name}
-                    location={item.location}
-                    bg
-                  />
-                </div>
-              ))}
-            </div>
+            {streamId && <OtherCameras streamId={streamId} />}
           </div>
         </div>
 
         <div className="col-span-12 lg:col-span-3">
-          <ScheduleEventList streamId={streamId} />
+          {streamId && <ScheduleEventList streamId={streamId} />}
         </div>
       </div>
     </>

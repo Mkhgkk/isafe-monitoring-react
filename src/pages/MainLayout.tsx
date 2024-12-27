@@ -96,8 +96,9 @@ interface LayoutProps {
 function Layout({ systemStatus, isConnected }: LayoutProps) {
   const panelRef = useRef<ImperativePanelHandle>(null);
   const defaultLayout = 100;
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const [isCollapsed, setIsCollapsed] = useState(
-    Cookies.get("collapsed") === "true" || false
+    isSmallScreen || Cookies.get("collapsed") === "true" || false
   );
 
   const updateCollapsedCookie = (value: boolean) => {
@@ -107,8 +108,10 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
   const handleResize = () => {
     if (window.innerWidth < 768) {
       panelRef.current?.collapse();
+      setIsSmallScreen(true);
     } else {
       panelRef.current?.expand();
+      setIsSmallScreen(false);
     }
   };
 
@@ -151,7 +154,11 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
               systemStatus={systemStatus}
             />
           </ResizablePanel>
-          <ResizableHandle withHandle />
+
+          <ResizableHandle
+            withHandle={!isSmallScreen}
+            disabled={isSmallScreen}
+          />
           <ResizablePanel minSize={30}>
             <ScrollArea className="h-screen">
               <div className="p-4 gap-y-4 flex flex-col ">
