@@ -15,6 +15,7 @@ import EventItem from "@/components/event/event-item";
 import { Event } from "@/type";
 import { EventItemSkeleton } from "@/components/camera/schedule-event-list";
 import { useTranslation } from "react-i18next";
+import Empty from "@/components/empty";
 
 const LIMIT = 20;
 
@@ -65,9 +66,7 @@ export default function EventList() {
       </div>
       <ScrollArea className="h-[calc(100vh-105px)]">
         {!isLoading && !flatted?.length && (
-          <p className="text-muted-foreground text-center mt-[200px]">
-            {t("event.noResult")}
-          </p>
+          <Empty text={t("event.noResult")} className="h-[calc(100vh-105px)]" />
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-5 flex-wrap">
           {isLoading &&

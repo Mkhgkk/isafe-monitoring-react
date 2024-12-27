@@ -7,6 +7,7 @@ import StreamInfo from "@/components/stream/stream-info";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import Empty from "@/components/empty";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -40,12 +41,10 @@ export default function MainPage() {
         </Button>
       </div>
 
-      <div className="overflow-y-scroll max-h-[calc(100vh-110px)] pb-10 grid gap-y-4">
+      <div className="flex flex-col overflow-y-scroll h-[calc(100vh-110px)] pb-10 gap-y-4">
         {isFetching && !data?.length && <Skeletons />}
         {!isFetching && !data?.length && (
-          <p className="text-sm dark:text-muted-foreground mb-4 text-center">
-            {t("monitoring.noActiveStream")}
-          </p>
+          <Empty text={t("monitoring.noActiveStream")} />
         )}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {data?.map((item, index) => (

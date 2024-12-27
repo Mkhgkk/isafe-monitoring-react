@@ -8,6 +8,7 @@ import { Skeleton } from "../ui/skeleton";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
+import Empty from "../empty";
 
 const LIMIT = 20;
 function ScheduleEventList({ streamId }: { streamId: string }) {
@@ -82,9 +83,7 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
         </div>
 
         {events?.length === 0 && !isLoading && (
-          <p className="dark:text-muted-foreground text-center mt-10 text-sm">
-            {t("event.noResult")}
-          </p>
+          <Empty text={t("event.noResult")} className="h-[calc(100vh-185px)]" />
         )}
         <div ref={setTarget} className="h-[1rem]" />
       </div>
