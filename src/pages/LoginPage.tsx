@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 
 export const inputClassName =
-  "bg-opacity-60 bg-white border-0 text-black placeholder:text-white placeholder:font-semibold";
+  "bg-opacity-60 bg-white border-0 text-black placeholder:text-zinc-700";
 
 export const buttonClassName =
   "w-full mt-4 bg-[#1e293b] hover:bg-opacity-90 hover:bg-[#1e293b] text-white";
