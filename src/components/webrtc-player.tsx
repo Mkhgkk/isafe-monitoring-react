@@ -9,18 +9,12 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
   const iframeSrc = `${config.PROTOCOL}//${config.WEBRTC_STREAM_URL}/live/${streamId}/`;
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      {/* The iframe */}
+    <div className="w-full h-full">
       <iframe
         src={iframeSrc}
         title="WebRTC Stream"
         allow="autoplay"
-        style={{
-          width: "100%",
-          height: "100%",
-          border: "none",
-          pointerEvents: "none", // Prevent mouse interaction directly on the iframe
-        }}
+        className="w-full h-full pointer-events-none border-0"
       />
     </div>
   );

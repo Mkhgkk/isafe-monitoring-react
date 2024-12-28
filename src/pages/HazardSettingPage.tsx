@@ -98,7 +98,7 @@ function HazardSettingPage() {
         )}
       </div>
       {!url && (
-        <div className="my-5 rounded-md overflow-hidden max-w-screen-lg relative aspect-[16/9]">
+        <div className="mx-auto w-full lg:max-w-5xl my-5 rounded-md overflow-hidden relative aspect-[16/9]">
           <PanelVideo streamId={streamId} />
           <div
             className={cn(
@@ -126,7 +126,7 @@ function HazardSettingPage() {
         </div>
       )}
       {url && (
-        <div className="max-w-screen-lg h-full my-5 rounded-md overflow-hidde">
+        <div className="mx-auto w-full lg:max-w-5xl h-full my-5 rounded-md overflow-hidden">
           <SafeAreaCanvas url={url} ref={canvasRef} />
         </div>
       )}

@@ -72,9 +72,9 @@ function EventDetail() {
           )}
         </div>
         {isFetching ? (
-          <Skeleton className="rounded-md w-full lg:max-w-5xl aspect-[16/9]" />
+          <Skeleton className="mx-auto rounded-md w-full lg:max-w-5xl aspect-[16/9]" />
         ) : (
-          <div className="overflow-hidden rounded-md w-full lg:max-w-5xl">
+          <div className="mx-auto overflow-hidden rounded-md w-full lg:max-w-5xl">
             {data?.video_filename && (
               <video
                 src={`${config.PROTOCOL}//${config.BACKEND_URL}/video/videos/${data.video_filename}`}
@@ -89,24 +89,24 @@ function EventDetail() {
         )}
       </div>
       <Separator />
-      <div className=" p-4">
+      <div className="p-4">
         <h1 className="text-xl font-semibold mb-4">
           {t("event.relatedEvent")}
         </h1>
         {relatedEvents?.data?.length === 0 && !isFetchingRelated && (
           <p className="text-center">{t("event.noRelated")}</p>
         )}
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {isFetchingRelated &&
             [0, 1, 2, 3].map((item) => (
               <EventCardSkeleton
-                className="flex gap-2 w-[250px] border p-2 rounded-md"
+                className="flex gap-2 w-full border p-2 rounded-md"
                 key={item}
               />
             ))}
           {relatedEvents?.data?.map((item: Event) => (
             <EventCard
-              className="flex gap-2 w-[250px] border p-2 rounded-md"
+              className="flex gap-2 w-full border p-2 rounded-md"
               key={item._id.$oid}
               item={item}
             />
