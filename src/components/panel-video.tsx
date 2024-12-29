@@ -4,6 +4,7 @@ import socket from "../services/socketService";
 import { useConnectionContext } from "@/context/ConnectionContext";
 import WebRTCPlayer from "./webrtc-player";
 import { useAlertContext } from "@/context/AlertContext";
+import { useDebouncedCallback } from "use-debounce";
 
 interface PanelVideoProps {
   streamId?: string;
@@ -14,17 +15,25 @@ const PanelVideo = forwardRef(({ streamId }: PanelVideoProps) => {
   const ALERT_EVENT = `alert-${streamId}`;
 
   const [intrustion, setIntrustion] = useState(false);
+  const [showIntrustion, setShowIntrustion] = useState(false);
   const { playAlert } = useAlertContext();
 
   const { isConnected } = useConnectionContext();
 
+  const debounced = useDebouncedCallback((value) => {
+    if (intrustion) return;
+    setShowIntrustion(value);
+  }, 200);
+
   const handleAlert = (value: { type: string }) => {
-    if (value.type === "intrusion" && !intrustion) {
+    if (value.type === "intrusion") {
       setIntrustion(true);
+      setShowIntrustion(true);
       playAlert();
 
       setTimeout(() => {
         setIntrustion(false);
+        debounced(false);
       }, 4000);
     }
   };
@@ -46,21 +55,10 @@ const PanelVideo = forwardRef(({ streamId }: PanelVideoProps) => {
 
   return (
     <>
-      {/* {!isStreaming && (
-        <div className="absolute w-full h-full">
-          <div className="rounded-md bg-zinc-200 dark:bg-zinc-900 h-full flex justify-center items-center cursor-pointer">
-            {isFetching && (
-              <Icons.loader className="animate-spin opacity-30" size={50} />
-            )}
-            {!isFetching && <Icons.videoOff className="opacity-30" size={50} />}
-          </div>
-        </div>
-      )} */}
-
       <WebRTCPlayer streamId={streamId!} />
 
       {/* bg-[radial-gradient(circle_at_50%_50%,transparent,#ef4444CC)] */}
-      {intrustion && (
+      {showIntrustion && (
         <div className="absolute h-full left-0 top-0 right-0 bottom-0 flex flex-col justify-between bg-red-500 bg-opacity-50 animate-pulse-intense" />
       )}
     </>

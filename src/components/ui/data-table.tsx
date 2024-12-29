@@ -174,7 +174,7 @@ export function DataTable<TData, TValue>({
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
-                      className="text-black dark:text-white"
+                      className="text-black dark:text-white text-nowrap"
                     >
                       {header.isPlaceholder
                         ? null
