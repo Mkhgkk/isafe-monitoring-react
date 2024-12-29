@@ -19,7 +19,7 @@ const PanelVideo = forwardRef(({ streamId }: PanelVideoProps) => {
   const { isConnected } = useConnectionContext();
 
   const handleAlert = (value: { type: string }) => {
-    if (value.type === "intrusion") {
+    if (value.type === "intrusion" && !intrustion) {
       setIntrustion(true);
       playAlert();
 
