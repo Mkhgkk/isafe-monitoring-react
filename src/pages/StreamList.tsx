@@ -129,7 +129,7 @@ function StreamList() {
                 )}
               />
               <span className="capitalize">
-                {isActive ? t("monitoring.active") : t("monitoring.inactive")}
+                {isActive ? t("stream.active") : t("stream.inactive")}
               </span>
             </div>
           );

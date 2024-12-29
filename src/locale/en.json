@@ -46,6 +46,9 @@
     "ptzPort": "PTZ Port",
     "rtspLink": "RTSP Link",
 
+    "active": "Active",
+    "inactive": "Inactive",
+
     "newStream": "New Stream",
     "addStream": "Add Stream",
     "editStream": "Edit Stream",

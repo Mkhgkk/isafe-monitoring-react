@@ -46,6 +46,9 @@
     "ptzPort": "PTZ 포트",
     "rtspLink": "RTSP 링크",
 
+    "active": "활성",
+    "inactive": "비활성",
+
     "newStream": "새 스트림",
     "addStream": "스트림 추가",
     "editStream": "스트림 수정",
