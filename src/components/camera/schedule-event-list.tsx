@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import EventCard, { EventCardSkeleton } from "../event-card";
 import WeekCalendar from "../week-calendar";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { eventService } from "@/api";
@@ -9,6 +8,7 @@ import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Empty from "../empty";
+import EventItem, { EventItemSkeleton } from "../event/event-item";
 
 const LIMIT = 20;
 function ScheduleEventList({ streamId }: { streamId: string }) {
@@ -69,17 +69,19 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
         <div className="grid gap-y-3 grid-cols-2 gap-2 ">
           {isLoading
             ? [0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
-                <EventCardSkeleton key={item} className="p-2" />
+                <EventItemSkeleton key={item} className="p-2" />
               ))
             : events?.map((item) => (
-                <EventCard
+                <EventItem
                   item={item}
                   key={item._id.$oid}
-                  className="border rounded-md p-2"
+                  className="border p-2"
+                  simple
+                  withoutDate
                 />
               ))}
 
-          {isFetchingNextPage && <EventCardSkeleton className="p-2" />}
+          {isFetchingNextPage && <EventItemSkeleton className="p-2" />}
         </div>
 
         {events?.length === 0 && !isLoading && (
@@ -93,15 +95,15 @@ function ScheduleEventList({ streamId }: { streamId: string }) {
 
 export default ScheduleEventList;
 
-export function EventItemSkeleton() {
-  return (
-    <div>
-      <Skeleton className="w-full rounded-sm aspect-[16/9] mb-2 border" />
-      <div>
-        <Skeleton className="h-5 w-20 mb-2 rounded-sm" />
-        <Skeleton className="h-3 w-28 rounded-sm mb-0.5" />
-        <Skeleton className="h-3 w-28" />
-      </div>
-    </div>
-  );
-}
+// export function EventItemSkeleton() {
+//   return (
+//     <div>
+//       <Skeleton className="w-full rounded-sm aspect-[16/9] mb-2 border" />
+//       <div>
+//         <Skeleton className="h-5 w-20 mb-2 rounded-sm" />
+//         <Skeleton className="h-3 w-28 rounded-sm mb-0.5" />
+//         <Skeleton className="h-3 w-28" />
+//       </div>
+//     </div>
+//   );
+// }

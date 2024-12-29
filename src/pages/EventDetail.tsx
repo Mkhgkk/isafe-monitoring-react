@@ -6,11 +6,18 @@ import { Icons } from "@/components/icons";
 import config from "../config/default.config";
 import { useQuery } from "@tanstack/react-query";
 import { eventService } from "@/api";
-import { format } from "date-fns";
 import { getDateFromUnixTimestamp } from "@/utils";
-import EventCard, { EventCardSkeleton } from "@/components/event-card";
+
 import { Event } from "@/type";
 import { useTranslation } from "react-i18next";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import EventItem, { EventItemSkeleton } from "@/components/event/event-item";
+import moment from "moment";
 
 function EventDetail() {
   const { t } = useTranslation();
@@ -58,15 +65,39 @@ function EventDetail() {
               onClick={() => navigate(-1)}
               className="cursor-pointer"
             />
-            <h1 className="text-xl font-semibold">
-              {data?.title} ({data?.stream_id} - {data?.description})
-            </h1>
+            {data?.reasons.length > 1 ? (
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <h1 className="text-xl font-semibold">
+                      {t(`eventCause.${data.reasons[0]}`)}
+                      {` +${data.reasons.length - 1}`} ({data?.stream_id} -{" "}
+                      {data?.model_name})
+                    </h1>
+                  </TooltipTrigger>
+                  <TooltipContent className="grid gap-2" align="start">
+                    {data.reasons.map((reason: string, index: number) => (
+                      <p key={index} className="text-md">
+                        {t(`eventCause.${reason}`)}
+                      </p>
+                    ))}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <h1 className="text-xl font-semibold">
+                {t(`eventCause.${data?.reasons[0]}`)} ({data?.stream_id} -{" "}
+                {data?.model_name})
+              </h1>
+            )}
           </div>
 
           {data?.timestamp && (
             <p className="text-sm text-muted-foreground mt-1">
               {t("event.accuredAt", {
-                time: format(getDateFromUnixTimestamp(data.timestamp), "PPpp"),
+                time: moment
+                  .unix(data?.timestamp)
+                  .format("yyyy-MM-DD HH:mm:ss"),
               })}
             </p>
           )}
@@ -99,16 +130,17 @@ function EventDetail() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {isFetchingRelated &&
             [0, 1, 2, 3].map((item) => (
-              <EventCardSkeleton
+              <EventItemSkeleton
                 className="flex gap-2 w-full border p-2 rounded-md"
                 key={item}
               />
             ))}
           {relatedEvents?.data?.map((item: Event) => (
-            <EventCard
-              className="flex gap-2 w-full border p-2 rounded-md"
+            <EventItem
+              className="border p-2"
               key={item._id.$oid}
               item={item}
+              simple
             />
           ))}
         </div>

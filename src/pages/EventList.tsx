@@ -11,9 +11,8 @@ import { eventService } from "@/api";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import ListFilter, { EventFilters } from "@/components/event/list-filter";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import EventItem from "@/components/event/event-item";
+import EventItem, { EventItemSkeleton } from "@/components/event/event-item";
 import { Event } from "@/type";
-import { EventItemSkeleton } from "@/components/camera/schedule-event-list";
 import { useTranslation } from "react-i18next";
 import Empty from "@/components/empty";
 

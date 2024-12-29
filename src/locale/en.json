@@ -183,5 +183,18 @@
     "password": "Password must be at least 6 characters",
     "username": "Username must be at least 3 characters",
     "passwordNotMatch": "Password does not match"
+  },
+  "eventCause": {
+    "intrusion": "Intrusion",
+    "missing_helment": "Missing Helment",
+    "mobile_scaffold_no_outtrigger": "Mobile Scaffold No Outtrigger",
+    "opened_hatch": "Opened Hatch",
+    "same_vertical_area": "Working in Same Vertical Area",
+    "missing_hook": "Missing Hook",
+    "fire": "Fire",
+    "smoke": "Smoke",
+    "missing_guardrail": "Missing Guardrail",
+    "missing_fire_extinguisher": "Missing Fire Extinguisher",
+    "missing_fire_net": "Missing Fire Net"
   }
 }

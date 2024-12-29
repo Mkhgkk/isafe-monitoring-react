@@ -1,11 +1,11 @@
 export type Event = {
   _id: { $oid: string };
   stream_id: string;
-  title: string;
-  description: string;
+  reasons: EventCause[];
   timestamp: number;
   thumbnail: string;
   vedio_filename: string;
+  model_name: string;
 };
 
 export type Stream = {
@@ -20,3 +20,16 @@ export type Stream = {
   location: string;
   model_name: string;
 };
+
+export type EventCause =
+  | "instrusion"
+  | "missing_helment"
+  | "mobile_scaffold_no_outtrigger"
+  | "opened_hatch"
+  | "same_vertical_area"
+  | "missing_hook"
+  | "fire"
+  | "smoke"
+  | "missing_guardrail"
+  | "missing_fire_extinguisher"
+  | "missing_fire_net";

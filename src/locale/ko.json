@@ -180,5 +180,18 @@
     "password": "비밀번호는 최소 6자 이상이어야 합니다.",
     "username": "사용자 이름은 최소 3자 이상이어야 합니다.",
     "passwordNotMatch": "비밀번호가 일치하지 않습니다."
+  },
+  "eventCause": {
+    "intrusion": "위험지역 침입",
+    "missing_helmet": "헬멧 미착용",
+    "mobile_scaffold_no_outtrigger": "아웃트리거 없는 이동식 비계",
+    "opened_hatch": "열린 해치",
+    "same_vertical_area": "동일 수직 영역 작업",
+    "missing_hook": "후크 미설치",
+    "fire": "화재 감지",
+    "smoke": "연기 감지",
+    "missing_guardrail": "가드레일 미설치",
+    "missing_fire_extinguisher": "소화기 미비치",
+    "missing_fire_net": "방화망 미설치"
   }
 }
