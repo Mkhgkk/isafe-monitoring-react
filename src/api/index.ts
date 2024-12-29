@@ -101,13 +101,11 @@ export const streamService = {
   },
 
   deleteStream: async (streamId: string) => {
-    const result = await databases.deleteDocument(
-      "isafe-guard-db",
-      "66f504260003d64837e5",
-      streamId
-    );
+    const response = await apiClient.post("/api/stream/delete_stream", {
+      stream_id: streamId,
+    });
 
-    return result;
+    return response.data;
   },
   changeAutoTrack: async (streamId: string) => {
     const response = await apiClient.post("/api/stream/change_autotrack", {
