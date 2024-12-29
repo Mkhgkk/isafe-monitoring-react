@@ -18,7 +18,6 @@ import StreamList from "./pages/StreamList";
 import LoginPage from "./pages/LoginPage";
 import AuthLayout from "./pages/AuthLayout";
 import SignupPage from "./pages/SignupPage";
-import { AppwriteProvider } from "./context/AppwriteContext";
 import { Toaster } from "@/components/ui/toaster";
 import { ConnectionProvider } from "./context/ConnectionContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -61,16 +60,14 @@ function App() {
   return (
     <ConnectionProvider>
       <AlertProvider>
-        <AppwriteProvider>
-          <QueryClientProvider client={queryClient}>
-            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-              <LocaleProvider defaultLocale="en" storageKey="isafe-locale">
-                <RouterProvider router={router} />
-                <Toaster />
-              </LocaleProvider>
-            </ThemeProvider>
-          </QueryClientProvider>
-        </AppwriteProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <LocaleProvider defaultLocale="en" storageKey="isafe-locale">
+              <RouterProvider router={router} />
+              <Toaster />
+            </LocaleProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
       </AlertProvider>
     </ConnectionProvider>
   );

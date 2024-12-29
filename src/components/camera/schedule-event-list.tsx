@@ -3,7 +3,6 @@ import WeekCalendar from "../week-calendar";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { eventService } from "@/api";
 import { Event } from "@/type";
-import { Skeleton } from "../ui/skeleton";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
