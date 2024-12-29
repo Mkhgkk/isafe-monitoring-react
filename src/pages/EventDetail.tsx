@@ -108,7 +108,7 @@ function EventDetail() {
           <div className="mx-auto overflow-hidden rounded-md w-full lg:max-w-5xl">
             {data?.video_filename && (
               <video
-                src={`${config.PROTOCOL}//${config.BACKEND_URL}/video/videos/${data.video_filename}`}
+                src={`${config.PROTOCOL}//${config.BACKEND_URL}/video/${data.stream_id}/videos/${data.video_filename}`}
                 controls={true}
                 autoPlay
                 muted

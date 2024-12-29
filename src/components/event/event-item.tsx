@@ -45,7 +45,7 @@ function EventItem({
       onClick={() => navigate("/events/" + item._id.$oid)}
     >
       <img
-        src={getThumbnailUrl(item.thumbnail)}
+        src={getThumbnailUrl(item.thumbnail, item.stream_id)}
         className="w-full rounded-sm aspect-[16/9]"
       />
       <div className="mt-1.5">

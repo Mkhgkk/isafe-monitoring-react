@@ -11,5 +11,5 @@ export const getDateFromUnixTimestamp = (unixTimestamp: number) => {
   return new Date(unixTimestamp * 1000);
 };
 
-export const getThumbnailUrl = (thumbnail: string) =>
-  `${config.PROTOCOL}//${config.BACKEND_URL}/static/thumbnails/${thumbnail}`;
+export const getThumbnailUrl = (thumbnail: string, streamId: string) =>
+  `${config.PROTOCOL}//${config.BACKEND_URL}/static/${streamId}/thumbnails/${thumbnail}`;
