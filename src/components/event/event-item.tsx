@@ -48,7 +48,7 @@ function EventItem({
         src={getThumbnailUrl(item.thumbnail)}
         className="w-full rounded-sm aspect-[16/9]"
       />
-      <div className="mt-1">
+      <div className="mt-1.5">
         {item.reasons.length > 1 ? (
           <TooltipProvider delayDuration={0}>
             <Tooltip>
