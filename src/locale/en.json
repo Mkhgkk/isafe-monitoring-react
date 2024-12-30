@@ -189,7 +189,7 @@
   },
   "eventCause": {
     "intrusion": "Intrusion",
-    "missing_helment": "Missing Helment",
+    "missing_helmet": "Missing Helment",
     "mobile_scaffold_no_outtrigger": "Mobile Scaffold No Outtrigger",
     "opened_hatch": "Opened Hatch",
     "same_vertical_area": "Working in Same Vertical Area",
