@@ -4,4 +4,5 @@ export const streamModels = [
   { value: "Ladder", label: "Ladder" },
   { value: "MobileScaffolding", label: "Mobile Scaffolding" },
   { value: "CuttingWelding", label: "Cutting Welding" },
+  { value: "Fire", label: "Fire" },
 ];
