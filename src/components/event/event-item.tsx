@@ -65,7 +65,9 @@ function EventItem({
               <TooltipContent className="grid gap-2">
                 {item.reasons.map((reason, index) => (
                   <p key={index} className="text-sm">
-                    {t(`eventCause.${reason}`)}
+                    {reason
+                      ? t(`eventCause.${reason}`)
+                      : t("eventCause.unknown")}
                   </p>
                 ))}
               </TooltipContent>
@@ -77,7 +79,9 @@ function EventItem({
               "text-sm": simple,
             })}
           >
-            {t(`eventCause.${item.reasons[0]}`)}
+            {item.reasons[0]
+              ? t(`eventCause.${item.reasons[0]}`)
+              : t("eventCause.unknown")}
           </p>
         )}
 

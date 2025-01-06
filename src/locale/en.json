@@ -198,6 +198,7 @@
     "smoke": "Smoke",
     "missing_guardrail": "Missing Guardrail",
     "missing_fire_extinguisher": "Missing Fire Extinguisher",
-    "missing_fire_net": "Missing Fire Net"
+    "missing_fire_net": "Missing Fire Net",
+    "unknown": "Unsafe Event"
   }
 }

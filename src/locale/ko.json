@@ -195,6 +195,7 @@
     "smoke": "연기 감지",
     "missing_guardrail": "가드레일 미설치",
     "missing_fire_extinguisher": "소화기 미비치",
-    "missing_fire_net": "방화망 미설치"
+    "missing_fire_net": "방화망 미설치",
+    "unknown": "위험 감지"
   }
 }
