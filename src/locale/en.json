@@ -95,7 +95,7 @@
   "event": {
     "title": "Events",
     "noResult": "No events found.",
-    "accuredAt": "Accured at {{time}}",
+    "accuredAt": "Occured at {{time}}",
     "relatedEvent": "Related Event",
     "noRelated": "No related event."
   },
