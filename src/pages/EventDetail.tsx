@@ -86,8 +86,10 @@ function EventDetail() {
               </TooltipProvider>
             ) : (
               <h1 className="text-xl font-semibold">
-                {t(`eventCause.${data?.reasons[0]}`)} ({data?.stream_id} -{" "}
-                {data?.model_name})
+                {data?.reasons[0]
+                  ? t(`eventCause.${data?.reasons[0]}`)
+                  : t("eventCause.unknown")}{" "}
+                ({data?.stream_id} - {data?.model_name})
               </h1>
             )}
           </div>
