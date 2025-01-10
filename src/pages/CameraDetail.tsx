@@ -64,7 +64,7 @@ function CameraDetail() {
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 lg:gap-4 ">
         <div className="col-span-12 pr-4 lg:col-span-9 lg:border-r p-4">
           <div className="flex justify-between items-center">
             <div>
@@ -93,7 +93,7 @@ function CameraDetail() {
             {streamId && <ConfigDropdown stream={stream} streamId={streamId} />}
           </div>
 
-          <div className="lg:h-[calc(100vh-104px)] overflow-y-scroll pb-10">
+          <div className="lg:h-[calc(100vh-104px)] overflow-y-scroll lg:pb-10">
             {streamId && stream?.is_active && (
               <StreamView
                 streamId={streamId}
@@ -116,7 +116,7 @@ function CameraDetail() {
           </div>
         </div>
 
-        <div className="col-span-12 lg:col-span-3 p-4 pl-0">
+        <div className="col-span-12 lg:col-span-3 p-4 lg:pl-0">
           {streamId && <ScheduleEventList streamId={streamId} />}
         </div>
       </div>

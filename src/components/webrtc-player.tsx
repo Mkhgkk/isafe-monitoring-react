@@ -47,7 +47,7 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
         setVideoErrorMessage(undefined);
         break;
       case "event":
-        if (event.data.message === "canplay") setVideoLoading(false);
+        if (event.data.message === "playing") setVideoLoading(false);
         break;
       default:
         setVideoErrorMessage(t("stream.error.server"));
