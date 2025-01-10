@@ -9,9 +9,11 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
   const iframeSrc = `${config.PROTOCOL}//${config.WEBRTC_STREAM_URL}/live/${streamId}/`;
 
   const [videoLoading, setVideoLoading] = useState(true);
-  const [videoErrorMessage, setVideoErrorMessage] = useState<string | null>("");
+  const [videoErrorMessage, setVideoErrorMessage] = useState<string>("");
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [iframeErrorMessage, setIframeErrorMessage] = useState<string>("");
 
-  const handleMessage = (event) => {
+  const handleMessage = (event: MessageEvent) => {
     if (event.data.target !== "mediamtx-webrtc-inpage") return;
     // console.log(event.data);
 
@@ -30,7 +32,7 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
       // hide error messages related to connection
       // show loading
       setVideoLoading(true);
-      setVideoErrorMessage(null);
+      setVideoErrorMessage("");
       console.log(event.data);
     } else if (event.data.type === "event") {
       // canplay || suspended
@@ -42,6 +44,16 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
       // handle default case (probably error too)
       //  -- unknown message
     }
+  };
+
+  const handleIframeError = () => {
+    setIframeLoaded(false);
+    setIframeErrorMessage("Error: streaming server not reachable");
+  };
+
+  const handleIframeLoad = () => {
+    setIframeErrorMessage("");
+    setIframeLoaded(true);
   };
 
   useEffect(() => {
@@ -60,6 +72,8 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
         // sandbox="allow-scripts allow-same-origin"
         allow="autoplay"
         className="w-full h-full pointer-events-none border-0"
+        onLoad={handleIframeLoad}
+        onError={handleIframeError}
       />
     </div>
   );
