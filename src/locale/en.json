@@ -64,6 +64,14 @@
       "autoTrackActivate": "Autotrack activated.",
       "autoTrackDeactivate": "Autotrack deactivated.",
       "autoTrackError": "Failed to activate/deactivate autotrack"
+    },
+
+    "error": {
+      "server": "Server error.",
+      "streamingServer": "Streaming server not reachable.",
+      "connectionClosed": "Connection closed.",
+      "serverNotAvailable": "Server not reachable.",
+      "streamNotFound": "Stream not found."
     }
   },
 
