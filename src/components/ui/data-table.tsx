@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -51,6 +51,7 @@ type DataTableProps<TData, TValue> = {
   filters?: Filter[];
   onRefresh?: () => void;
   loading: boolean;
+  id: string;
 };
 
 function TableFilters({ filters, table }) {
@@ -111,6 +112,7 @@ export function DataTable<TData, TValue>({
   filters,
   onRefresh,
   loading,
+  id,
 }: DataTableProps<TData, TValue>) {
   const { t } = useTranslation();
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -135,7 +137,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border p-4">
+    <div className="rounded-md border p-4 flex flex-col max-w-full overflow-hidden">
       <div className="mb-4 flex justify-between items-center">
         <div className="hidden lg:flex items-center gap-2">
           <TableFilters table={table} filters={filters} />
@@ -164,7 +166,7 @@ export function DataTable<TData, TValue>({
           </Button>
         )}
       </div>
-      <div className="border rounded-md">
+      <div className="border rounded-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -219,7 +221,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="mt-4">
-        <DataTablePagination table={table} />
+        <DataTablePagination table={table} tableId={id} />
       </div>
     </div>
   );
@@ -227,12 +229,20 @@ export function DataTable<TData, TValue>({
 
 interface DataTablePaginationProps<TData> {
   table: TanTable<TData>;
+  tableId: string;
 }
 
 export function DataTablePagination<TData>({
   table,
+  tableId,
 }: DataTablePaginationProps<TData>) {
   const { t } = useTranslation();
+  useEffect(() => {
+    const savedPageSize = localStorage.getItem(`${tableId}-pageSize`);
+    if (savedPageSize) {
+      table.setPageSize(Number(savedPageSize));
+    }
+  }, []);
 
   return (
     <div className="flex justify-between items-center">
@@ -242,6 +252,7 @@ export function DataTablePagination<TData>({
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
             table.setPageSize(Number(value));
+            localStorage.setItem(`${tableId}-pageSize`, value); // Save new page size to local storage
           }}
         >
           <SelectTrigger className="h-8 w-[70px]">

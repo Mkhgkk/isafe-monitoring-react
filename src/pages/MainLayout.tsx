@@ -160,11 +160,9 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
             disabled={isSmallScreen}
           />
           <ResizablePanel minSize={30}>
-            <ScrollArea className="h-screen">
-              <div className="gap-y-4 flex flex-col">
-                <Outlet />
-              </div>
-            </ScrollArea>
+            <div className="h-[calc(100vh-30px)]">
+              <Outlet />
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
         <div className="h-[30px] px-4 border-t flex items-center">

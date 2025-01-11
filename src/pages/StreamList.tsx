@@ -246,7 +246,7 @@ function StreamList() {
   );
 
   return (
-    <div className="p-4 max-h-[calc(100vh-30px)] overflow-y-scroll">
+    <div className="p-4 max-h-[calc(100vh-30px)]  overflow-y-scroll">
       {contextHolder}
       <div className="flex justify-between pb-4 items-center">
         <div>
@@ -267,6 +267,7 @@ function StreamList() {
           }
         />
       </div>
+
       <DataTable
         //@ts-expect-error
         columns={columns}
@@ -289,6 +290,7 @@ function StreamList() {
           },
         ]}
         onRefresh={() => refetch()}
+        id="stream-list"
       />
     </div>
   );
