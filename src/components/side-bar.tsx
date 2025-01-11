@@ -149,7 +149,7 @@ function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
             />
           </PopoverContent>
         </Popover>
-        <NotificationPanel
+        {/* <NotificationPanel
           trigger={
             <Button
               variant="ghost"
@@ -168,7 +168,7 @@ function SideBar({ isCollapsed, isConnected, systemStatus }: SideBarProps) {
               </span>
             </Button>
           }
-        />
+        /> */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
