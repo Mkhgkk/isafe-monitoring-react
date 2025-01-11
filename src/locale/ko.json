@@ -120,8 +120,12 @@
       "media": "비디오",
       "model": "모델",
       "etc": "기타",
-      "available": "사용 가능",
-      "eventRetention": "이벤트 보관 기간"
+      "available": "사용 가능"
+    },
+    "eventRetention": "이벤트 보관 기간",
+    "alert": {
+      "eventRetentionSuccess": "이벤트 보관 기간이 성공적으로 업데이트되었습니다.",
+      "eventRetentionError": "이벤트 보관 기간 업데이트에 실패하였습니다."
     }
   },
   "profile": {

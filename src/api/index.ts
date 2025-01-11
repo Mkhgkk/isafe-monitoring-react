@@ -183,4 +183,12 @@ export const systemService = {
     const response = await apiClient.get("/api/system/disk");
     return response.data;
   },
+  getRetention: async () => {
+    const response = await apiClient.get("/api/system/retention");
+    return response.data;
+  },
+  updateRetention: async (data: { retention: number }) => {
+    const response = await apiClient.post("/api/system/retention", data);
+    return response.data;
+  },
 };

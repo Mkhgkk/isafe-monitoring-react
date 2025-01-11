@@ -12,7 +12,7 @@ import { bytesToHumanReadable, convertToBytes } from "@/utils";
 
 function Storage() {
   const { t } = useTranslation();
-  const { data, isFetching } = useQuery({
+  const { data } = useQuery({
     queryKey: ["systemService.getDisk"],
     queryFn: systemService.getDisk,
     select: (data) => {
@@ -55,8 +55,8 @@ function Storage() {
         <p className="text-sm">{t("setting.storage.serverPc")}</p>
         <p className="text-sm text-muted-foreground">
           {t("setting.storage.usage", {
-            used: bytesToHumanReadable(data?.used ?? 0),
-            total: bytesToHumanReadable(data?.total ?? 0),
+            used: bytesToHumanReadable(data?.used) ?? "-",
+            total: bytesToHumanReadable(data?.total) ?? "-",
           })}
         </p>
       </div>
