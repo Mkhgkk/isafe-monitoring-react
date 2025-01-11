@@ -47,7 +47,7 @@ function Storage() {
           },
           {
             name: t("setting.storage.etc"),
-            color: "bg-slate-300",
+            color: "bg-slate-300 dark:bg-slate-700",
             size: etc,
           },
         ],
