@@ -32,18 +32,21 @@ function LanguageDropdown({ className }: { className?: string }) {
           <Button
             size="sm"
             variant="ghost"
-            className="border-white dark:border-white hover:bg-[#1e293b] dark:hover:bg-[#1e293b]"
+            className="text-white border-white dark:border-white hover:bg-[#1e293b] dark:hover:bg-[#1e293b]"
           >
             <Icons.globe className="w-4 h-4 mr-2" />
             {languages.find((lang) => lang.code === locale)?.name}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
+        <DropdownMenuContent
+          align="start"
+          className="bg-[#020819] border-[#020819]"
+        >
           {languages.map((lang) => (
             <DropdownMenuItem
               onSelect={() => setLocale(lang.code)}
               data-selected={locale === lang.code}
-              className="data-[selected=true]:bg-[#1e293b] dark:data-[selected=ture]:bg-[#1e293b]"
+              className="data-[selected=true]:bg-[#1e293b] dark:data-[selected=ture]:bg-[#1e293b] text-white focus:bg-[#1e293b] focus:text-white"
             >
               {lang.name}
             </DropdownMenuItem>
