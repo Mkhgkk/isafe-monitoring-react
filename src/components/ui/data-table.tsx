@@ -156,7 +156,12 @@ export function DataTable<TData, TValue>({
         </Popover>
 
         {onRefresh && (
-          <Button onClick={onRefresh} variant="outline" size="sm">
+          <Button
+            onClick={onRefresh}
+            variant="outline"
+            size="sm"
+            disabled={loading}
+          >
             <Icons.refresh
               className={`w-4 h-4 lg:mr-1.5 text-zinc-800 dark:text-white ${
                 loading ? "animate-spin" : ""

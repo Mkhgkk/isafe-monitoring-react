@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import Empty from "@/components/empty";
+import { cn } from "@/lib/utils";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -35,8 +36,14 @@ export default function MainPage() {
             {t("monitoring.active")}
           </p>
         </div>
-        <Button onClick={() => refetch()} variant="outline">
-          <Icons.refresh className="mr-2 w-4 h-4 " />
+        <Button
+          onClick={() => refetch()}
+          variant="outline"
+          disabled={isFetching}
+        >
+          <Icons.refresh
+            className={cn("mr-2 w-4 h-4", { "animate-spin": isFetching })}
+          />
           {t("common.refresh")}
         </Button>
       </div>
