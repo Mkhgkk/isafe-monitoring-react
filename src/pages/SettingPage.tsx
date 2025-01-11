@@ -73,7 +73,7 @@ function SettingPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {[1, 7, 14].map((value) => (
+                      {[7, 14, 30].map((value) => (
                         <SelectItem value={value.toString()} key={value}>
                           {t("common.unit.day", { count: value })}
                         </SelectItem>
