@@ -32,7 +32,7 @@ function LanguageDropdown({ className }: { className?: string }) {
           <Button
             size="sm"
             variant="ghost"
-            className="text-white border-white dark:border-white hover:bg-[#1e293b] dark:hover:bg-[#1e293b]"
+            className="text-white border-white dark:border-white hover:bg-[#1e293b] dark:hover:bg-[#1e293b] hover:text-white"
           >
             <Icons.globe className="w-4 h-4 mr-2" />
             {languages.find((lang) => lang.code === locale)?.name}
