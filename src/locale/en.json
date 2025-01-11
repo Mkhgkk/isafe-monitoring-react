@@ -140,7 +140,16 @@
     "passwordUpdateDesc": "Reset password",
     "currentPassword": "Current Password",
     "newPassword": "New Password",
-    "confirmPassword": "Confirm Password"
+    "confirmPassword": "Confirm Password",
+    "alert": {
+      "usernameSuccess": "Username updated successfully.",
+      "usernameError": "Failed to update username.",
+      "passwordSuccess": "Password updated successfully.",
+      "passwordError": "Failed to update password."
+    },
+    "error": {
+      "invalidPassword": "Password is not correct."
+    }
   },
   "login": {
     "title": "Welcome to iSafe Guard",

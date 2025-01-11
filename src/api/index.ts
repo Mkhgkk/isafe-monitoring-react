@@ -42,6 +42,30 @@ export const authService = {
   },
 };
 
+export const userService = {
+  updateUsername: async (username: string) => {
+    const response = await apiClient.post("/api/user/username", {
+      username,
+    });
+
+    return response.data;
+  },
+  updatePassword: async ({
+    password,
+    newPassword,
+  }: {
+    password: string;
+    newPassword: string;
+  }) => {
+    const response = await apiClient.post("/api/user/password", {
+      current_password: password,
+      new_password: newPassword,
+    });
+
+    return response.data;
+  },
+};
+
 export const streamService = {
   fetchStreams: async () => {
     const response = await apiClient.get("/api/stream");

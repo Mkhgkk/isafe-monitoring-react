@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../services/socketService";
 
 import { useConnectionContext } from "@/context/ConnectionContext";
@@ -11,7 +11,7 @@ interface PanelVideoProps {
   onClick?: () => void;
 }
 
-const PanelVideo = forwardRef(({ streamId }: PanelVideoProps) => {
+const PanelVideo = ({ streamId }: PanelVideoProps) => {
   const ALERT_EVENT = `alert-${streamId}`;
 
   const [intrustion, setIntrustion] = useState(false);
@@ -63,6 +63,6 @@ const PanelVideo = forwardRef(({ streamId }: PanelVideoProps) => {
       )}
     </>
   );
-});
+};
 
 export default PanelVideo;

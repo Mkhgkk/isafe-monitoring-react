@@ -139,7 +139,16 @@
     "passwordUpdateDesc": "비밀번호를 재설정 해주세요.",
     "currentPassword": "현재 비밀번호",
     "newPassword": "새 비밀번호",
-    "confirmPassword": "비밀번호 확인"
+    "confirmPassword": "비밀번호 확인",
+    "alert": {
+      "usernameSuccess": "사용자 이름이 성공적으로 업데이트되었습니다.",
+      "usernameError": "사용자 이름 업데이트에 실패했습니다.",
+      "passwordSuccess": "비밀번호가 성공적으로 업데이트되었습니다.",
+      "passwordError": "비밀번호 업데이트에 실패했습니다."
+    },
+    "error": {
+      "invalidPassword": "비밀번호가 일치하지 않습니다."
+    }
   },
   "login": {
     "title": "iSafe Guard에 오신 것을 환영합니다",

@@ -269,7 +269,6 @@ function StreamList() {
       </div>
 
       <DataTable
-        //@ts-expect-error
         columns={columns}
         data={data?.rows ?? []}
         loading={isFetching}

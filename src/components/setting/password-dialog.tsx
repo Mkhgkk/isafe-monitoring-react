@@ -8,17 +8,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { Icons } from "../icons";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { streamService } from "@/api";
-import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import FormField from "../form/FormField";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
+import { useMutation } from "@tanstack/react-query";
+import { userService } from "@/api";
+import { toast } from "@/hooks/use-toast";
 
 const passwordFormSchema = z
   .object({
@@ -45,6 +44,7 @@ export default function PasswordDialog() {
     control,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(passwordFormSchema),
@@ -54,67 +54,44 @@ export default function PasswordDialog() {
       confirmPassword: "",
     },
   });
-  //   const queryClient = useQueryClient();
 
-  //   const { mutate: startStream, isPending } = useMutation({
-  //     mutationFn: streamService.startStream,
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreamById", streamId],
-  //       });
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreams"],
-  //       });
+  const { mutate: updatePassword, isPending } = useMutation({
+    mutationFn: userService.updatePassword,
+    onSuccess: () => {
+      toast({
+        description: t("profile.alert.passwordSuccess"),
+        variant: "success",
+      });
 
-  //       setOpen(false);
+      setOpen(false);
+    },
+    onError: (error) => {
+      if (error?.response?.data?.message === "Incorrect password.") {
+        setError("password", {
+          type: "manual",
+          message: "profile.error.invalidPassword",
+        });
 
-  //       toast({
-  //         description: "Stream has been started successfully",
-  //         variant: "success",
-  //       });
-  //     },
-  //     onError: (err) => {
-  //       console.error(err);
-  //     },
-  //   });
-
-  //   const { mutate: stopStream, isPending: isStopping } = useMutation({
-  //     mutationFn: streamService.stopStream,
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreamById", streamId],
-  //       });
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreams"],
-  //       });
-
-  //       setOpen(false);
-
-  //       toast({
-  //         description: "Stream has been stopped successfully",
-  //         variant: "success",
-  //       });
-  //     },
-  //     onError: (err) => {
-  //       console.error(err);
-  //     },
-  //   });
+        return;
+      }
+      toast({
+        description: t("profile.alert.passwordError"),
+        variant: "destructive",
+      });
+    },
+  });
 
   const onSubmit = (values: PasswordFormData) => {
-    console.log(values);
-    // if (isActivated) {
-    //   stopStream(streamId);
-    // } else startStream(streamId);
+    updatePassword(values);
+  };
+
+  const handleOpen = (value: boolean) => {
+    if (value) reset();
+    setOpen(value);
   };
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={() => {
-        setOpen(!open);
-        reset();
-      }}
-    >
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         <div className="cursor-pointer py-2 pl-4">
           <Icons.right className="text-muted-foreground w-4 h-4" />
@@ -150,11 +127,7 @@ export default function PasswordDialog() {
             type="password"
           />
           <DialogFooter>
-            <Button
-              type="submit"
-              className="mt-2"
-              // loading={isPending || isStopping}
-            >
+            <Button type="submit" className="mt-2" loading={isPending}>
               {t("common.save")}
             </Button>
           </DialogFooter>

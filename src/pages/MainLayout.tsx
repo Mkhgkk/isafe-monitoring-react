@@ -6,7 +6,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navigate, Outlet } from "react-router-dom";
 import { useConnectionContext } from "@/context/ConnectionContext";
@@ -95,7 +94,6 @@ interface LayoutProps {
 
 function Layout({ systemStatus, isConnected }: LayoutProps) {
   const panelRef = useRef<ImperativePanelHandle>(null);
-  const defaultLayout = 100;
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const [isCollapsed, setIsCollapsed] = useState(
     isSmallScreen || Cookies.get("collapsed") === "true" || false
@@ -132,7 +130,7 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
           className="flex-1 items-stretch"
         >
           <ResizablePanel
-            defaultSize={isCollapsed ? 4 : defaultLayout}
+            defaultSize={isCollapsed ? 4 : 20}
             collapsedSize={4}
             collapsible={true}
             minSize={15}
@@ -159,7 +157,7 @@ function Layout({ systemStatus, isConnected }: LayoutProps) {
             withHandle={!isSmallScreen}
             disabled={isSmallScreen}
           />
-          <ResizablePanel minSize={30}>
+          <ResizablePanel minSize={80}>
             <div className="h-[calc(100vh-30px)]">
               <Outlet />
             </div>

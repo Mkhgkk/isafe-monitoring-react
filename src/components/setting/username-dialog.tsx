@@ -8,17 +8,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
-import { Icons } from "../icons";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { streamService } from "@/api";
-import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import FormField from "../form/FormField";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { userService } from "@/api";
+import { toast } from "@/hooks/use-toast";
 
 const usernameFormSchema = z.object({
   username: z.string().min(3, "validation.username"),
@@ -32,71 +30,51 @@ export default function UsernameDialog({
   trigger: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: zodResolver(usernameFormSchema),
     defaultValues: {
       username: "",
     },
   });
-  //   const queryClient = useQueryClient();
 
-  //   const { mutate: startStream, isPending } = useMutation({
-  //     mutationFn: streamService.startStream,
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreamById", streamId],
-  //       });
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreams"],
-  //       });
-
-  //       setOpen(false);
-
-  //       toast({
-  //         description: "Stream has been started successfully",
-  //         variant: "success",
-  //       });
-  //     },
-  //     onError: (err) => {
-  //       console.error(err);
-  //     },
-  //   });
-
-  //   const { mutate: stopStream, isPending: isStopping } = useMutation({
-  //     mutationFn: streamService.stopStream,
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreamById", streamId],
-  //       });
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["streamService.fetchStreams"],
-  //       });
-
-  //       setOpen(false);
-
-  //       toast({
-  //         description: "Stream has been stopped successfully",
-  //         variant: "success",
-  //       });
-  //     },
-  //     onError: (err) => {
-  //       console.error(err);
-  //     },
-  //   });
+  const { mutate: updateUsername, isPending } = useMutation({
+    mutationFn: userService.updateUsername,
+    onSuccess: () => {
+      toast({
+        description: t("profile.alert.usernameSuccess"),
+        variant: "success",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["authService.getMe"],
+      });
+      setOpen(false);
+    },
+    onError: () => {
+      toast({
+        description: t("profile.alert.usernameError"),
+        variant: "destructive",
+      });
+    },
+  });
 
   const onSubmit = (values: UsernameFormData) => {
-    // if (isActivated) {
-    //   stopStream(streamId);
-    // } else startStream(streamId);
+    updateUsername(values.username);
+  };
+
+  const handleOpen = (value: boolean) => {
+    if (value) reset();
+    setOpen(value);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -113,10 +91,7 @@ export default function UsernameDialog({
             placeholder={t("profile.username")}
           />
           <DialogFooter>
-            <Button
-              type="submit"
-              // loading={isPending || isStopping}
-            >
+            <Button type="submit" loading={isPending}>
               {t("common.save")}
             </Button>
           </DialogFooter>
