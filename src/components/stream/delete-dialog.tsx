@@ -21,24 +21,22 @@ const DeleteDialog = ({ stream_id }: { stream_id: string }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const handleOpen = (value: boolean) => {
-    setOpen(value);
-  };
 
   const { mutate: deleteStream, isPending } = useMutation({
     mutationFn: streamService.deleteStream,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["streamService.fetchStreams"],
-      });
-      setOpen(false);
       toast({
         description: t("stream.alert.deleteSuccess"),
         variant: "success",
       });
+      setOpen(false);
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["streamService.fetchStreams"],
+        });
+      }, 500);
     },
-    onError: (err) => {
-      console.log("Error deleting stream: ", err);
+    onError: () => {
       toast({
         description: t("stream.alert.deleteError"),
         variant: "destructive",
@@ -50,7 +48,7 @@ const DeleteDialog = ({ stream_id }: { stream_id: string }) => {
     deleteStream(stream_id);
   };
   return (
-    <Dialog open={open} onOpenChange={handleOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <DropdownMenuItem
           onSelect={(e) => e.preventDefault()}
