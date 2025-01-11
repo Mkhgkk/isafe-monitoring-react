@@ -21,7 +21,8 @@ function Storage() {
       const media = convertToBytes(data.disk_media);
       const model = convertToBytes(data.disk_models);
       const base = convertToBytes(data.base);
-      const etc = base - media - model;
+      const app = base - media - model;
+      const etc = used - base;
       const available = total - used;
 
       return {
@@ -40,8 +41,13 @@ function Storage() {
             size: model,
           },
           {
+            name: t("setting.storage.app"),
+            color: "bg-green-500",
+            size: app,
+          },
+          {
             name: t("setting.storage.etc"),
-            color: "bg-slate-500",
+            color: "bg-slate-300",
             size: etc,
           },
         ],
@@ -98,11 +104,13 @@ function Storage() {
           </TooltipProvider>
         </div>
       </div>
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-x-5 gap-y-1 items-center flex-wrap">
         {data?.items.map((item) => (
-          <div className="flex items-center gap-2" key={item.name}>
+          <div className="flex items-center gap-2 " key={item.name}>
             <span className={cn("w-3 h-3 rounded-full", item.color)} />
-            <p className="text-sm text-muted-foreground">{item.name}</p>
+            <p className="text-sm text-muted-foreground text-nowrap">
+              {item.name}
+            </p>
           </div>
         ))}
       </div>

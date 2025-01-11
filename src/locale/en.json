@@ -121,7 +121,8 @@
       "media": "Media",
       "model": "Model",
       "etc": "Etc",
-      "available": "Available"
+      "available": "Available",
+      "app": "App"
     },
     "eventRetention": "Event Retention",
     "alert": {

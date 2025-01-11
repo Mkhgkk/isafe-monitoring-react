@@ -120,7 +120,8 @@
       "media": "비디오",
       "model": "모델",
       "etc": "기타",
-      "available": "사용 가능"
+      "available": "사용 가능",
+      "app": "어플리케이션"
     },
     "eventRetention": "이벤트 보관 기간",
     "alert": {
