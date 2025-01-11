@@ -117,9 +117,9 @@
     "storage": {
       "title": "Storage",
       "serverPc": "Server PC",
-      "usage": "{{used}} GB of {{total}} GB used",
-      "video": "Video",
-      "image": "Image",
+      "usage": "{{used}} of {{total}} used",
+      "media": "Media",
+      "model": "Model",
       "etc": "Etc",
       "available": "Available",
       "eventRetention": "Event Retention"

@@ -177,3 +177,10 @@ export const configService = {
     return response.data;
   },
 };
+
+export const systemService = {
+  getDisk: async () => {
+    const response = await apiClient.get("/api/system/disk");
+    return response.data;
+  },
+};

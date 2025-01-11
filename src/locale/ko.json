@@ -116,9 +116,9 @@
     "storage": {
       "title": "저장 용량",
       "serverPc": "서버 PC",
-      "usage": "{{used}} GB 중 {{total}} GB 사용됨",
-      "video": "비디오",
-      "image": "이미지",
+      "usage": "{{total}} 중 {{used}} 사용됨",
+      "media": "비디오",
+      "model": "모델",
       "etc": "기타",
       "available": "사용 가능",
       "eventRetention": "이벤트 보관 기간"

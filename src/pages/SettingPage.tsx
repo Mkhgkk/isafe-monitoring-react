@@ -24,26 +24,7 @@ function SettingPage() {
           <div>
             <p className="mb-4 font-semibold">{t("setting.storage.title")}</p>
             <div className="border rounded-md">
-              <Storage
-                items={[
-                  {
-                    name: t("setting.storage.video"),
-                    color: "bg-indigo-500",
-                    size: 15.94,
-                  },
-                  {
-                    name: t("setting.storage.image"),
-                    color: "bg-yellow-500",
-                    size: 13.32,
-                  },
-                  {
-                    name: t("setting.storage.etc"),
-                    color: "bg-slate-500",
-                    size: 10.34,
-                  },
-                ]}
-                total={90.35}
-              />
+              <Storage />
               <SettingItem label={t("setting.storage.eventRetention")}>
                 <Select value="7">
                   <SelectTrigger className="w-[100px]">
