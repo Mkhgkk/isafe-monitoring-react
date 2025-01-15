@@ -124,6 +124,11 @@
       "available": "Available",
       "app": "App"
     },
+    "notification": {
+      "title": "Notifications",
+      "watch": "Watch Notification",
+      "email": "Email Notification"
+    },
     "eventRetention": "Event Retention",
     "alert": {
       "eventRetentionSuccess": "Event Retention has been updated successfully.",

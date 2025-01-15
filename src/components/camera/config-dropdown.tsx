@@ -53,12 +53,6 @@ const ConfigDropdown = ({
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <Contents field={t("monitoring.alert")} value={<Switch />} />
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <Contents
-            field={t("monitoring.watchNotification")}
-            value={<Switch />}
-          />
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

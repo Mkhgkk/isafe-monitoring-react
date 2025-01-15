@@ -6,10 +6,10 @@ function AuthLayout() {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
   const bgs = [
-    'bg-[url("@/assets/bg3.jpg")]',
-    'bg-[url("@/assets/bg4.jpg")]',
-    'bg-[url("@/assets/bg6.jpg")]',
-    'bg-[url("@/assets/bg7.jpg")]',
+    'bg-[url("@/assets/bg3.webp")]',
+    'bg-[url("@/assets/bg4.webp")]',
+    'bg-[url("@/assets/bg6.webp")]',
+    'bg-[url("@/assets/bg7.webp")]',
   ];
   const bg = bgs[Math.floor(Math.random() * bgs.length)];
 

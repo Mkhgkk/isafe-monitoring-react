@@ -123,6 +123,11 @@
       "available": "사용 가능",
       "app": "어플리케이션"
     },
+    "notification": {
+      "title": "알림",
+      "watch": "워치 알림",
+      "email": "이메일 알림"
+    },
     "eventRetention": "이벤트 보관 기간",
     "alert": {
       "eventRetentionSuccess": "이벤트 보관 기간이 성공적으로 업데이트되었습니다.",
