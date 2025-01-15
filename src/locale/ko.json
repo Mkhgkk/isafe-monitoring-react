@@ -131,7 +131,11 @@
     "eventRetention": "이벤트 보관 기간",
     "alert": {
       "eventRetentionSuccess": "이벤트 보관 기간이 성공적으로 업데이트되었습니다.",
-      "eventRetentionError": "이벤트 보관 기간 업데이트에 실패하였습니다."
+      "eventRetentionError": "이벤트 보관 기간 업데이트에 실패하였습니다.",
+      "watchNotificationSuccess": "워치 알림이 성공적으로 업데이트되었습니다.",
+      "watchNotificationError": "워치 알림 업데이트에 실패했습니다.",
+      "emailNotificationSuccess": "이메일 알림이 성공적으로 업데이트되었습니다.",
+      "emailNotificationError": "이메일 알림 업데이트에 실패했습니다."
     }
   },
   "profile": {

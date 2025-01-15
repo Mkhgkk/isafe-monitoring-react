@@ -207,12 +207,20 @@ export const systemService = {
     const response = await apiClient.get("/api/system/disk");
     return response.data;
   },
-  getRetention: async () => {
-    const response = await apiClient.get("/api/system/retention");
+  getSystemSettings: async () => {
+    const response = await apiClient.get("/api/system");
     return response.data;
   },
   updateRetention: async (data: { retention: number }) => {
     const response = await apiClient.post("/api/system/retention", data);
+    return response.data;
+  },
+  updateWatchNotif: async (data: { enable: boolean }) => {
+    const response = await apiClient.post("/api/system/watch_notif", data);
+    return response.data;
+  },
+  updateEmailNotif: async (data: { enable: boolean }) => {
+    const response = await apiClient.post("/api/system/email_notif", data);
     return response.data;
   },
 };

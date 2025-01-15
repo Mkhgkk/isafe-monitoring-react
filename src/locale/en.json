@@ -132,7 +132,11 @@
     "eventRetention": "Event Retention",
     "alert": {
       "eventRetentionSuccess": "Event Retention has been updated successfully.",
-      "eventRetentionError": "Failed to update Event Retention."
+      "eventRetentionError": "Failed to update Event Retention.",
+      "watchNotificationSuccess": "Watch Notification has been updated successfully.",
+      "watchNotificationError": "Failed to update Watch Notification.",
+      "emailNotificationSuccess": "Email Notification has been updated successfully.",
+      "emailNotificationError": "Failed to update Email Notification."
     }
   },
   "profile": {

@@ -1,6 +1,6 @@
 import { systemService } from "@/api";
 import { toast } from "@/hooks/use-toast";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import Storage from "./storage";
 import SettingItem from "./setting-item";
@@ -14,13 +14,9 @@ import {
 } from "../ui/select";
 import { Icons } from "../icons";
 
-function StorageSection() {
+function StorageSection({ eventRetention }: { eventRetention?: number }) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { data } = useQuery({
-    queryKey: ["systemService.getRetention"],
-    queryFn: () => systemService.getRetention(),
-  });
 
   const { mutate: updateRetention, isPending } = useMutation({
     mutationFn: systemService.updateRetention,
@@ -30,7 +26,7 @@ function StorageSection() {
         variant: "success",
       });
       queryClient.invalidateQueries({
-        queryKey: ["systemService.getRetention"],
+        queryKey: ["systemService.getSystemSettings"],
       });
     },
     onError: () => {
@@ -47,7 +43,7 @@ function StorageSection() {
         <Storage />
         <SettingItem label={t("setting.eventRetention")}>
           <Select
-            value={data?.retention?.toString()}
+            value={eventRetention?.toString()}
             disabled={isPending}
             onValueChange={(value) =>
               updateRetention({ retention: Number(value) })
