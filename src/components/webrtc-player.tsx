@@ -24,6 +24,7 @@ const WebRTCPlayer: React.FC<WebRTCPlayerProps> = ({ streamId }) => {
 
   const handleMessage = (event: MessageEvent) => {
     if (event.data.target !== "mediamtx-webrtc-inpage") return;
+    if (event.data.streamId !== streamId) return;
 
     switch (event.data.type) {
       case "error": {
