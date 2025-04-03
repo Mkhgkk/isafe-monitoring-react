@@ -137,6 +137,37 @@ export const streamService = {
 
     return response.data;
   },
+
+  getPtzPosition: async (streamId: string) => {
+    const response = await apiClient.post(
+      "/api/stream/get_current_ptz_values",
+      {
+        stream_id: streamId,
+      }
+    );
+
+    return response.data;
+  },
+  setPatrolArea: async ({
+    streamId,
+    patrolArea,
+  }: {
+    streamId: string;
+    patrolArea: {
+      zMin: number;
+      zMax: number;
+      xMin: number;
+      xMax: number;
+      yMin: number;
+      yMax: number;
+    };
+  }) => {
+    const response = await apiClient.post("/api/stream/save_patrol_area", {
+      stream_id: streamId,
+      patrol_area: patrolArea,
+    });
+    return response.data;
+  },
 };
 
 export const eventService = {

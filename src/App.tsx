@@ -27,6 +27,7 @@ import SettingPage from "./pages/SettingPage";
 import ProfilePage from "./pages/ProfilePage";
 import { LocaleProvider } from "./components/locale-provider";
 import HazardSettingPage from "./pages/HazardSettingPage";
+import PatrolAreaPage from "./pages/PatrolAreaPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -45,6 +46,10 @@ function App() {
           <Route
             path="/streams/hazard-area/:streamId"
             element={<HazardSettingPage />}
+          />
+          <Route
+            path="/streams/patrol-area/:streamId"
+            element={<PatrolAreaPage />}
           />
           <Route path="/settings" element={<SettingPage />} />
           <Route path="/profile" element={<ProfilePage />} />

@@ -38,6 +38,8 @@ import {
   Globe,
   AtSign,
   LockKeyhole,
+  ArrowRight,
+  CarTaxiFront,
 } from "lucide-react";
 
 export type Icon = typeof LucideIcon;
@@ -57,6 +59,7 @@ export const Icons = {
   videoOff: VideoOff,
   alert: BadgeAlert,
   arrowLeft: ArrowLeft,
+  arrowRight: ArrowRight,
   link: Link,
   arrowUpDown: ArrowUpDown,
   cctv: Cctv,
@@ -81,6 +84,7 @@ export const Icons = {
   globe: Globe,
   email: AtSign,
   lock: LockKeyhole,
+  patrol: CarTaxiFront,
 
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>

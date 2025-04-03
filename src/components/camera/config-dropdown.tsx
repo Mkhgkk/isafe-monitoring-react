@@ -40,6 +40,13 @@ const ConfigDropdown = ({
           <Icons.hazard className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
           <div className="flex-1">{t("hazardArea.title")}</div>
         </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => navigate("/streams/patrol-area/" + streamId)}
+          disabled={!stream?.is_active}
+        >
+          <Icons.patrol className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
+          <div className="flex-1">{t("patrolArea.title")}</div>
+        </DropdownMenuItem>
         <Separator />
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <Contents field={t("monitoring.savingVideo")} value={<Switch />} />

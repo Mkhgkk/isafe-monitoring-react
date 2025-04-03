@@ -225,6 +225,13 @@ function StreamList() {
                   <Icons.hazard className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
                   {t("hazardArea.title")}
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => navigate("/streams/patrol-area/" + streamId)}
+                  disabled={!row.original.is_active}
+                >
+                  <Icons.patrol className="w-4 h-4 text-zinc-800 mr-2 dark:text-white" />
+                  {t("patrolArea.title")}
+                </DropdownMenuItem>
                 <Separator className="my-2" />
                 <StreamForm
                   initialData={row.original}
